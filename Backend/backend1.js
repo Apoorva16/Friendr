@@ -10,11 +10,30 @@ var config = {
 
   
 firebase.initializeApp(config);
+
 var database = firebase.database();
   
+
+var user;
+
 function addAuthUser(email, password) {
    firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
    });
+
+   //deleteUser();
+}
+
+function deleteUser() {
+	if (user == null) {
+		getCurrentUser();
+	}
+
+	var email = user.email;
+	user.delete().then(function() {
+	  	console.log(email + " deleted");
+	}, function(error) {
+	  	console.log("No account deleted");
+	});
 }
 
 function signIn(email, password) {
@@ -22,9 +41,21 @@ function signIn(email, password) {
 		console.log("Sign in unsuccessful");
 		return;
 	});
-	console.log("Sign into " + email + " successfully");
+	console.log("Signed into " + email + " successfully");
 }
 
+function getCurrentUser() {
+	firebase.auth().onAuthStateChanged(function(_user) {
+		if (_user) {
+			user = _user;
+			printCurrentUserData();
+	   		// User is signed in.
+		} else {
+			return null;
+			// No user is signed in.
+		}
+	});
+}
 function signOut() {
 	firebase.auth().signOut().then(function() {
 		// signout Successful
@@ -52,10 +83,10 @@ function sendPasswordResetEmail(email) {
 }
 
 function sendEmailVerification() {
-	var user = firebase.auth().currentUser;
+	user = firebase.auth().currentUser;
 
 	user.sendEmailVerification().then(function() {
-		console.log("Email sent to " + user.Email);
+		console.log("Email sent to " + user.email);
 	}, function(error) {
   		console.log("Email not sent - From sendEmailVerification()");
 	});
@@ -63,16 +94,28 @@ function sendEmailVerification() {
 
 function printCurrentUserData() {
 	var user = firebase.auth().currentUser;
-
-	//console.log(user.email);
-	//console.log(user.UID);
-	//console.log(user.P)
+	if (user != null) {
+		console.log(user.email);
+		console.log(user.uid);
+		//console.log(user.P)
+	}
+	else {
+		console.log("No user signed in");
+	}
 }
 var email = "brandonxia01@gmail.com";
 var password = "password01";
-//addAuthUser("brandonxia01@gmail.com", "password01");
-
+//addAuthUser(email, password);
 signIn(email, password);
+getCurrentUser();
+
+//setTimeout(function(){alert("hi")}, 2000);
+//console.log(user.email);
+
+//deleteUser();
+
+//console.log("waiting");
+
 //printCurrentUserData();
 
 //sendPasswordResetEmail(email);
