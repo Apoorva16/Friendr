@@ -16,11 +16,27 @@ var database = firebase.database();
 
 var user;
 
-function addAuthUser(email, password) {
-   firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-   });
+function addAuthUser(email, password, firstName, lastName, username)
+{
+	firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {});
 
-   //deleteUser();
+	firebase.auth().onAuthStateChanged(function(currentUser)
+	{
+		if(currentUser)
+		{
+			createDatabaseEntry(currentUser.uid, firstName, lastName, username);
+		}
+	});
+}
+
+function createDatabaseEntry(uid, firstName, lastName, username)
+{
+	database.ref('users/' + uid).set(
+	{
+		firstName: firstName,
+		lastName: lastName,
+		username: username
+	});
 }
 
 function deleteUser() {
@@ -48,7 +64,7 @@ function getCurrentUser() {
 	firebase.auth().onAuthStateChanged(function(_user) {
 		if (_user) {
 			user = _user;
-			printCurrentUserData();
+			//printCurrentUserData();
 	   		// User is signed in.
 		} else {
 			return null;
@@ -72,6 +88,7 @@ function resetPassword(newPassword) {
 		//error
 	});
 }
+
 function sendPasswordResetEmail(email) {
 	firebase.auth().sendPasswordResetEmail(email).then(function() {
 		// email sent
@@ -103,11 +120,41 @@ function printCurrentUserData() {
 		console.log("No user signed in");
 	}
 }
-var email = "brandonxia01@gmail.com";
-var password = "password01";
-//addAuthUser(email, password);
-signIn(email, password);
-getCurrentUser();
+
+function initiateConversation(other_uid)
+{
+	firebase.auth().onAuthStateChanged(function(user)
+	{
+		if(user)
+		{
+			var conversation_id = user.uid + ' ' + other_uid;
+	
+			database.ref('users/' + other_uid).once('value').then(function(snapshot)
+			{
+				database.ref('users/' + user.uid).child("conversation_list").child(conversation_id).set(
+				{
+					other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName
+				});
+			});
+			
+			database.ref('users/' + user.uid).once('value').then(function(snapshot)
+			{
+				database.ref('users/' + other_uid).child("conversation_list").child(conversation_id).set(
+				{
+					other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName
+				});
+			});
+			
+		}
+	});
+	
+	
+}
+
+addAuthUser("testing@purdue.edu", "testing123", "Test", "Tester", "imatester");
+initiateConversation("Botywvf2ZCSMbOPOcb37h6V6BO13");
+//signIn(email, password);
+//getCurrentUser();
 
 //setTimeout(function(){alert("hi")}, 2000);
 //console.log(user.email);
