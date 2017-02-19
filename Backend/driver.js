@@ -1,7 +1,7 @@
 var backend = require('./backend1');
 
 
-backend.signIn("jradocho@purdue.edu", "testing");
-//backend.addAuthUser("jradocho@purdue.edu", "testing", "Josh", "Radochonski", "joshrado");
-backend.initiateConversation("1dZ1EAuND6MRB8s4eMKJBz6IYgq2");
-backend.sendMessage("1dZ1EAuND6MRB8s4eMKJBz6IYgq2", "This is a test.");
+backend.signIn("testing@purdue.edu", "testing");
+//backend.addAuthUser("testing@purdue.edu", "testing", "Test", "Tester", "imatester");
+//backend.initiateConversation("9A4qaTgVs6gYu49X228WA6Ui20F3");
+backend.sendMessage("9A4qaTgVs6gYu49X228WA6Ui20F3", "This is a test.");

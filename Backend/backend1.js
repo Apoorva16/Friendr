@@ -161,38 +161,60 @@ module.exports =
 			{
 				var conversation_id1 = user.uid + ' ' + other_uid;
 				var conversation_id2 = other_uid + ' ' + user.uid;
-				var firstConversationId = true;
-				var nextMessageId = -1;
+
+				//determine which conversation_id is correct
+				var convoId1 = database.ref('conversations').child(conversation_id1);
+				var convoId2 = database.ref('conversations').child(conversation_id2);
+
+				var conversation_id;
+				if (convoId1 != null)
+					conversation_id = conversation_id1;
+				else
+					conversation_id = conversation_id2;
+
+				//add message to database
+				database.ref('conversations').child(conversation_id).once('value').then(function(snapshot)
+				{
+					var messageCount = snapshot.val().MessageCount;
+					var nextMessageId = messageCount + 1;
+					var date = new Date();
 				
-				database.ref('coversations').child(conversation_id1).once('value').then(function(snapshot)
-				{
-					if (snapshot.exists())
+					database.ref('conversations').child(conversation_id).child('message_list').child(nextMessageId).set(
 					{
-						nextMessageId = shapshot.val().MessageCount + 1;
-						console.log("NextMessageId: " + nextMessageId);
-						
-						var next_message_ref = database.ref('convsersations').child(conversation_id1).
-							child('message_list').child(nextMessageId);
-						
-						next_message_ref.set(
-						{
-							message: message
-							//date later
-						});
-					}
-				}, function(error)
-				{
-					console.log("Need to wait for conversation list to update I guess...");
+						message: message,
+						sender: user.uid,
+						date: date.toDateString(),
+						time: date.toTimeString()
+					});
+
+					database.ref('conversations').child(conversation_id).update(
+					{
+						MessageCount: messageCount+1
+					});
 				});
+			}
+		});
+	},
+
+	viewConversation: function(other_uid)
+	{
+		firebase.auth().onAuthStateChanged(function(user)
+		{
+			if (user)
+			{
+				var conversation_id1 = user.uid + ' ' + other_uid;
+				var conversation_id2 = other_uid + ' ' + user.uid;
+
+				//determine which conversation_id is correct
+				var convoId1 = database.ref('conversations').child(conversation_id1);
+				var convoId2 = database.ref('conversations').child(conversation_id2);
+
+				var conversation_id;
+				if (convoId1 != null)
+					conversation_id = conversation_id1;
+				else
+					conversation_id = conversation_id2;
 			}
 		});
 	}
 }
-	
-
-
-
-
-
-
-
