@@ -12,6 +12,7 @@ firebase.initializeApp(config);
 var database = firebase.database();
 
 var email = "xiab@purdue.edu";
+var email2 = "brandonxia01@gmail.com";
 var password = "password";
 var name = "Brandon Xia";
 var username = "brandonxia01";
@@ -100,7 +101,8 @@ function enterQueue(activity) {
             return other_uid;
 
           }
-          else {
+          else if (snapshot.exists()){
+
               database.ref('Activities/'+ activity).set(
               {
                   activity: activity,
