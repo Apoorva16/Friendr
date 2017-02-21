@@ -185,7 +185,7 @@ module.exports =
 						sender: user.uid,
 						date: date.toDateString(),
 						time: date.toTimeString()
-					});
+					});	
 
 					database.ref('conversations').child(conversation_id).update(
 					{
@@ -217,4 +217,26 @@ module.exports =
 			}
 		});
 	}
+
+
+	addActivity: function(activity) 
+	{
+		database.ref('Activities/'+activity).set(
+  		{ 
+        activity: activity
+  		});
+	}
+
+	getActivityList: function() {
+		var list = [];
+  		database.ref('Activities/').once('value').then(function(snapshot)
+  		{
+   			snapshot.forEach(function(childSnapshot) {
+      			list.push(childSnapshot.key);
+    		});
+    		console.log(list.toString());
+    		return list; //u
+  		});
+	}
+
 }
