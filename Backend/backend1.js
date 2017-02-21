@@ -216,16 +216,16 @@ module.exports =
 					conversation_id = conversation_id2;
 			}
 		});
-	}
+	},
 
 
 	addActivity: function(activity) 
 	{
 		database.ref('Activities/'+activity).set(
   		{ 
-        activity: activity
+        	activity: activity
   		});
-	}
+	},
 
 	getActivityList: function() {
 		var list = [];
@@ -237,6 +237,59 @@ module.exports =
     		console.log(list.toString());
     		return list; //u
   		});
+	},
+
+	getMatched: function(activity) {
+		firebase.auth().onAuthStateChanged(function(user) {
+	    	if (user) { // User is signed in.
+	       		console.log("matching");
+	     	   	database.ref('Activities/'+ activity).once('value').then(function(snapshot)
+	        	{
+	          		if (snapshot.child("Searching").exists()) {
+			            // get matched with this user
+			            var other_uid = snapshot.child("Searching").val();
+			            console.log("should be matched with user " + other_uid)
+			            database.ref('Activities/' + activity).set({
+			                activity: activity
+	           	 	});
+	            	return other_uid;
+
+	          		}	
+		          	else {
+		              database.ref('Activities/'+ activity).set(
+		              {
+		                  activity: activity,
+		                  Searching: user.uid
+		              });
+		              console.log(user.uid + " in queue for "+ activity);
+		              return null;
+		          	}
+	       	 	}); 
+	        
+	    	}
+  		});
+
+	},
+
+	leaveQueue: function(activity) {
+	  	firebase.auth().onAuthStateChanged(function(user) {
+		    if (user) { // User is signed in.
+		        database.ref('Activities/'+ activity).once('value').then(function(snapshot)
+			    {
+			        if (snapshot.child("Searching").exists()) {
+			            // get matched with this user
+			            if (snapshot.child("Searching").val() == user.uid) {
+			            	database.ref('Activities/' + activity).set({
+			              		activity: activity
+			            	});
+			              	console.log("User out of queue");
+			            }
+			        }
+		        }); 
+		        // User is signed in.
+		    }
+  		});
 	}
+
 
 }
