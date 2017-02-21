@@ -67,7 +67,7 @@ function getCurrentUser() {
 			user = _user;
 			//printCurrentUserData();
 	   		// User is signed in.
-		} else {
+		} else {a
 			return null;
 			// No user is signed in.
 		}
@@ -205,11 +205,83 @@ function sendMessage(other_uid, message)
 	});
 }
 
+function addActivity(activity) {
+ 
+  database.ref('Activities/'+activity).set(
+  { 
+        activity: activity
+  });
+  
+}
+function getActivityList() {
+  
+  var list = [];
+  database.ref('Activities/').once('value').then(function(snapshot)
+  {
+    snapshot.forEach(function(childSnapshot) {
+      list.push(childSnapshot.key);
+    });
+    //var list = snapshot.getChildren();
+    console.log(list.toString());
+    return list;
+  });
+  
+}
+
+function enterQueue(activity) {
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) { // User is signed in.
+        console.log("matching");
+        database.ref('Activities/'+ activity).once('value').then(function(snapshot)
+        {
+          if (snapshot.child("Searching").exists()) {
+            // get matched with this user
+            var other_uid = snapshot.child("Searching").val();
+            console.log("should be matched with user " + other_uid)
+            database.ref('Activities/' + activity).set({
+                activity: activity
+            });
+            return other_uid;
+
+          }
+          else {
+              database.ref('Activities/'+ activity).set(
+              {
+                  activity: activity,
+                  Searching: user.uid
+              });
+              console.log(user.uid + " in queue for "+ activity);
+          }
+        }); 
+        // User is signed in.
+    }
+  });
+}
+
+function leaveQueue(activity) {
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) { // User is signed in.
+        database.ref('Activities/'+ activity).once('value').then(function(snapshot)
+        {
+          if (snapshot.child("Searching").exists()) {
+            // get matched with this user
+            if (snapshot.child("Searching").val() == user.uid) {
+              database.ref('Activities/' + activity).set({
+                activity: activity
+              });
+              console.log("User out of queue");
+            }
+          }
+        }); 
+        // User is signed in.
+    }
+  });
+}
 
 //signIn("testing@purdue.edu", "testing123");
-addAuthUser("testing@purdue.edu", "testing123", "Test", "Tester", "iamatester");
-initiateConversation("zg2ggzAZFePEeSOHOcZITDRtWcu1");
-sendMessage("zg2ggzAZFePEeSOHOcZITDRtWcu1", "This is a test.");
+//addAuthUser("testing@purdue.edu", "testing123", "Test", "Tester", "iamatester");
+//initiateConversation("zg2ggzAZFePEeSOHOcZITDRtWcu1");
+//sendMessage("zg2ggzAZFePEeSOHOcZITDRtWcu1", "This is a test.");
 
 
 //getCurrentUser();
@@ -223,7 +295,7 @@ sendMessage("zg2ggzAZFePEeSOHOcZITDRtWcu1", "This is a test.");
 
 //printCurrentUserData();
 
-//sendPasswordResetEmail(email);
+//sendPasswordResetEmail("xiab@purdue.edu");
 
 
 //sendEmailVerification();

@@ -11,10 +11,10 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
-var email = "jradocho@purdue.com";
-var password = "testing123";
-var name = "Josh Radochonski";
-var username = "joshrado";
+var email = "xiab@purdue.edu";
+var password = "password";
+var name = "Brandon Xia";
+var username = "brandonxia01";
 var currentUser;
 
 function createAuthAccount(email, password, name, username)
@@ -28,6 +28,14 @@ function createAuthAccount(email, password, name, username)
 	});
 	
 }
+
+function signIn(email, password) {
+    firebase.auth().signInWithEmailAndPassword(email, password).catch(function (error) {
+      console.log("Sign in unsuccessful");
+      return;
+    });
+    console.log("Signed into " + email + " successfully");
+  }
 
 function createDatabaseEntry(uid, username)
 {
@@ -54,19 +62,12 @@ function createActivityList(activityArray) {
 }
 
 function addActivity(activity) {
-  /*database.ref('Activities/Number').once('value').then(function(snapshot)
-  {
-      var num = snapshot.val().Number + 1;
-      database.ref('Activities/Number').set({
-          Number:num
-      })
-  });
-*/
+ 
   database.ref('Activities/'+activity).set(
   { 
         activity: activity
   });
-  //database.r
+  
 }
 function getActivityList() {
   
@@ -83,10 +84,64 @@ function getActivityList() {
   
 }
 
-/*addActivity("Study");
-addActivity("Eat");
+function enterQueue(activity) {
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) { // User is signed in.
+        console.log("matching");
+        database.ref('Activities/'+ activity).once('value').then(function(snapshot)
+        {
+          if (snapshot.child("Searching").exists()) {
+            // get matched with this user
+            var other_uid = snapshot.child("Searching").val();
+            console.log("should be matched with user " + other_uid)
+            database.ref('Activities/' + activity).set({
+                activity: activity
+            });
+            return other_uid;
+
+          }
+          else {
+              database.ref('Activities/'+ activity).set(
+              {
+                  activity: activity,
+                  Searching: user.uid
+              });
+              console.log(user.uid + " in queue for "+ activity);
+          }
+        }); 
+        // User is signed in.
+    }
+  });
+}
+
+function leaveQueue(activity) {
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) { // User is signed in.
+        database.ref('Activities/'+ activity).once('value').then(function(snapshot)
+        {
+          if (snapshot.child("Searching").exists()) {
+            // get matched with this user
+            if (snapshot.child("Searching").val() == user.uid) {
+              database.ref('Activities/' + activity).set({
+                activity: activity
+              });
+              console.log("User out of queue");
+            }
+          }
+        }); 
+        // User is signed in.
+    }
+  });
+}
+
+//createAuthAccount(email, password, name, username);
+signIn(email,password);
+enterQueue("Study");
+//leaveQueue("Study");
+//addActivity("Study");
+/*addActivity("Eat");
 addActivity("Work Out");*/
-getActivityList();
+//getActivityList();
 
 
 
