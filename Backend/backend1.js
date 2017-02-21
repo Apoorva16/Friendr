@@ -239,7 +239,7 @@ module.exports =
   		});
 	},
 
-	getMatched: function(activity) {
+	enterQueue: function(activity) {
 		firebase.auth().onAuthStateChanged(function(user) {
 	    	if (user) { // User is signed in.
 	       		console.log("matching");
@@ -248,14 +248,14 @@ module.exports =
 	          		if (snapshot.child("Searching").exists()) {
 			            // get matched with this user
 			            var other_uid = snapshot.child("Searching").val();
-			            console.log("should be matched with user " + other_uid)
+			            console.log(user.uid + " matched with user " + other_uid)
 			            database.ref('Activities/' + activity).set({
 			                activity: activity
 	           	 	});
 	            	return other_uid;
 
 	          		}	
-		          	else {
+		          	else if(snapshot.exists()){
 		              database.ref('Activities/'+ activity).set(
 		              {
 		                  activity: activity,

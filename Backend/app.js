@@ -12,6 +12,7 @@ firebase.initializeApp(config);
 var database = firebase.database();
 
 var email = "xiab@purdue.edu";
+var email2 = "brandonxia01@gmail.com";
 var password = "password";
 var name = "Brandon Xia";
 var username = "brandonxia01";
@@ -57,9 +58,6 @@ firebase.auth().onAuthStateChanged(function(currentUser)
 	}
 });
 
-function createActivityList(activityArray) {
-
-}
 
 function addActivity(activity) {
  
@@ -93,14 +91,15 @@ function enterQueue(activity) {
           if (snapshot.child("Searching").exists()) {
             // get matched with this user
             var other_uid = snapshot.child("Searching").val();
-            console.log("should be matched with user " + other_uid)
+            console.log(user.uid + " matched with user " + other_uid)
             database.ref('Activities/' + activity).set({
                 activity: activity
             });
             return other_uid;
 
           }
-          else {
+          else if (snapshot.exists()){
+
               database.ref('Activities/'+ activity).set(
               {
                   activity: activity,
@@ -122,7 +121,7 @@ function leaveQueue(activity) {
           if (snapshot.child("Searching").exists()) {
             // get matched with this user
             if (snapshot.child("Searching").val() == user.uid) {
-              database.ref('Activities/' + activity).set({
+                database.ref('Activities/' + activity).set({
                 activity: activity
               });
               console.log("User out of queue");
@@ -135,7 +134,7 @@ function leaveQueue(activity) {
 }
 
 //createAuthAccount(email, password, name, username);
-signIn(email,password);
+signIn(email2,password);
 enterQueue("Study");
 //leaveQueue("Study");
 //addActivity("Study");

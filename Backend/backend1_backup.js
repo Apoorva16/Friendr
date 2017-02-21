@@ -237,14 +237,14 @@ function enterQueue(activity) {
           if (snapshot.child("Searching").exists()) {
             // get matched with this user
             var other_uid = snapshot.child("Searching").val();
-            console.log("should be matched with user " + other_uid)
+            console.log(user.uid + " matched with user " + other_uid)
             database.ref('Activities/' + activity).set({
                 activity: activity
             });
             return other_uid;
 
           }
-          else {
+          else if (snapshot.exists()){
               database.ref('Activities/'+ activity).set(
               {
                   activity: activity,
@@ -295,7 +295,7 @@ function leaveQueue(activity) {
 
 //printCurrentUserData();
 
-//sendPasswordResetEmail("xiab@purdue.edu");
+//sendPasswordResetEmail("brandonxia01@gmail.com");
 
 
 //sendEmailVerification();
