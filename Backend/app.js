@@ -37,7 +37,7 @@ function createDatabaseEntry(uid, username)
 	});
 }
 
-createAuthAccount(email, password);
+//createAuthAccount(email, password);
 
 
 firebase.auth().onAuthStateChanged(function(currentUser)
@@ -48,6 +48,49 @@ firebase.auth().onAuthStateChanged(function(currentUser)
 		createDatabaseEntry(currentUser.uid, username);
 	}
 });
+
+function createActivityList(activityArray) {
+
+}
+
+function addActivity(activity) {
+  /*database.ref('Activities/Number').once('value').then(function(snapshot)
+  {
+      var num = snapshot.val().Number + 1;
+      database.ref('Activities/Number').set({
+          Number:num
+      })
+  });
+*/
+  database.ref('Activities/'+activity).set(
+  { 
+        activity: activity
+  });
+  //database.r
+}
+function getActivityList() {
+  
+  var list = [];
+  database.ref('Activities/').once('value').then(function(snapshot)
+  {
+    snapshot.forEach(function(childSnapshot) {
+      list.push(childSnapshot.key);
+    });
+    //var list = snapshot.getChildren();
+    console.log(list.toString());
+    return list;
+  });
+  
+}
+
+/*addActivity("Study");
+addActivity("Eat");
+addActivity("Work Out");*/
+getActivityList();
+
+
+
+
 
 
 
