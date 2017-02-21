@@ -58,9 +58,6 @@ firebase.auth().onAuthStateChanged(function(currentUser)
 	}
 });
 
-function createActivityList(activityArray) {
-
-}
 
 function addActivity(activity) {
  
