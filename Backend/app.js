@@ -124,7 +124,7 @@ function leaveQueue(activity) {
           if (snapshot.child("Searching").exists()) {
             // get matched with this user
             if (snapshot.child("Searching").val() == user.uid) {
-              database.ref('Activities/' + activity).set({
+                database.ref('Activities/' + activity).set({
                 activity: activity
               });
               console.log("User out of queue");
