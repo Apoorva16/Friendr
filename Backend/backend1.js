@@ -198,24 +198,41 @@ module.exports =
 
 	viewConversation: function(other_uid)
 	{
-		firebase.auth().onAuthStateChanged(function(user)
+		var messageListPromise = new Promise(function(resolve, reject)
 		{
-			if (user)
+			firebase.auth().onAuthStateChanged(function(user)
 			{
-				var conversation_id1 = user.uid + ' ' + other_uid;
-				var conversation_id2 = other_uid + ' ' + user.uid;
+				if (user)
+				{
+					var conversation_id1 = user.uid + ' ' + other_uid;
+					var conversation_id2 = other_uid + ' ' + user.uid;
 
-				//determine which conversation_id is correct
-				var convoId1 = database.ref('conversations').child(conversation_id1);
-				var convoId2 = database.ref('conversations').child(conversation_id2);
+					//determine which conversation_id is correct
+					var convoId1 = database.ref('conversations').child(conversation_id1);
+					var convoId2 = database.ref('conversations').child(conversation_id2);
 
-				var conversation_id;
-				if (convoId1 != null)
-					conversation_id = conversation_id1;
-				else
-					conversation_id = conversation_id2;
-			}
+					var conversation_id;
+					if (convoId1 != null)
+						conversation_id = conversation_id1;
+					else
+						conversation_id = conversation_id2;
+
+					//get message list
+					database.ref('conversations').child(conversation_id).child('message_list').once('value').then(function(snapshot)
+					{
+	    				var list = [];
+	    				snapshot.forEach(function(childSnapshot)
+						{
+							var childData = childSnapshot.val();
+		      				list.push(childData);
+		    			});
+
+		    			resolve(list);
+		    		});
+				}
+			});
 		});
+		return messageListPromise;
 	},
 
 
@@ -240,46 +257,54 @@ module.exports =
 	},
 
 	enterQueue: function(activity) {
-		firebase.auth().onAuthStateChanged(function(user) {
-	    	if (user) { // User is signed in.
+		firebase.auth().onAuthStateChanged(function(user)
+		{
+	    	if (user)
+	    	{ // User is signed in.
 	       		console.log("matching");
 	     	   	database.ref('Activities/'+ activity).once('value').then(function(snapshot)
 	        	{
-	          		if (snapshot.child("Searching").exists()) {
+	          		if (snapshot.child("Searching").exists())
+	          		{
 			            // get matched with this user
 			            var other_uid = snapshot.child("Searching").val();
 			            console.log(user.uid + " matched with user " + other_uid)
-			            database.ref('Activities/' + activity).set({
+			            database.ref('Activities/' + activity).set(
+			            {
 			                activity: activity
-	           	 	});
-	            	return other_uid;
-
+	           	 		});
+	            		return other_uid;
 	          		}	
-		          	else if(snapshot.exists()){
-		              database.ref('Activities/'+ activity).set(
-		              {
-		                  activity: activity,
-		                  Searching: user.uid
-		              });
-		              console.log(user.uid + " in queue for "+ activity);
-		              return null;
+		          	else if(snapshot.exists())
+		          	{
+		          		database.ref('Activities/'+ activity).set(
+		          		{
+		          			activity: activity,
+		          			Searching: user.uid
+		          		});
+		          		console.log(user.uid + " in queue for "+ activity);
+		          		return null;
 		          	}
 	       	 	}); 
-	        
 	    	}
   		});
-
 	},
 
-	leaveQueue: function(activity) {
-	  	firebase.auth().onAuthStateChanged(function(user) {
-		    if (user) { // User is signed in.
+	leaveQueue: function(activity)
+	{
+	  	firebase.auth().onAuthStateChanged(function(user)
+	  	{
+		    if (user)
+		    { // User is signed in.
 		        database.ref('Activities/'+ activity).once('value').then(function(snapshot)
 			    {
-			        if (snapshot.child("Searching").exists()) {
+			        if (snapshot.child("Searching").exists())
+			        {
 			            // get matched with this user
-			            if (snapshot.child("Searching").val() == user.uid) {
-			            	database.ref('Activities/' + activity).set({
+			            if (snapshot.child("Searching").val() == user.uid)
+			            {
+			            	database.ref('Activities/' + activity).set(
+			            	{
 			              		activity: activity
 			            	});
 			              	console.log("User out of queue");
@@ -290,6 +315,4 @@ module.exports =
 		    }
   		});
 	}
-
-
 }
