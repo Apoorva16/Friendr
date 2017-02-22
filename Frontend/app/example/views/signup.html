@@ -1,0 +1,43 @@
+<super-navbar>
+    <super-navbar-title>
+        Signup
+    </super-navbar-title>
+</super-navbar>
+
+<div class="padding" ng-controller="SignupController">
+
+    <div class="padding">
+        <div class="wrap-login">
+            <div class="text-center">
+                <h2 class="logo-font"><strong>Friendr</strong></h2>
+            </div>
+            <div class="text-center">
+
+            </div>
+            <div class="list white">
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">First Name</span>
+                    <input type="text" ng-model="firstName" placeholder="ABCD">
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Last Name</span>
+                    <input type="text" ng-model="lastName" placeholder="ABCD">
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">User Name</span>
+                    <input type="text" ng-model="username" placeholder="ABCD">
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Email</span>
+                    <input type="text" ng-model="email" placeholder="abcd@purdue.edu">
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Password</span>
+                    <input type="password" ng-model="password" placeholder="abcd">
+                </label>
+            </div>
+        </div>
+    </div>
+    <button ng-click="close()" class="button button-block button-positive">Sign Up</button>
+
+</div>

@@ -1,0 +1,43 @@
+<super-navbar>
+  <super-navbar-title>
+    Login
+  </super-navbar-title>
+</super-navbar>
+
+<div class="login-page" ng-controller="InitialViewController">
+
+  <div class="padding">
+    <div class="wrap-login">
+      <div class="text-center">
+        <h2 class="logo-font"><strong>Friendr</strong></h2>
+      </div>
+      <div class="text-center">
+        <!--<p class="login-text">-->
+        <!--Don't have a facebook account?-->
+        <!--&lt;!&ndash;<br>&ndash;&gt;-->
+        <!--Make one now, its that easy!-->
+        <!--</p>-->
+      </div>
+      <div class="list white">
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">Email</span>
+          <input type="text" ng-model="email" placeholder="abcd@purdue.edu">
+        </label>
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">Password</span>
+          <input type="password" ng-model="password" placeholder="abcd">
+        </label>
+      </div>
+      <div class="wrap-buttons">
+        <!--<button ng-click="login()" class="button button-block btn-login">-->
+        <!--<i class="fa fa-facebook-square fa"></i>&nbsp; Login with Facebook-->
+        <!--</button>-->
+        <button onclick="supersonic.ui.initialView.dismiss()" class="button button-block button-positive">Log in</button>
+        <button ng-click="signUp()" class="button button-block button-positive">Create Account</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</div>
