@@ -6,8 +6,8 @@
 navigation-bar {
   background-color: #00B5FF;
   color: #ffffff;
-  padding-left: 6px;
-  padding-right: 6px;
+  padding-bottom:0px;
+  margin-bottom:0px;
 }
 
 navigation-bar title {
@@ -70,4 +70,15 @@ tab-bar-item#index {
 
 tab-bar-item#internet {
   background-image: url(icons/search.svg);
+<<<<<<< HEAD
+=======
+}
+
+#nav-drawer {
+  background-image: url(icons/src/navicon-round.svg);
+}
+
+#nav-search {
+  background-image: url(icons/search.svg);
+>>>>>>> Dennis
 }

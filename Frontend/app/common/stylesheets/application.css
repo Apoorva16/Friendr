@@ -55,3 +55,64 @@
   box-shadow: 0px 0px 21px 3px rgba(0,0,0,0.48);
 }
 
+.list.card.margin {
+  padding-left: 0 !important;
+  margin-left:0 !important;
+  margin-top:10vh;
+  padding-top:0;
+  top: 0;bottom: 0;left: 0;right: 0;
+  position: relative;
+  text-align: center;
+  border-radius: 50% !important;
+  height:100vw;
+  width:100vw;
+/*  background-color: blue !important;
+*/  
+}
+
+.recentContent{
+	margin:auto;
+}
+
+.homePage {
+	top:0;
+	left:0;
+	height:100vh;
+	width:100vw;
+}
+
+.recentActivities {
+	height: 100vh;
+}
+.test {
+	text-align:center;
+	background-color:transparent;
+    border-radius: 50% !important;
+    border-width: 0px;
+	height:100%;
+	width:100%;
+	display: inline-block;
+}
+
+.test2 {
+	margin-top:0 !important;
+	padding-top: 0 !important;
+	text-align: center;
+    position: relative;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.container {
+	height:100vw;
+	width:100vw;
+	overflow-y:hidden;
+  	white-space:nowrap;
+}
+
+::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+}

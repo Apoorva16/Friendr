@@ -2,7 +2,7 @@
 
 module.exports =
   app:
-    name: "studyBuddy"
+    name: "myProject"
 
   # steroidsAppId and steroidsApiKey headers are required by Supersonic Data
   # network:
