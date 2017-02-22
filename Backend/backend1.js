@@ -246,48 +246,58 @@ module.exports =
 
 	getActivityList: function() {
 		var list = [];
-  		database.ref('Activities/').once('value').then(function(snapshot)
-  		{
-   			snapshot.forEach(function(childSnapshot) {
-      			list.push(childSnapshot.key);
-    		});
-    		console.log(list.toString());
-    		return list; //u
-  		});
+		var activityListPromise = new Promise(function(resolve, reject)
+		{
+	  		database.ref('Activities/').once('value').then(function(snapshot)
+	  		{
+	   			snapshot.forEach(function(childSnapshot) {
+	      			list.push(childSnapshot.key);
+	    		});
+	    		//console.log(list.toString());
+	    		resolve(list); //u
+	  		});
+	  	});
+	  
+	  	return activityListPromise;
+
 	},
 
 	enterQueue: function(activity) {
-		firebase.auth().onAuthStateChanged(function(user)
+		var matchedUser = new Promise(function(resolve, reject)
 		{
-	    	if (user)
-	    	{ // User is signed in.
-	       		console.log("matching");
-	     	   	database.ref('Activities/'+ activity).once('value').then(function(snapshot)
-	        	{
-	          		if (snapshot.child("Searching").exists())
-	          		{
-			            // get matched with this user
-			            var other_uid = snapshot.child("Searching").val();
-			            console.log(user.uid + " matched with user " + other_uid)
-			            database.ref('Activities/' + activity).set(
-			            {
-			                activity: activity
-	           	 		});
-	            		return other_uid;
-	          		}	
-		          	else if(snapshot.exists())
-		          	{
-		          		database.ref('Activities/'+ activity).set(
+			firebase.auth().onAuthStateChanged(function(user)
+			{
+		    	if (user)
+		    	{ // User is signed in.
+		       		//console.log("matching");
+		     	   	database.ref('Activities/'+ activity).once('value').then(function(snapshot)
+		        	{
+		          		if (snapshot.child("Searching").exists())
 		          		{
-		          			activity: activity,
-		          			Searching: user.uid
-		          		});
-		          		console.log(user.uid + " in queue for "+ activity);
-		          		return null;
-		          	}
-	       	 	}); 
-	    	}
-  		});
+				            // get matched with this user
+				            var other_uid = snapshot.child("Searching").val();
+				            //console.log(user.uid + " matched with user " + other_uid)
+				            database.ref('Activities/' + activity).set(
+				            {
+				                activity: activity
+		           	 		});
+		            		resolve(other_uid);
+		          		}	
+			          	else if(snapshot.exists())
+			          	{
+			          		database.ref('Activities/'+ activity).set(
+			          		{
+			          			activity: activity,
+			          			Searching: user.uid
+			          		});
+			          		console.log(user.uid + " in queue for " + activity);
+			          		resolve(null);
+			          	}
+		       	 	}); 
+		    	}
+	  		});
+	  	});
+	  	return matchedUser;
 	},
 
 	leaveQueue: function(activity)

@@ -150,7 +150,7 @@ function removeAllSearches() {
 
 //createAuthAccount(email, password, name, username);
 signIn(email2,password);
-removeAllSearches();
+//removeAllSearches();
 //enterQueue("Study");
 //leaveQueue("Study");
 //addActivity("Study");

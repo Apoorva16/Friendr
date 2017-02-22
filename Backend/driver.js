@@ -16,3 +16,19 @@ backend.viewConversation("9A4qaTgVs6gYu49X228WA6Ui20F3").then(function(values)
 	}
 	
 });
+
+
+backend.getActivityList().then(function(values) {
+	console.log(values);
+});
+
+
+var other_uid;
+backend.enterQueue("Study").then(function(values) {
+	//console.log(values);
+	other_uid = values;
+});
+
+//console.log(other_uid);
+
+
