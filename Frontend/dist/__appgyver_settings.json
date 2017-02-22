@@ -1,14 +1,4 @@
 {
-  "preloads": [
-    {
-      "id": "learn-more",
-      "location": "http://localhost/app/example/learn-more.html"
-    },
-    {
-      "id": "using-the-scanner",
-      "location": "http://localhost/app/example/using-the-scanner.html"
-    }
-  ],
   "drawers": {
     "left": {
       "id": "leftDrawer",
@@ -16,8 +6,12 @@
       "showOnAppLoad": false
     },
     "options": {
-      "animation": "swingingDoor"
+      "animation": "slide"
     }
+  },
+  "initialView": {
+    "id": "initialView",
+    "location": "http://localhost/app/example/initial-view.html"
   },
   "tabs": [],
   "rootView": {
