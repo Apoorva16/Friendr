@@ -24,10 +24,21 @@ backend.getActivityList().then(function(values) {
 
 
 var other_uid;
-backend.enterQueue("Study").then(function(values) {
-	//console.log(values);
-	other_uid = values;
+/*backend.enterQueue("Study").then(function(values) {
+	if (values != null) {
+		backend.initiateConversation (values);
+	}
+
+
+	console.log(values);
+	//other_uid = values;
 });
+*/
+backend.sendMessage("diZfoNdEaSZFOo011aLi4XiVWS92", "HELLO");
+
+
+
+
 
 //console.log(other_uid);
 

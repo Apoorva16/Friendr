@@ -132,7 +132,7 @@ function leaveQueue(activity) {
     }
   });
 }
-
+/*
 function removeAllSearches() {
   database.ref('Activities/').once('value').then(function(snapshot)
   {
@@ -147,11 +147,11 @@ function removeAllSearches() {
   });
 }
 
-
+*/
 //createAuthAccount(email, password, name, username);
 signIn(email2,password);
 //removeAllSearches();
-//enterQueue("Study");
+enterQueue("Study");
 //leaveQueue("Study");
 //addActivity("Study");
 /*addActivity("Eat");
