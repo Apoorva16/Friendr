@@ -1,0 +1,10 @@
+{
+  "name": "Friendr",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "grunt-steroids": "1.x",
+    "load-grunt-tasks": "^3.5.2"
+  }
+}
