@@ -1,53 +1,40 @@
 /**
  * Created by apoorvaparmar on 1/14/17.
  */
+(function(){
+    // some code…
+    var config = {
+        apiKey: "AIzaSyB9-bQjCSShbkJuiDeWtyOurzFqTnr7pFU",
+        authDomain: "friendr-be400.firebaseapp.com",
+        databaseURL: "https://friendr-be400.firebaseio.com",
+        storageBucket: "friendr-be400.appspot.com",
+        messagingSenderId: "852808235414"
+    };
 
-/*
+    firebase.initializeApp(config);
+})();
+
+
 angular
     .module('example')
     .controller('InitialViewController', function($scope, supersonic) {
 
-        $scope.signUp = function() {
-
-            // supersonic.ui.dialog.alert("Signup working Yo");
-
-
-            var modalView = new supersonic.ui.View("example#signup");
-            var options = {
-                animate: true
-            };
-            supersonic.ui.modal.show(modalView, options);
-        };
-
-    });*/
-
-angular
-    .module('example')
-    .controller('InitialViewController', function($scope, supersonic, $http) {
-
-
+        $scope.email = "abcd@gmail.com";
+        $scope.password = "123456";
         $scope.login = function() {
-            $http({
-                url: "https://friendr-be400.firebaseio.com" + "/signIn",
-                method: "POST",
-                data: {
-                    username: $scope.email,
-                    password: $scope.password
-                }
-            }).success(function(data, status, headers, config) {
-                if(data !== undefined && data !== null) {
-                    $scope.data = data;
-                    window.localStorage.setItem("userId", data.userId + "");
-                    window.localStorage.setItem("authKey", data.authKey + "");
-                    window.localStorage.setItem("userProfile", JSON.stringify(data.userProfile));
-                    supersonic.ui.initialView.dismiss();
-                } else {
-                    alert("Error");
-                }
-            }).error(function(data, status, headers, config) {
-                alert(JSON.stringify(data));
+
+            //firebase.signIn($scope.email, $scope.password);
+            firebase.auth().signInWithEmailAndPassword($scope.email, $scope.password).then(function(object) {
+
+                window.localStorage.setItem("userObj", JSON.stringify(object) + "");
+                supersonic.ui.initialView.dismiss();
+
+                // alert(JSON.stringify(object));
+                // alert("Sign in successful");
+            }).catch(function (error) {
+                alert("Sign in unsuccessful");
             });
-        }
+        };
 
         $scope.signUp = function() {
 

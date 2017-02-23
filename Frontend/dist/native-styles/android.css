@@ -70,8 +70,7 @@ tab-bar-item#index {
 
 tab-bar-item#internet {
   background-image: url(icons/search.svg);
-<<<<<<< HEAD
-=======
+
 }
 
 #nav-drawer {
@@ -79,6 +78,6 @@ tab-bar-item#internet {
 }
 
 #nav-search {
-  background-image: url(icons/search.svg);
->>>>>>> Dennis
+  background-image: url(../assets/icons/search.svg);
+
 }

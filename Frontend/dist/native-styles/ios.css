@@ -4,8 +4,8 @@
  ***********************************************************/
 
 navigation-bar {
-  background-color: #FF0000;
-  color: #ffffff;
+  background-color: #1527df;
+  color: #1527df;
 }
 
 navigation-bar title {
@@ -44,4 +44,13 @@ tab-bar-item#index {
 
 tab-bar-item#internet {
   background-image: url(icons/search.svg);
+}
+
+#nav-drawer {
+  background-image: url(../assets/icons/src/navicon-round.svg);
+}
+
+#nav-search {
+  background-image: url(../assets/icons/search.svg);
+
 }

@@ -4,6 +4,7 @@
   </super-navbar-title>
 </super-navbar>
 
+
 <div class="login-page" ng-controller="InitialViewController">
 
   <div class="padding">
@@ -32,10 +33,10 @@
         <!--<button ng-click="login()" class="button button-block btn-login">-->
         <!--<i class="fa fa-facebook-square fa"></i>&nbsp; Login with Facebook-->
         <!--</button>-->
-        <button onclick="supersonic.ui.initialView.dismiss()" class="button button-block button-positive">Log in</button>
+      <!--<button onclick="supersonic.ui.initialView.dismiss()" class="button button-block button-positive">Log in</button> -->
+        <button ng-click="login()" class="button button-block button-positive">Login</button>
         <button ng-click="signUp()" class="button button-block button-positive">Create Account</button>
       </div>
     </div>
   </div>
 </div>
-

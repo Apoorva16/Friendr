@@ -22,7 +22,7 @@
   <script src="/components/angular/angular.js"></script>
   <script src="/components/supersonic/supersonic.js"></script>
   <script src="/components/webcomponentsjs/webcomponents-lite.js"></script>
-
+  <script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
   
   <script src="/app/common.js"></script>
   
@@ -31,29 +31,35 @@
 </head>
 <body ng-app="example">
 
-<div class="micro-padding">
-
-  <super-navbar>
-    <super-navbar-title>
-      Hi Apoorva.
-    </super-navbar-title>
-  </super-navbar>
 
 
-  <ul class="list">
-    <li class="item">
-      Prithvi
-    </li>
-    <li class="item">
-      Apoorva
-    </li>
-    <li class="item">
-      Mrudul
-    </li>
-    <li class="item">
-      Sahil
-    </li>
-  </ul>
+<div class="list" ng-controller="LearnMoreController">
+
+  <a class="item item-avatar" ng-click="myFunction()">
+    <img class="img-circle" img src="https://www.codeproject.com/KB/web-image/ASPNetUpDownloadFiles/RunAppDownload.jpg">
+    <h2>Apoo</h2>
+  </a>
+  <a class="item item-avatar" href="#" ng-click="myFunction()">
+    <img src="https://svn.apache.org/repos/asf/openoffice/ooo-site/trunk/content/documentation/Samples_Templates/User/gallery/coffeeclipart.jpg">
+    <h2>Srish</h2>
+  </a>
+  <a class="item item-avatar" href="#" ng-click="myFunction()">
+    <img src="http://www.slate.com/content/dam/slate/blogs/bad_astronomy/2013/06/09/shutterstock_zombie.jpg.CROP.thumbnail-small.jpg">
+    <h2>Josh</h2>
+  </a>
+  <a class="item item-avatar" href="#" ng-click="myFunction()">
+    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c3/NotCommons-emblem-copyrighted.svg/52px-NotCommons-emblem-copyrighted.svg.png">
+    <h2>Dennis</h2>
+  </a>
+  <a class="item item-avatar" href="#" ng-click="myFunction()">
+    <img src="venkman.jpg">
+    <h2>Ben</h2>
+  </a>
+  <a class="item item-avatar" href="#" ng-click="myFunction()">
+    <img src="venkman.jpg">
+    <h2>Leo</h2>
+  </a>
+
 </div>
 
 

@@ -22,7 +22,7 @@
   <script src="/components/angular/angular.js"></script>
   <script src="/components/supersonic/supersonic.js"></script>
   <script src="/components/webcomponentsjs/webcomponents-lite.js"></script>
-
+  <script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
   
   <script src="/app/common.js"></script>
   
@@ -36,6 +36,7 @@
     Login
   </super-navbar-title>
 </super-navbar>
+
 
 <div class="login-page" ng-controller="InitialViewController">
 
@@ -65,14 +66,13 @@
         <!--<button ng-click="login()" class="button button-block btn-login">-->
         <!--<i class="fa fa-facebook-square fa"></i>&nbsp; Login with Facebook-->
         <!--</button>-->
-        <button onclick="supersonic.ui.initialView.dismiss()" class="button button-block button-positive">Log in</button>
+      <!--<button onclick="supersonic.ui.initialView.dismiss()" class="button button-block button-positive">Log in</button> -->
+        <button ng-click="login()" class="button button-block button-positive">Login</button>
         <button ng-click="signUp()" class="button button-block button-positive">Create Account</button>
       </div>
     </div>
   </div>
 </div>
-
-
 
 </body>
 </html>
