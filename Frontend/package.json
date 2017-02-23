@@ -2,7 +2,9 @@
   "name": "Friendr",
   "version": "0.0.0",
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "firebase": "^3.6.10"
+  },
   "devDependencies": {
     "grunt-steroids": "1.x"
   }
