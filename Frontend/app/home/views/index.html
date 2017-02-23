@@ -76,9 +76,9 @@
 			if(result) {
 				//right Swipe
 				if(Math.abs(dist) < threshold) {
-					// if(Math.abs(dist) <= touchDistance) {
-					// 	alert(page);
-					// }
+					if(Math.abs(dist) <= touchDistance) {
+						alert(page);
+					}
 				}
 				else if(dist>0 && Math.abs(dist) >= threshold) {
 					if(page>0) {
