@@ -2,7 +2,9 @@ var backend = require('./backend1');
 
 
 backend.signIn("testing@purdue.edu", "testing");
-//backend.addAuthUser("testing@purdue.edu", "testing", "Test", "Tester", "imatester");
+//backend.signIn("xiab@purdue.edu", "password");
+
+//backend.addAuthUser("xiab@purdue.edu", "password", "Eric", "Tao", "EX1990");
 //backend.initiateConversation("9A4qaTgVs6gYu49X228WA6Ui20F3");
 //backend.sendMessage("9A4qaTgVs6gYu49X228WA6Ui20F3", "This is the third message in this conversation.");
 //console.log(backend.getActivityList());
@@ -24,7 +26,7 @@ backend.getActivityList().then(function(values) {
 
 
 var other_uid;
-/*backend.enterQueue("Study").then(function(values) {
+backend.enterQueue("Study").then(function(values) {
 	if (values != null) {
 		backend.initiateConversation (values);
 	}
@@ -33,9 +35,10 @@ var other_uid;
 	console.log(values);
 	//other_uid = values;
 });
-*/
-backend.sendMessage("diZfoNdEaSZFOo011aLi4XiVWS92", "HELLO");
 
+//backend.addAuthUser()
+//backend.sendMessage("diZfoNdEaSZFOo011aLi4XiVWS92", "HELLO");
+	
 
 
 

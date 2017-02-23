@@ -142,14 +142,15 @@ module.exports =
 					});
 				});
 				
-			}
 			
-			database.ref('conversations').child(conversation_id).set(
-			{
-				User1: user.uid,
-				User2: other_uid,
-				MessageCount: 0,
-			});
+			
+				database.ref('conversations').child(conversation_id).set(
+				{
+					User1: user.uid,
+					User2: other_uid,
+					MessageCount: 0,
+				});
+			}
 		});
 	},
 
