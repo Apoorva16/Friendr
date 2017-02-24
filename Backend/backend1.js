@@ -130,7 +130,8 @@ module.exports =
 				{
 					database.ref('users/' + user.uid).child("conversation_list").child(conversation_id).set(
 					{
-						other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName
+						other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName,
+						other_user_uid: other_uid
 					});
 				});
 				
@@ -138,7 +139,8 @@ module.exports =
 				{
 					database.ref('users/' + other_uid).child("conversation_list").child(conversation_id).set(
 					{
-						other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName
+						other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName,
+						other_user_uid: user.uid
 					});
 				});
 				
