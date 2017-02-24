@@ -196,6 +196,25 @@ module.exports =
 		});
 	},
 
+	viewConversationList: function()
+	{
+		var messageListPromise = new Promise(function(resolve, reject)
+		{
+			firebase.auth().onAuthStateChanged(function(user)
+			{
+				if (user)
+				{
+					//get conversation list
+					database.ref('users').child(user.uid).child('conversation_list').once('value').then(function(snapshot)
+					{
+		    			resolve(snapshot.val());
+		    		});
+				}
+			});
+		});
+		return messageListPromise;
+	},
+
 	viewConversation: function(other_uid)
 	{
 		var messageListPromise = new Promise(function(resolve, reject)
