@@ -15,7 +15,7 @@ angular
         $scope.myFunction = function(){
             var view = new supersonic.ui.View("example#getting-started");
             supersonic.ui.layers.push(view);
-            supersonic.logger.log("Something semi-interesting just happened.");
+            //supersonic.logger.log("Something semi-interesting just happened.");
             supersonic.ui.drawers.close();
 
         }

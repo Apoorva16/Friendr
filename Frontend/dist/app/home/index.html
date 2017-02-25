@@ -12,7 +12,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
   <title>index</title>
-
+  <script src="/app/common/assets/scripts/backendService.js"></script>
   <link rel="stylesheet" href="/components/supersonic/css/supersonic.css" />
   <link rel="stylesheet" href="/app/common/stylesheets/application.css" />
   <script src="/app/common/assets/scripts/jquery-3.1.1.min.js"></script>
@@ -49,7 +49,7 @@
 
 	<div class="recentActivities">
 		<div class="recentContent">
-			<h1> Recent Activities </h1>
+			<h1 id="recentActivities"> Recent Activities </h1>
 		</div>
 	</div>
 	
@@ -105,189 +105,16 @@ $('div.container').on("touchend", function(e) {
         
     })
 function enterQueue(page) {
+	alert("You are now queued up");
 	if (page == 1) {
-
-		firebase.auth().onAuthStateChanged(function(user)
-		{
-			if (user)
-            { // User is signed in.
-            	var activity = "Eat";
-            	supersonic.logger.log("matching");
-            	supersonic.logger.log(activity);
-            	firebase.database().ref('Activities/'+ activity).once('value').then(function(snapshot)
-            	{
-            		if (snapshot.child("Searching").exists())
-            		{
-                        // get matched with this user
-                        var other_uid = snapshot.child("Searching").val();
-                        console.log(user.uid + " matched with user " + other_uid)
-                        firebase.database().ref('Activities/' + activity).set(
-                        {
-                        	activity: activity
-                        });
-                        var conversation_id = user.uid + ' ' + other_uid;
-
-                        firebase.database().ref('users/' + other_uid).once('value').then(function(snapshot)
-                        {
-                        	firebase.database().ref('users/' + user.uid).child("conversation_list").child(conversation_id).set(
-                        	{
-                        		other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName
-                        	});
-                        });
-
-                        firebase.database().ref('users/' + user.uid).once('value').then(function(snapshot)
-                        {
-                        	firebase.database().ref('users/' + other_uid).child("conversation_list").child(conversation_id).set(
-                        	{
-                        		other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName
-                        	});
-                        });
-
-                        firebase.database().ref('conversations').child(conversation_id).set(
-                        {
-                        	User1: user.uid,
-                        	User2: other_uid,
-                        	MessageCount: 0,
-                        });
-                    }   
-                    else if(snapshot.exists())
-                    {
-                    	supersonic.logger.log(activity + "test 2");
-                    	firebase.database().ref('Activities/'+ activity).set(
-                    	{
-                    		activity: activity,
-                    		Searching: user.uid
-                    	});
-                    	console.log(user.uid + " in queue for "+ activity);
-                    	return null;
-                    }
-                }); 
-            }
-
-            supersonic.logger.log("user doesnt exists");
-        });
+		angular.element($('#indexCtrl')).scope().queue("Eat");
 
 	} else if (page == 2) {
-				firebase.auth().onAuthStateChanged(function(user)
-		{
-			if (user)
-            { // User is signed in.
-            	var activity = "Study";
-            	supersonic.logger.log("matching");
-            	supersonic.logger.log(activity);
-            	firebase.database().ref('Activities/'+ activity).once('value').then(function(snapshot)
-            	{
-            		if (snapshot.child("Searching").exists())
-            		{
-                        // get matched with this user
-                        var other_uid = snapshot.child("Searching").val();
-                        console.log(user.uid + " matched with user " + other_uid)
-                        firebase.database().ref('Activities/' + activity).set(
-                        {
-                        	activity: activity
-                        });
-                        var conversation_id = user.uid + ' ' + other_uid;
+		angular.element($('#indexCtrl')).scope().queue("Study");
 
-                        firebase.database().ref('users/' + other_uid).once('value').then(function(snapshot)
-                        {
-                        	firebase.database().ref('users/' + user.uid).child("conversation_list").child(conversation_id).set(
-                        	{
-                        		other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName
-                        	});
-                        });
-
-                        firebase.database().ref('users/' + user.uid).once('value').then(function(snapshot)
-                        {
-                        	firebase.database().ref('users/' + other_uid).child("conversation_list").child(conversation_id).set(
-                        	{
-                        		other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName
-                        	});
-                        });
-
-                        firebase.database().ref('conversations').child(conversation_id).set(
-                        {
-                        	User1: user.uid,
-                        	User2: other_uid,
-                        	MessageCount: 0,
-                        });
-                    }   
-                    else if(snapshot.exists())
-                    {
-                    	supersonic.logger.log(activity + "test 2");
-                    	firebase.database().ref('Activities/'+ activity).set(
-                    	{
-                    		activity: activity,
-                    		Searching: user.uid
-                    	});
-                    	console.log(user.uid + " in queue for "+ activity);
-                    	return null;
-                    }
-                }); 
-            }
-
-            supersonic.logger.log("user doesnt exists");
-        });
 
 	} else if (page == 3) {
-		firebase.auth().onAuthStateChanged(function(user)
-		{
-			if (user)
-            { // User is signed in.
-            	var activity = "Work Out";
-            	supersonic.logger.log("matching");
-            	supersonic.logger.log(activity);
-            	firebase.database().ref('Activities/'+ activity).once('value').then(function(snapshot)
-            	{
-            		if (snapshot.child("Searching").exists())
-            		{
-                        // get matched with this user
-                        var other_uid = snapshot.child("Searching").val();
-                        console.log(user.uid + " matched with user " + other_uid)
-                        firebase.database().ref('Activities/' + activity).set(
-                        {
-                        	activity: activity
-                        });
-                        var conversation_id = user.uid + ' ' + other_uid;
-
-                        firebase.database().ref('users/' + other_uid).once('value').then(function(snapshot)
-                        {
-                        	firebase.database().ref('users/' + user.uid).child("conversation_list").child(conversation_id).set(
-                        	{
-                        		other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName
-                        	});
-                        });
-
-                        firebase.database().ref('users/' + user.uid).once('value').then(function(snapshot)
-                        {
-                        	firebase.database().ref('users/' + other_uid).child("conversation_list").child(conversation_id).set(
-                        	{
-                        		other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName
-                        	});
-                        });
-
-                        firebase.database().ref('conversations').child(conversation_id).set(
-                        {
-                        	User1: user.uid,
-                        	User2: other_uid,
-                        	MessageCount: 0,
-                        });
-                    }   
-                    else if(snapshot.exists())
-                    {
-                    	supersonic.logger.log(activity + "test 2");
-                    	firebase.database().ref('Activities/'+ activity).set(
-                    	{
-                    		activity: activity,
-                    		Searching: user.uid
-                    	});
-                    	console.log(user.uid + " in queue for "+ activity);
-                    	return null;
-                    }
-                }); 
-            }
-
-            supersonic.logger.log("user doesnt exists");
-        });
+		angular.element($('#indexCtrl')).scope().queue("Work Out");
 
 	}
 }
@@ -363,6 +190,7 @@ function handleswipe(result) {
         handleSwipeDown(swipeDownBol)
         e.preventDefault()
     });
+
 		function handleSwipeDown(result) {
 			//Time is less than elapsed time
 			if(result) {
@@ -374,6 +202,10 @@ function handleswipe(result) {
 			}
 		}
 	}
+
+		$('h1#recentActivities').on("touchend", function(e){
+			angular.element($('#indexCtrl')).scope().test();
+		})
 
 // *
 

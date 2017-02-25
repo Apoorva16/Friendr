@@ -1,26 +1,26 @@
 /**
  * Created by apoorvaparmar on 1/14/17.
  */
-(function(){
-    // some code…
-    var config = {
-        apiKey: "AIzaSyB9-bQjCSShbkJuiDeWtyOurzFqTnr7pFU",
-        authDomain: "friendr-be400.firebaseapp.com",
-        databaseURL: "https://friendr-be400.firebaseio.com",
-        storageBucket: "friendr-be400.appspot.com",
-        messagingSenderId: "852808235414"
-    };
+//  (function(){
+//     // some code…
+//     var config = {
+//         apiKey: "AIzaSyB9-bQjCSShbkJuiDeWtyOurzFqTnr7pFU",
+//         authDomain: "friendr-be400.firebaseapp.com",
+//         databaseURL: "https://friendr-be400.firebaseio.com",
+//         storageBucket: "friendr-be400.appspot.com",
+//         messagingSenderId: "852808235414"
+//     };
 
-    firebase.initializeApp(config);
-})();
+//     firebase.initializeApp(config);
+// })();
 
 
 angular
     .module('example')
-    .controller('InitialViewController', function($scope, supersonic) {
+    .controller('InitialViewController', function($scope, supersonic, backendService) {
 
-        $scope.email = "abcd@gmail.com";
-        $scope.password = "123456";
+        $scope.email = "jradocho@purdue.edu";
+        $scope.password = "password";
         $scope.login = function() {
 
             //firebase.signIn($scope.email, $scope.password);
@@ -34,6 +34,8 @@ angular
             }).catch(function (error) {
                 alert("Sign in unsuccessful");
             });
+            // backendService.signIn($scope.email,$scope.password);
+            // supersonic.logger.log(success);
         };
 
         $scope.signUp = function() {
