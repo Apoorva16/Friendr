@@ -1,18 +1,12 @@
 var backend = require('./backend1');
 
-
+//testing@purdue.edu - testing
+//jradocho@purdue.edu - password
 backend.signIn("testing@purdue.edu", "testing");
 //backend.addAuthUser("testing@purdue.edu", "testing", "Test", "Tester", "imatester");
-//backend.initiateConversation("9A4qaTgVs6gYu49X228WA6Ui20F3");
-//backend.sendMessage("9A4qaTgVs6gYu49X228WA6Ui20F3", "This is the third message in this conversation.");
+//backend.initiateConversation("U1PMF6lJBzereWItzrxnQbCrIH03");
+backend.sendMessage("U1PMF6lJBzereWItzrxnQbCrIH03", "This is the sixth message in this conversation.");
 //console.log(backend.getActivityList());
 
-backend.viewConversation("9A4qaTgVs6gYu49X228WA6Ui20F3").then(function(values)
-{
-	var i;
-	for (i = 0; i < values.length; i ++)
-	{
-		console.log(values[i].message);
-	}
-	
-});
+//backend.viewConversation("U1PMF6lJBzereWItzrxnQbCrIH03");
+//backend.modifyUsername("joshradochonski");

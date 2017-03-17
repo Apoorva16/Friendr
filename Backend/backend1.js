@@ -130,7 +130,8 @@ module.exports =
 				{
 					database.ref('users/' + user.uid).child("conversation_list").child(conversation_id).set(
 					{
-						other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName
+						other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName,
+						other_user_uid: other_uid
 					});
 				});
 				
@@ -138,7 +139,8 @@ module.exports =
 				{
 					database.ref('users/' + other_uid).child("conversation_list").child(conversation_id).set(
 					{
-						other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName
+						other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName,
+						other_user_uid: user.uid
 					});
 				});
 				
@@ -166,31 +168,50 @@ module.exports =
 				var convoId1 = database.ref('conversations').child(conversation_id1);
 				var convoId2 = database.ref('conversations').child(conversation_id2);
 
-				var conversation_id;
-				if (convoId1 != null)
-					conversation_id = conversation_id1;
-				else
-					conversation_id = conversation_id2;
-
-				//add message to database
-				database.ref('conversations').child(conversation_id).once('value').then(function(snapshot)
+				convoId1.once('value').then(function(snapshot)
 				{
-					var messageCount = snapshot.val().MessageCount;
-					var nextMessageId = messageCount + 1;
-					var date = new Date();
-				
-					database.ref('conversations').child(conversation_id).child('message_list').child(nextMessageId).set(
+					if (snapshot.hasChildren())
 					{
-						message: message,
-						sender: user.uid,
-						date: date.toDateString(),
-						time: date.toTimeString()
-					});	
+						var messageCount = snapshot.val().MessageCount;
+						var nextMessageId = messageCount + 1;
+						var date = new Date();
+					
+						database.ref('conversations').child(conversation_id1).child('message_list').child(nextMessageId).set(
+						{
+							message: message,
+							sender: user.uid,
+							date: date.toDateString(),
+							time: date.toTimeString()
+						});	
 
-					database.ref('conversations').child(conversation_id).update(
+						database.ref('conversations').child(conversation_id1).update(
+						{
+							MessageCount: messageCount+1
+						});
+					}
+				});
+
+				convoId2.once('value').then(function(snapshot)
+				{
+					if (snapshot.hasChildren())
 					{
-						MessageCount: messageCount+1
-					});
+						var messageCount = snapshot.val().MessageCount;
+						var nextMessageId = messageCount + 1;
+						var date = new Date();
+					
+						database.ref('conversations').child(conversation_id2).child('message_list').child(nextMessageId).set(
+						{
+							message: message,
+							sender: user.uid,
+							date: date.toDateString(),
+							time: date.toTimeString()
+						});	
+
+						database.ref('conversations').child(conversation_id2).update(
+						{
+							MessageCount: messageCount+1
+						});
+					}
 				});
 			}
 		});
@@ -198,41 +219,34 @@ module.exports =
 
 	viewConversation: function(other_uid)
 	{
-		var messageListPromise = new Promise(function(resolve, reject)
+		firebase.auth().onAuthStateChanged(function(user)
 		{
-			firebase.auth().onAuthStateChanged(function(user)
+			if (user)
 			{
-				if (user)
+				var conversation_id1 = user.uid + ' ' + other_uid;
+				var conversation_id2 = other_uid + ' ' + user.uid;
+
+				//determine which conversation_id is correct
+				var convoId1 = database.ref('conversations').child(conversation_id1);
+				var convoId2 = database.ref('conversations').child(conversation_id2);
+
+				convoId1.child('message_list').on('child_added', function(snapshot, prevKey)
 				{
-					var conversation_id1 = user.uid + ' ' + other_uid;
-					var conversation_id2 = other_uid + ' ' + user.uid;
-
-					//determine which conversation_id is correct
-					var convoId1 = database.ref('conversations').child(conversation_id1);
-					var convoId2 = database.ref('conversations').child(conversation_id2);
-
-					var conversation_id;
-					if (convoId1 != null)
-						conversation_id = conversation_id1;
-					else
-						conversation_id = conversation_id2;
-
-					//get message list
-					database.ref('conversations').child(conversation_id).child('message_list').once('value').then(function(snapshot)
+					if (snapshot.hasChildren())
 					{
-	    				var list = [];
-	    				snapshot.forEach(function(childSnapshot)
-						{
-							var childData = childSnapshot.val();
-		      				list.push(childData);
-		    			});
+						console.log(snapshot.val().message);
+	    			}
+				});
 
-		    			resolve(list);
-		    		});
-				}
-			});
+				convoId2.child('message_list').on('child_added', function(snapshot, prevKey)
+				{
+					if (snapshot.hasChildren())
+					{
+						console.log(snapshot.val().message);
+	    			}
+				});
+			}
 		});
-		return messageListPromise;
 	},
 
 
@@ -314,5 +328,32 @@ module.exports =
 		        // User is signed in.
 		    }
   		});
+	},
+
+	modifyProfilePicture: function(picture_link)
+	{
+		var user = firebase.auth().currentUser;
+
+		user.updateProfile({
+			photoURL: picture_link
+		});
+	},
+
+	modifyUsername: function(user_name)
+	{
+		firebase.auth().onAuthStateChanged(function(user)
+		{
+			if (user)
+			{
+				user.updateProfile({
+					username: user_name
+				});
+
+				database.ref('users/' + user.uid).update(
+				{
+					username: user_name
+				});
+			}
+		});
 	}
 }
