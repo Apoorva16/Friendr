@@ -5,17 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
   <title><%= yield.viewName %></title>
-
+  <script src="/app/common/assets/scripts/backendService.js"></script>
   <link rel="stylesheet" href="/components/supersonic/css/supersonic.css" />
   <link rel="stylesheet" href="/app/common/stylesheets/application.css" />
+  <script src="/app/common/assets/scripts/jquery-3.1.1.min.js"></script>
   <link rel="import" href="/components/supersonic/components/import.html">
-
   <script src="http://localhost/cordova.js"></script>
   <script src="/components/steroids-js/steroids.js"></script>
   <script src="/components/angular/angular.js"></script>
   <script src="/components/supersonic/supersonic.js"></script>
   <script src="/components/webcomponentsjs/webcomponents-lite.js"></script>
-
+  <script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
   <% _.each(yield.modules, function(module) { %>
   <script src="/app/<%= module %>.js"></script>
   <% }); %>

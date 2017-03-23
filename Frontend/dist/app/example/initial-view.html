@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+  window.addEventListener('WebComponentsReady', function() {
+    supersonic.app.splashscreen.hide();
+  });
+  </script>
+  <!-- Cloud resource definition file for Supersonic Data -->
+  <script src="/cloud-resources.js"></script>
+  <meta charset="utf8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  <title>initial-view</title>
+  <script src="/app/common/assets/scripts/backendService.js"></script>
+  <link rel="stylesheet" href="/components/supersonic/css/supersonic.css" />
+  <link rel="stylesheet" href="/app/common/stylesheets/application.css" />
+  <script src="/app/common/assets/scripts/jquery-3.1.1.min.js"></script>
+  <link rel="import" href="/components/supersonic/components/import.html">
+  <script src="http://localhost/cordova.js"></script>
+  <script src="/components/steroids-js/steroids.js"></script>
+  <script src="/components/angular/angular.js"></script>
+  <script src="/components/supersonic/supersonic.js"></script>
+  <script src="/components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.6.10/firebase.js"></script>
+  
+  <script src="/app/common.js"></script>
+  
+  <script src="/app/example.js"></script>
+  
+</head>
+<body ng-app="example">
+
+<super-navbar>
+  <super-navbar-title>
+    Login
+  </super-navbar-title>
+</super-navbar>
+
+
+<div class="login-page" ng-controller="InitialViewController">
+
+  <div class="padding">
+    <div class="wrap-login">
+      <div class="text-center">
+        <h2 class="logo-font"><strong>Friendr</strong></h2>
+      </div>
+      <div class="text-center">
+        <!--<p class="login-text">-->
+        <!--Don't have a facebook account?-->
+        <!--&lt;!&ndash;<br>&ndash;&gt;-->
+        <!--Make one now, its that easy!-->
+        <!--</p>-->
+      </div>
+      <div class="list white">
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">Email</span>
+          <input type="text" ng-model="email" placeholder="abcd@purdue.edu">
+        </label>
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">Password</span>
+          <input type="password" ng-model="password" placeholder="abcd">
+        </label>
+      </div>
+      <div class="wrap-buttons">
+        <!--<button ng-click="login()" class="button button-block btn-login">-->
+        <!--<i class="fa fa-facebook-square fa"></i>&nbsp; Login with Facebook-->
+        <!--</button>-->
+      <!--<button onclick="supersonic.ui.initialView.dismiss()" class="button button-block button-positive">Log in</button> -->
+        <button ng-click="login()" class="button button-block button-positive">Login</button>
+        <button ng-click="signUp()" class="button button-block button-positive">Create Account</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

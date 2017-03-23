@@ -1,0 +1,23 @@
+{
+  "drawers": {
+    "left": {
+      "id": "leftDrawer",
+      "location": "http://localhost/app/example/drawer.html",
+      "showOnAppLoad": false
+    },
+    "options": {
+      "animation": "slide"
+    }
+  },
+  "initialView": {
+    "id": "initialView",
+    "location": "http://localhost/app/example/initial-view.html"
+  },
+  "tabs": [],
+  "rootView": {
+    "location": "http://localhost/app/home/index.html"
+  },
+  "configuration": {
+    "extra_response_headers": {}
+  }
+}

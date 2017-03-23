@@ -1,7 +1,9 @@
 var backend = require('./backend1');
 
-
+//testing@purdue.edu - testing
+//jradocho@purdue.edu - password
 backend.signIn("testing@purdue.edu", "testing");
+<<<<<<< HEAD
 //backend.signIn("xiab@purdue.edu", "password");
 
 //backend.addAuthUser("xiab@purdue.edu", "password", "Eric", "Tao", "EX1990");
@@ -46,3 +48,12 @@ backend.enterQueue("Study").then(function(values) {
 //console.log(other_uid);
 
 
+=======
+//backend.addAuthUser("testing@purdue.edu", "testing", "Test", "Tester", "imatester");
+//backend.initiateConversation("U1PMF6lJBzereWItzrxnQbCrIH03");
+backend.sendMessage("U1PMF6lJBzereWItzrxnQbCrIH03", "This is the sixth message in this conversation.");
+//console.log(backend.getActivityList());
+
+//backend.viewConversation("U1PMF6lJBzereWItzrxnQbCrIH03");
+//backend.modifyUsername("joshradochonski");
+>>>>>>> master
