@@ -227,6 +227,7 @@ module.exports =
 				var conversation_id1 = user.uid + ' ' + other_uid;
 				var conversation_id2 = other_uid + ' ' + user.uid;
 
+
 				//determine which conversation_id is correct
 				var convoId1 = database.ref('conversations').child(conversation_id1);
 				var convoId2 = database.ref('conversations').child(conversation_id2);
@@ -239,6 +240,7 @@ module.exports =
 	    			}
 				});
 
+
 				convoId2.child('message_list').on('child_added', function(snapshot, prevKey)
 				{
 					if (snapshot.hasChildren())
@@ -246,6 +248,7 @@ module.exports =
 						console.log(snapshot.val().message);
 	    			}
 				});
+
 			}
 		});
 	},
@@ -364,6 +367,7 @@ module.exports =
 				});
 			}
 		});
+
 	}
 	setPreferencesForActivity: function(activity, preferencesList) {
 		var x = 0;
@@ -407,6 +411,7 @@ module.exports =
 				database.ref('users/'+ user.uid + '/Preferences').update(foo);
 			}
 		});
+
 	}
 
 }
