@@ -132,9 +132,25 @@ function leaveQueue(activity) {
     }
   });
 }
+/*
+function removeAllSearches() {
+  database.ref('Activities/').once('value').then(function(snapshot)
+  {
+    snapshot.forEach(function(childSnapshot) {
+      if (snapshot.child(childSnapshot.key).child("Searching").exists()) {
+        database.ref('Activities/'+childSnapshot.key).set({
+          activity: childSnapshot.key;
+        });
+      }
 
-//createAuthAccount(email, password, name, username);
-signIn(email2,password);
+    });
+  });
+}
+
+*/
+createAuthAccount(email, password, name, username);
+//signIn(email,password);
+//removeAllSearches();
 enterQueue("Study");
 //leaveQueue("Study");
 //addActivity("Study");
