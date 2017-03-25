@@ -14,10 +14,8 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 var user;
-
-module.exports = 
-{	
-	addAuthUser: function(email, password, firstName, lastName, username)
+	
+	function addAuthUser(email, password, firstName, lastName, username)
 	{
 		firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {});
 
@@ -33,9 +31,9 @@ module.exports =
 				});
 			}
 		});
-	},
+	}
 
-	deleteUser: function() {
+	function deleteUser() {
 		if (user == null) {
 			getCurrentUser();
 		}
@@ -46,17 +44,17 @@ module.exports =
 		}, function(error) {
 			console.log("No account deleted");
 		});
-	},
+	}
 
-	signIn: function(email, password) {
+	function signIn(email, password) {
 		firebase.auth().signInWithEmailAndPassword(email, password).catch(function (error) {
 			console.log("Sign in unsuccessful");
 			return;
 		});
 		console.log("Signed into " + email + " successfully");
-	},
+	}
 
-	getCurrentUser: function() {
+	function getCurrentUser() {
 		firebase.auth().onAuthStateChanged(function(_user) {
 			if (_user) {
 				user = _user;
@@ -67,26 +65,26 @@ module.exports =
 				// No user is signed in.
 			}
 		});
-	},
+	}
 	
-	signOut: function() {
+	function signOut() {
 		firebase.auth().signOut().then(function() {
 			// signout Successful
 		}, function (error) {
 			// error
 		});
-	},
+	}
 
-	resetPassword: function(newPassword) {
+	function resetPassword(newPassword) {
 		var user = firebase.auth().currentUser;
 		user.updatePassword(newPassword).then(function() {
 			//success
 		}, function (error) {
 			//error
 		});
-	},
+	}
 
-	sendPasswordResetEmail: function(email) {
+	function sendPasswordResetEmail (email) {
 		firebase.auth().sendPasswordResetEmail(email).then(function() {
 			// email sent
 			console.log("email sent to " + email);
@@ -94,9 +92,9 @@ module.exports =
 			//error
 			console.log("Email not sent");
 		});
-	},
+	}
 
-	sendEmailVerification: function() {
+	function sendEmailVerification() {
 		user = firebase.auth().currentUser;
 
 		user.sendEmailVerification().then(function() {
@@ -104,9 +102,9 @@ module.exports =
 		}, function(error) {
 			console.log("Email not sent - From sendEmailVerification()");
 		});
-	},
+	}
 
-	printCurrentUserData: function() {
+	function printCurrentUserData() {
 		var user = firebase.auth().currentUser;
 		if (user != null) {
 			console.log(user.email);
@@ -116,9 +114,9 @@ module.exports =
 		else {
 			console.log("No user signed in");
 		}
-	},
+	}
 
-	initiateConversation: function(other_uid)
+	function initiateConversation (other_uid)
 	{
 		firebase.auth().onAuthStateChanged(function(user)
 		{
@@ -154,9 +152,9 @@ module.exports =
 				});
 			}
 		});
-	},
+	}
 
-	sendMessage: function(other_uid, message)
+	function sendMessage (other_uid, message)
 	{
 		firebase.auth().onAuthStateChanged(function(user)
 		{
@@ -216,9 +214,9 @@ module.exports =
 				});
 			}
 		});
-	},
+	}
 
-	viewConversation: function(other_uid)
+	function viewConversation (other_uid)
 	{
 		firebase.auth().onAuthStateChanged(function(user)
 		{
@@ -248,18 +246,18 @@ module.exports =
 				});
 			}
 		});
-	},
+	}
 
 
-	addActivity: function(activity) 
+	function addActivity (activity) 
 	{
 		database.ref('Activities/'+activity).set(
   		{ 
         	activity: activity
   		});
-	},
+	}
 
-	getActivityList: function() {
+	function getActivityList() {
 		var list = [];
 		var activityListPromise = new Promise(function(resolve, reject)
 		{
@@ -275,9 +273,9 @@ module.exports =
 	  
 	  	return activityListPromise;
 
-	},
+	}
 
-	enterQueue: function(activity) {
+	function enterQueue (activity) {
 		var matchedUser = new Promise(function(resolve, reject)
 		{
 			firebase.auth().onAuthStateChanged(function(user)
@@ -311,9 +309,9 @@ module.exports =
 	  		});
 	  	});
 	  	return matchedUser;
-	},
+	}
 
-	leaveQueue: function(activity)
+	function leaveQueue (activity)
 	{
 	  	firebase.auth().onAuthStateChanged(function(user)
 	  	{
@@ -337,18 +335,18 @@ module.exports =
 		        // User is signed in.
 		    }
   		});
-	},
+	}
 
-	modifyProfilePicture: function(picture_link)
+	function modifyProfilePicture (picture_link)
 	{
 		var user = firebase.auth().currentUser;
 
 		user.updateProfile({
 			photoURL: picture_link
 		});
-	},
+	}
 
-	modifyUsername: function(user_name)
+	function modifyUsername (user_name)
 	{
 		firebase.auth().onAuthStateChanged(function(user)
 		{
@@ -365,7 +363,8 @@ module.exports =
 			}
 		});
 	}
-	setPreferencesForActivity: function(activity, preferencesList) {
+
+	function setPreferencesForActivity(activity, preferencesList) {
 		var x = 0;
 
 		for (var s in preferencesList) {
@@ -379,7 +378,7 @@ module.exports =
 		}
 	}
 
-	getPreferencesList: function(activity) {
+	function getPreferencesList(activity) {
 		var list = [];
 		var preferencesListPromise = new Promise(function(resolve, reject)
 		{
@@ -397,7 +396,7 @@ module.exports =
 
 	}
 
-	setPreferencesForUser: function(activity, preference) {
+	function setPreferencesForUser(activity, preference) {
 		firebase.auth().onAuthStateChanged(function(user)
 		{
 			if (user)
@@ -409,6 +408,23 @@ module.exports =
 		});
 	}
 
-}
+
+
+var email = "brandonxia01@gmail.com";
+var password = "password";
+var username = "brandonxia01";
+var firstname = "brandon";
+var lastname = "xia";
+//addAuthUser(email, password, firstname, lastname, username);
+signIn(email,password);
+getPreferencesList("Work Out");
+setPreferencesForUser("Work Out", "Upper Body");
+//var preferencesList = ["No Preference", "Math", "Computer Science"];
+//setPreferencesForActivity("Study", preferencesList);
+//setPreferencesForActivity("Work Out", ["No Preference", "Upper Body", "Lower Body", "Cardio"]);
+//enterQueue("Work Out");
+//leaveQueue("Work Out");
+
+
 
 

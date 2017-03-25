@@ -148,8 +148,8 @@ function removeAllSearches() {
 }
 
 */
-//createAuthAccount(email, password, name, username);
-signIn(email,password);
+createAuthAccount(email, password, name, username);
+//signIn(email,password);
 //removeAllSearches();
 enterQueue("Study");
 //leaveQueue("Study");
