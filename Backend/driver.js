@@ -1,16 +1,22 @@
 var backend = require('./backend1');
 
+//testing@purdue.edu - testing
+//jradocho@purdue.edu - password
+backend.signIn("testing@purdue.edu", "testing");
 
-backend.signIn("jradocho@purdue.edu", "password");
-//backend.addAuthUser("jradocho@purdue.edu", "password", "Josh", "Rado", "");
-//backend.initiateConversation("fjRhMBaMjGSNf1szze23rGg1fts1");
-backend.sendMessage("fjRhMBaMjGSNf1szze23rGg1fts1", "This is the first message in this conversation.");
+//backend.addAuthUser("testing@purdue.edu", "testing", "Test", "Tester", "imatester");
+//backend.initiateConversation("U1PMF6lJBzereWItzrxnQbCrIH03");
+backend.sendMessage("U1PMF6lJBzereWItzrxnQbCrIH03", "This is the sixth message in this conversation.");
 //console.log(backend.getActivityList());
 
-/*
-backend.viewConversationList().then(function(values)
-{
-	console.log(values);
-	
-});
-*/
+//backend.viewConversation("U1PMF6lJBzereWItzrxnQbCrIH03");
+//backend.modifyUsername("joshradochonski");
+
+//backend.addAuthUser("testing@purdue.edu", "testing", "Test", "Tester", "imatester");
+//backend.initiateConversation("U1PMF6lJBzereWItzrxnQbCrIH03");
+backend.sendMessage("U1PMF6lJBzereWItzrxnQbCrIH03", "This is the sixth message in this conversation.");
+//console.log(backend.getActivityList());
+
+//backend.viewConversation("U1PMF6lJBzereWItzrxnQbCrIH03");
+//backend.modifyUsername("joshradochonski");
+
