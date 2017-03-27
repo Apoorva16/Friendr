@@ -173,6 +173,7 @@ module.exports =
 				{
 					if (snapshot.hasChildren())
 					{
+						console.log("Message Sent: " + message);
 						var messageCount = snapshot.val().MessageCount;
 						var nextMessageId = messageCount + 1;
 						var date = new Date();
@@ -307,25 +308,57 @@ module.exports =
 		    	if (user)
 		    	{ // User is signed in.
 		       		//console.log("matching");
-		     	   	database.ref('Activities/'+ activity).once('value').then(function(snapshot)
+		     	   	database.ref('Activities/'+ activity + '/Searching').once('value').then(function(snapshot)
 		        	{
-		          		if (snapshot.child("Searching").exists())
+		          		if (snapshot.exists())
 		          		{
 				            // get matched with this user
-				            var other_uid = snapshot.child("Searching").val();
-				            //console.log(user.uid + " matched with user " + other_uid)
-				            database.ref('Activities/' + activity + "/Searching").remove()
-				     
+				            var matches = snapshot.val();
+				            database.ref('Activities/' + activity + "/Searching").remove();
+				            
+				            var other_uid;
+				            console.log(matches);
+				            snapshot.forEach(function(childSnapshot) {
+				            	console.log(childSnapshot.key);
+				            });
+				            
+				            //TODO not working for some reason...
+				            //add user to list of previous matches for both
+				            database.ref('users/' + other_uid).once('value').then(function(snapshot)
+							{
+								database.ref('users/' + user.uid + '/match_list/' + other_uid).set(
+								{
+									other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName,
+									other_user_uid: other_uid
+								});
+							});
+							database.ref('users/' + user.uid).once('value').then(function(snapshot)
+							{
+								console.log("I'm getting here");
+								database.ref('users/' + other_uid + '/match_list/' + user.uid).set(
+								{
+									other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName,
+									other_user_uid: user.uid
+								});
+							});
+
 		            		resolve(other_uid);
 		          		}	
-			          	else if(snapshot.exists())
+			          	else if(!snapshot.exists())
 			          	{
-			          		database.ref('Activities/'+ activity).update(
+			          		database.ref('users/' + user.uid + '/Preferences').once('value').then(function(snapshot)
 			          		{
-			          			activity: activity,
-			          			Searching: user.uid
+			          			var preferences = snapshot.val();
+			          			var preferenceForThisActivity = preferences[activity];
+			          			console.log(preferenceForThisActivity);
+
+			          			database.ref('Activities/'+ activity + '/Searching/' + user.uid).update(
+				          		{
+				          			preferences: preferenceForThisActivity
+				          		});
+				          		console.log(user.uid + " in queue for " + activity);
 			          		});
-			          		console.log(user.uid + " in queue for " + activity);
+			          		
 			          		resolve(null);
 			          	}
 		       	 	}); 
@@ -386,8 +419,8 @@ module.exports =
 				});
 			}
 		});
+	},
 
-	}
 	setPreferencesForActivity: function(activity, preferencesList) {
 		var x = 0;
 
@@ -400,7 +433,7 @@ module.exports =
 			database.ref("Activities/"+activity+"/Preferences").update(foo);
 			x++;
 		}
-	}
+	},
 
 	getPreferencesList: function(activity) {
 		var list = [];
@@ -417,8 +450,7 @@ module.exports =
 	  	});
 	  
 	  	return preferencesListPromise;
-
-	}
+	},
 
 	setPreferencesForUser: function(activity, preference) {
 		firebase.auth().onAuthStateChanged(function(user)

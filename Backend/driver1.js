@@ -8,5 +8,7 @@ backend.signIn("jradocho@purdue.edu", "password");
 //backend.sendMessage("fjRhMBaMjGSNf1szze23rGg1fts1", "This is the fourth message in this conversation.");
 //console.log(backend.getActivityList());
 
-backend.viewConversation("fjRhMBaMjGSNf1szze23rGg1fts1");
+//backend.viewConversation("fjRhMBaMjGSNf1szze23rGg1fts1");
 //backend.modifyUsername("joshrado");
+//backend.setPreferencesForUser("Eat", "Dining Court");
+backend.enterQueue("Eat");
