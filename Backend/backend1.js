@@ -240,37 +240,46 @@ module.exports =
 
 	viewConversation: function(other_uid)
 	{
-		firebase.auth().onAuthStateChanged(function(user)
+		var messageList = new Promise(function(resolve, reject)
 		{
-			if (user)
+			firebase.auth().onAuthStateChanged(function(user)
 			{
-				var conversation_id1 = user.uid + ' ' + other_uid;
-				var conversation_id2 = other_uid + ' ' + user.uid;
-
-
-				//determine which conversation_id is correct
-				var convoId1 = database.ref('conversations').child(conversation_id1);
-				var convoId2 = database.ref('conversations').child(conversation_id2);
-
-				convoId1.child('message_list').on('child_added', function(snapshot, prevKey)
+				if (user)
 				{
-					if (snapshot.hasChildren())
+					var conversation_id1 = user.uid + ' ' + other_uid;
+					var conversation_id2 = other_uid + ' ' + user.uid;
+
+
+					//determine which conversation_id is correct
+					var convoId1 = database.ref('conversations').child(conversation_id1);
+					var convoId2 = database.ref('conversations').child(conversation_id2);
+
+					convoId1.child('message_list').once('value').then(function(snapshot)
 					{
-						console.log(snapshot.val().message);
-	    			}
-				});
+						var list = [];
+						snapshot.forEach(function(childSnapshot)
+						{
+							var message = childSnapshot.val().message;
+							list.push(message);
+						});
+						resolve(list);
+					});
 
-
-				convoId2.child('message_list').on('child_added', function(snapshot, prevKey)
-				{
-					if (snapshot.hasChildren())
+					convoId2.child('message_list').once('value').then(function(snapshot)
 					{
-						console.log(snapshot.val().message);
-	    			}
-				});
+						var list = [];
+						snapshot.forEach(function(childSnapshot)
+						{
+							var message = childSnapshot.val().message;
+							list.push(message);
+						});
+						resolve(list);
+					});
 
-			}
+				}
+			});
 		});
+		return messageList;
 	},
 
 
