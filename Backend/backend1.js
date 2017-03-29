@@ -308,53 +308,92 @@ module.exports =
 		    	if (user)
 		    	{ // User is signed in.
 		       		//console.log("matching");
-		     	   	database.ref('Activities/'+ activity + '/Searching').once('value').then(function(snapshot)
+		     	   	database.ref('Activities/'+ activity + '/Searching').once('value').then(function(snapshot1)
 		        	{
-		          		if (snapshot.exists())
+		          		if (snapshot1.exists())
 		          		{
-				            // get matched with this user
-				            var matches = snapshot.val();
-				            database.ref('Activities/' + activity + "/Searching").remove();
-				            
-				            var other_uid;
-				            console.log(matches);
-				            snapshot.forEach(function(childSnapshot) {
-				            	console.log(childSnapshot.key);
-				            });
-				            
-				            //TODO not working for some reason...
-				            //add user to list of previous matches for both
-				            database.ref('users/' + other_uid).once('value').then(function(snapshot)
-							{
-								database.ref('users/' + user.uid + '/match_list/' + other_uid).set(
-								{
-									other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName,
-									other_user_uid: other_uid
-								});
-							});
-							database.ref('users/' + user.uid).once('value').then(function(snapshot)
-							{
-								console.log("I'm getting here");
-								database.ref('users/' + other_uid + '/match_list/' + user.uid).set(
-								{
-									other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName,
-									other_user_uid: user.uid
-								});
-							});
+		          			database.ref('users/' + user.uid + '/Preferences').once('value').then(function(snapshot2)
+			          		{
+			          			var matchFound = false;
+			          			snapshot1.forEach(function(childSnapshot1)
+			          			{
+			          				var other_uid = childSnapshot1.key;
+			          				var other_preferences = childSnapshot1.val().preferences;
+			          				console.log("other_uid");
+			          				console.log(other_uid);
+			          				console.log("other_preferences");
+			          				console.log(other_preferences);
 
-		            		resolve(other_uid);
+			          				var my_preferences = snapshot2.val();
+			          				console.log("my_preferences");
+			          				console.log(my_preferences);
+
+			          				var isMatch = true;
+			          				for (var key in my_preferences)
+			          				{
+			          					if (my_preferences.hasOwnProperty(key))
+			          					{
+			          						if (my_preferences[key] == other_preferences[key])
+			          							console.log("Preferences Match: " + key);
+			          						else
+			          						{
+			          							console.log("Preferences Mismatch: " + key);
+			          							isMatch = false;
+			          							break;
+			          						}
+			          					}
+			          				}
+
+			          				if (isMatch)
+			          				{
+			          					//all preferences match, remove other user from queue
+			          					matchFound = true;
+			          					console.log("Match found, removing matching uid from queue " + other_uid);
+			          					database.ref('Activities/' + activity + '/Searching/' + other_uid).remove();
+
+			          					//add each to the match list
+			          					database.ref('users/' + user.uid + '/match_list').set({
+			          						other_uid: other_uid
+			          					});
+
+			          					database.ref('users/' + other_uid + '/match_list').set({
+			          						other_uid: user.uid
+			          					});
+
+			          					resolve(other_uid);
+			          				}
+			          			});
+
+			          			if (!matchFound)
+			          			{
+				          			//match not found, insert into queue
+				          			console.log("No Match Found");
+				          			database.ref('users/' + user.uid + '/Preferences').once('value').then(function(snapshot)
+					          		{
+					          			var userPreferences = snapshot.val();
+					          			console.log(userPreferences);
+
+					          			database.ref('Activities/'+ activity + '/Searching/' + user.uid).update(
+						          		{
+						          			preferences: userPreferences
+						          		});
+						          		console.log(user.uid + " in queue for " + activity);
+					          		});
+				          		
+				          			resolve(null);
+			          			}
+			          		});
 		          		}	
-			          	else if(!snapshot.exists())
+			          	else
 			          	{
 			          		database.ref('users/' + user.uid + '/Preferences').once('value').then(function(snapshot)
 			          		{
-			          			var preferences = snapshot.val();
-			          			var preferenceForThisActivity = preferences[activity];
-			          			console.log(preferenceForThisActivity);
+			          			var userPreferences = snapshot.val();
+			          			console.log(userPreferences);
 
 			          			database.ref('Activities/'+ activity + '/Searching/' + user.uid).update(
 				          		{
-				          			preferences: preferenceForThisActivity
+				          			preferences: userPreferences
 				          		});
 				          		console.log(user.uid + " in queue for " + activity);
 			          		});
@@ -421,50 +460,35 @@ module.exports =
 		});
 	},
 
-	setPreferencesForActivity: function(activity, preferencesList) {
-		var x = 0;
-
-		for (var s in preferencesList) {
-			var p = "p"+x;
-			//console.log("p = " + p);
-			var pref = preferencesList[s];
-			var foo = {};
-			foo[p] = pref;
-			database.ref("Activities/"+activity+"/Preferences").update(foo);
-			x++;
-		}
+	setPreferencesForActivity: function(activity, preferencesList)
+	{
+		database.ref("Activities/"+activity+"/StaticPreferences").update(preferencesList);
 	},
 
-	getPreferencesList: function(activity) {
-		var list = [];
+	getPreferencesList: function(activity)
+	{
 		var preferencesListPromise = new Promise(function(resolve, reject)
 		{
-	  		database.ref('Activities/'+activity+'/Preferences').once('value').then(function(snapshot)
+	  		database.ref('Activities/'+activity+'/StaticPreferences').once('value').then(function(snapshot)
 	  		{
-	   			snapshot.forEach(function(child) {
-	      			list.push(child.val());
-	    		});
-	    		//console.log(list.toString());
-	    		resolve(list); //u
+	  			var preferences = snapshot.val();
+	   			resolve(preferences);
 	  		});
 	  	});
 	  
 	  	return preferencesListPromise;
 	},
 
-	setPreferencesForUser: function(activity, preference) {
+	setPreferencesForUser: function(activity, preference)
+	{
 		firebase.auth().onAuthStateChanged(function(user)
 		{
 			if (user)
 			{
-				var foo = {};
-				foo[activity] = preference;
-				database.ref('users/'+ user.uid + '/Preferences').update(foo);
+				database.ref('users/'+ user.uid + '/Preferences').update(preference);
 			}
 		});
-
 	}
-
 }
 
 
