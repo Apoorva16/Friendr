@@ -8,10 +8,10 @@ backend.signIn("testing@purdue.edu", "testing");
 	console.log(list);
 });*/
 
-//backend.enterQueue("Eat");
+backend.enterQueue("Eat");
 
 //backend.initiateConversation("U1PMF6lJBzereWItzrxnQbCrIH03");
-backend.sendMessage("U1PMF6lJBzereWItzrxnQbCrIH03", "Newer Test Message");
+//backend.sendMessage("U1PMF6lJBzereWItzrxnQbCrIH03", "Newer Test Message");
 
 /*backend.viewConversation("U1PMF6lJBzereWItzrxnQbCrIH03").then(function(value){
 	console.log(value);

@@ -361,21 +361,21 @@ module.exports =
 
 	},
 
-	enterQueue: function(activity) {
+	enterQueue: function(activity)
+	{
 		var matchedUser = new Promise(function(resolve, reject)
 		{
 			firebase.auth().onAuthStateChanged(function(user)
 			{
 		    	if (user)
-		    	{ // User is signed in.
-		       		//console.log("matching");
+		    	{
 		     	   	database.ref('Activities/'+ activity + '/Searching').once('value').then(function(snapshot1)
 		        	{
-		          		if (snapshot1.exists())
+		        		var matchFound = false;
+		          		if (snapshot1.hasChildren())
 		          		{
 		          			database.ref('users/' + user.uid + '/Preferences/' + activity).once('value').then(function(snapshot2)
 			          		{
-			          			var matchFound = false;
 			          			snapshot1.forEach(function(childSnapshot1)
 			          			{
 			          				var other_uid = childSnapshot1.key;
@@ -411,39 +411,18 @@ module.exports =
 			          					matchFound = true;
 			          					console.log("Match found, removing matching uid from queue " + other_uid);
 			          					database.ref('Activities/' + activity + '/Searching/' + other_uid).remove();
+			          					var date = new Date();
 
-			          					database.ref('users/' + user.uid + '/match_list').once('value').then(function(snapshot){
-			          						var matchNum = snapshot.val().numMatches;
-			          						console.log("Match Number: ");
-			          						console.log(matchNum);
-			          						if (matchNum = null)
-			          							matchNum = 1;
-
-			          						//add each to the match list
-				          					database.ref('users/' + user.uid + '/match_list/' + matchNum).set({
-				          						other_uid: other_uid
-				          					});
-
-				          					database.ref('users/' + user.uid + '/match_list').update({
-				          						numMatches: matchNum + 1
-				          					});
+			          					database.ref('users/' + user.uid + '/match_list/' + other_uid).update({
+			          						timeMatched: date.toTimeString(),
+			          						dateMatched: date.toDateString(),
+			          						matchedActivity: activity
 			          					});
 
-			          					database.ref('users/' + other_uid + '/match_list').once('value').then(function(snapshot){
-			          						var matchNum = snapshot.val().numMatches;
-			          						console.log("Match Number: ");
-			          						console.log(matchNum);
-			          						if (matchNum == null)
-			          							matchNum = 1;
-
-			          						//add each to the match list
-				          					database.ref('users/' + other_uid + '/match_list/' + matchNum).set({
-				          						other_uid: other_uid
-				          					});
-
-				          					database.ref('users/' + other_uid + '/match_list').update({
-				          						numMatches: matchNum + 1
-				          					});
+			          					database.ref('users/' + other_uid + '/match_list/' + user.uid).update({
+			          						timeMatched: date.toTimeString(),
+			          						dateMatched: date.toDateString(),
+			          						matchedActivity: activity
 			          					});
 
 			          					resolve(other_uid);
@@ -452,7 +431,7 @@ module.exports =
 
 			          			if (!matchFound)
 			          			{
-				          			//match not found, insert into queue
+			          				//match not found, insert into queue
 				          			console.log("No Match Found");
 				          			database.ref('users/' + user.uid + '/Preferences/' + activity).once('value').then(function(snapshot)
 					          		{
@@ -469,10 +448,12 @@ module.exports =
 				          			resolve(null);
 			          			}
 			          		});
-		          		}	
-			          	else
-			          	{
-			          		database.ref('users/' + user.uid + '/Preferences/' + activity).once('value').then(function(snapshot)
+		          		}
+		          		else
+		          		{
+		          			//match not found, insert into queue
+		          			console.log("No Users Searching");
+		          			database.ref('users/' + user.uid + '/Preferences/' + activity).once('value').then(function(snapshot)
 			          		{
 			          			var userPreferences = snapshot.val();
 			          			console.log(userPreferences);
@@ -483,10 +464,10 @@ module.exports =
 				          		});
 				          		console.log(user.uid + " in queue for " + activity);
 			          		});
-			          		
-			          		resolve(null);
-			          	}
-		       	 	}); 
+		          		
+		          			resolve(null);
+		          		}
+		       	 	});
 		    	}
 	  		});
 	  	});
@@ -498,23 +479,9 @@ module.exports =
 	  	firebase.auth().onAuthStateChanged(function(user)
 	  	{
 		    if (user)
-		    { // User is signed in.
-		        database.ref('Activities/'+ activity).once('value').then(function(snapshot)
-			    {
-			        if (snapshot.child("Searching").exists())
-			        {
-			            // get matched with this user
-			            if (snapshot.child("Searching").val() == user.uid)
-			            {
-			            	database.ref('Activities/' + activity + "/Searching").remove();
-			            	/*{
-			              		activity: activity
-			            	});*/
-			              	console.log("User out of queue");
-			            }
-			        }
-		        }); 
-		        // User is signed in.
+		    {
+		        database.ref('Activities/' + activity + '/Searching/' + user.uid).remove();
+		        console.log("User out of queue.");
 		    }
   		});
 	},

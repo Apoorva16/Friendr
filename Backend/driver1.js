@@ -11,6 +11,6 @@ backend.signIn("jradocho@purdue.edu", "password");
 //backend.viewConversation("fjRhMBaMjGSNf1szze23rGg1fts1");
 //backend.modifyUsername("joshrado");
 //backend.setPreferencesForUser("Eat", "Dining Court");
-//backend.enterQueue("Eat");
+backend.enterQueue("Eat");
 
-backend.listenToConversation("fjRhMBaMjGSNf1szze23rGg1fts1");
+//backend.listenToConversation("fjRhMBaMjGSNf1szze23rGg1fts1");
