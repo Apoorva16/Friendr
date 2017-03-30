@@ -20,6 +20,23 @@
   box-shadow: 0px 0px 21px 3px rgba(0,0,0,0.5);
 }
 
+.setting {
+  padding: 15px;
+}
+
+.password{
+  margin-top: 5vh;
+  height: 15vh;
+  background: -webkit-linear-gradient(#FFFFFF, #d4dcdc);   /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(#FFFFFF, #d4dcdc);        /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(#FFFFFF, #d4dcdc);      /* For Firefox 3.6 to 15 */
+  background: linear-gradient(#FFFFFF, #d4dcdc);           /* Standard syntax */
+
+  padding: 5%;
+  -webkit-box-shadow: 0px 0px 21px 3px rgba(0,0,0,0.5);
+  -moz-box-shadow: 0px 0px 21px 3px rgba(0,0,0,0.5);
+  box-shadow: 0px 0px 21px 3px rgba(0,0,0,0.5);
+}
 .logo-font {
   font-family: 'Unica One', 'cursive';
 }

@@ -69,6 +69,14 @@ var getCurrentUser= function() {
 		});
 };
 
+function modifyProfilePicture(picture_link) {
+	var user = firebase.auth().currentUser;
+
+	user.updateProfile({
+		photoURL: picture_link
+	});
+};
+
 var signOut= function() {
 	firebase.auth().signOut().then(function() {
 			// signout Successful

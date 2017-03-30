@@ -19,8 +19,9 @@ angular
     .module('example')
     .controller('InitialViewController', function($scope, supersonic, backendService) {
 
-        $scope.email = "jradocho@purdue.edu";
-        $scope.password = "password";
+        $scope.email = "apudhelu@gmail.com";
+        $scope.password = "test1234";
+
         $scope.login = function() {
 
             //firebase.signIn($scope.email, $scope.password);
@@ -44,6 +45,17 @@ angular
 
 
             var modalView = new supersonic.ui.View("example#signup");
+            var options = {
+                animate: true
+            };
+            supersonic.ui.modal.show(modalView, options);
+        };
+        $scope.reset = function() {
+
+            // supersonic.ui.dialog.alert("Signup working Yo");
+
+
+            var modalView = new supersonic.ui.View("example#password");
             var options = {
                 animate: true
             };
