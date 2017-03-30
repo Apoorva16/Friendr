@@ -299,24 +299,34 @@ module.exports =
 					var conversation_id2 = other_uid + ' ' + user.uid;
 
 					//determine which conversation_id is correct
-					var convoId1 = database.ref('conversations').child(conversation_id1);
-					var convoId2 = database.ref('conversations').child(conversation_id2);
+					var convoId1 = database.ref('conversations/' + conversation_id1);
+					var convoId2 = database.ref('conversations/' + conversation_id2);
 
-					convoId1.child('message_list').on('child_added', function(snapshot, prevKey)
+					convoId1.once('value').then(function(snapshotP)
 					{
-						if (snapshot.hasChildren())
+						if (snapshotP.hasChildren())
 						{
-							//TODO: insert code to add message to conversation
-							resolve(snapshot.val());
+							console.log("ConversationId1 is valid.");
+							convoId1.child('message_list').on('child_added', function(snapshot, prevKey)
+							{
+								if (snapshot.hasChildren())
+								{
+									//TODO: insert code to add message to conversation
+									console.log(snapshot.val());
+								}
+							});
 						}
-					});
-
-					convoId2.child('message_list').on('child_added', function(snapshot, prevKey)
-					{
-						if (snapshot.hasChildren())
+						else
 						{
-							//TODO: insert code to add message to conversation
-							resolve(snapshot.val());
+							console.log("ConversationId2 is valid.");
+							convoId2.child('message_list').on('child_added', function(snapshot, prevKey)
+							{
+								if (snapshot.hasChildren())
+								{
+									//TODO: insert code to add message to conversation
+									console.log(snapshot.val());
+								}
+							});
 						}
 					});
 				}
