@@ -3,23 +3,16 @@
  */
 angular
     .module('example')
-    .controller('Settings', function($scope, supersonic, backendService) {
+    .controller('Settings', function($scope, supersonic) {
 
-        // $scope.fillDetails = function() {
-            var user = firebase.auth().currentUser;
-            $scope.usernameStr = user.email;
             $scope.username = "";
             $scope.password = "";
             $scope.confirmPassword = "";
             $scope.timestamp = null;
 
-            $scope.userObj = window.localStorage.getItem("userObj");
-        // };
-
-        // setTimeout(function(){ $scope.fillDetails() }, 5000);
-
         $scope.changePass = function() {
             //Change Password
+            var user = firebase.auth().currentUser;
             user.updatePassword($scope.password).then(function(object) {
                 window.localStorage.setItem("userObj", JSON.stringify(object) + "");
                 alert("Sucess password change");

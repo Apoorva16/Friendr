@@ -3,7 +3,7 @@
  */
 angular
     .module('example')
-    .controller('SignupController', function($scope, supersonic, backendService) {
+    .controller('SignupController', function($scope, supersonic) {
 
         $scope.email = "abcd@gmail.com";
         $scope.password = "helloworld";

@@ -40,8 +40,6 @@ angular
         $scope.signUp = function() {
 
             // supersonic.ui.dialog.alert("Signup working Yo");
-
-
             var modalView = new supersonic.ui.View("example#signup");
             var options = {
                 animate: true

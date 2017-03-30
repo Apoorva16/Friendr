@@ -3,7 +3,7 @@
  */
 angular
     .module('example')
-    .controller('PasswordController', function($scope, supersonic, backendService) {
+    .controller('PasswordController', function($scope, supersonic) {
 
         $scope.resetPassword = function() {
 
