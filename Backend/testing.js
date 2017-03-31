@@ -142,8 +142,6 @@ var user;
 					});
 				});
 				
-			
-			
 				database.ref('conversations').child(conversation_id).set(
 				{
 					User1: user.uid,
@@ -292,6 +290,24 @@ var user;
 				            //console.log(user.uid + " matched with user " + other_uid)
 				            database.ref('Activities/' + activity + "/Searching").remove()
 				     
+				            //add user to list of previous matches for both
+				            database.ref('users/' + other_uid).once('value').then(function(snapshot)
+							{
+								database.ref('users/' + user.uid).child("match_list").child(conversation_id).set(
+								{
+									other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName,
+									other_user_uid: other_uid
+								});
+							});
+							database.ref('users/' + user.uid).once('value').then(function(snapshot)
+							{
+								database.ref('users/' + other_uid).child("match_list").child(conversation_id).set(
+								{
+									other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName,
+									other_user_uid: user.uid
+								});
+							});
+
 		            		resolve(other_uid);
 		          		}	
 			          	else if(snapshot.exists())
@@ -299,7 +315,8 @@ var user;
 			          		database.ref('Activities/'+ activity).update(
 			          		{
 			          			activity: activity,
-			          			Searching: user.uid
+			          			Searching: user.uid,
+			          			Preferences: 
 			          		});
 			          		console.log(user.uid + " in queue for " + activity);
 			          		resolve(null);
@@ -393,7 +410,6 @@ var user;
 	  	});
 	  
 	  	return preferencesListPromise;
-
 	}
 
 	function setPreferencesForUser(activity, preference) {

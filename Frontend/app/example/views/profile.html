@@ -1,0 +1,19 @@
+<super-navbar>
+    <super-navbar-title>
+        Profile
+    </super-navbar-title>
+</super-navbar>
+
+
+<div ng-controller="Profile">
+
+    <div class="padding-top" style="text-align: center;">
+        <img style="border-radius: 50%" ng-src="data:image/jpeg;base64,{{profileImage}}" alt="Profile Image" />
+        <button class="button button-block button-dark" ng-click="choosePhoto()">
+            <i class="fa fa-picture-o"></i> Choose Profile Picture
+        </button>
+    </div>
+    <button onclick="supersonic.ui.modal.hide()" class="button button-block button-positive">Close</button>
+
+
+</div>

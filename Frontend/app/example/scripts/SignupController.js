@@ -3,7 +3,7 @@
  */
 angular
     .module('example')
-    .controller('SignupController', function($scope, supersonic) {
+    .controller('SignupController', function($scope, supersonic,backendService) {
 
         $scope.email = "abcd@gmail.com";
         $scope.password = "helloworld";
@@ -13,7 +13,6 @@ angular
 
         $scope.signup = function() {
             /* Note: Perform ERROR CHECKING for all fields */
-
             firebase.auth().createUserWithEmailAndPassword($scope.email, $scope.password)
             .then(function(object) {
                 firebase.auth().onAuthStateChanged(function(currentUser) {
@@ -26,7 +25,9 @@ angular
                     }
 
                     window.localStorage.setItem("userObj", JSON.stringify(currentUser) + "");
-                    supersonic.ui.modal.hide();
+
+
+                    $scope.confirmemail();
                 });
             })
             .catch(function(error) {
@@ -38,5 +39,18 @@ angular
         $scope.close = function() {
             supersonic.ui.modal.hide();
 
+        };
+        $scope.confirmemail = function () {
+
+            user = firebase.auth().currentUser;
+            user.sendEmailVerification().then(function(object) {
+                window.localStorage.setItem("userObj", JSON.stringify(object) + "");
+                alert("Confirmation email sent");
+                supersonic.ui.modal.hide();
+            })
+                .catch(function(error) {
+                    alert(JSON.stringify(error));
+                    alert("Confirmation email failed");
+                });
         };
     });

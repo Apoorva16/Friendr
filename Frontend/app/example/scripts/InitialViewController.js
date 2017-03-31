@@ -1,7 +1,7 @@
 /**
  * Created by apoorvaparmar on 1/14/17.
  */
-//  (function(){
+// (function(){
 //     // some code…
 //     var config = {
 //         apiKey: "AIzaSyB9-bQjCSShbkJuiDeWtyOurzFqTnr7pFU",
@@ -17,10 +17,11 @@
 
 angular
     .module('example')
-    .controller('InitialViewController', function($scope, supersonic, backendService) {
+    .controller('InitialViewController', function($scope, supersonic,backendService) {
 
-        $scope.email = "jradocho@purdue.edu";
-        $scope.password = "password";
+        $scope.email = "testing@purdue.edu";
+        $scope.password = "testing";
+
         $scope.login = function() {
 
             //firebase.signIn($scope.email, $scope.password);
@@ -34,16 +35,23 @@ angular
             }).catch(function (error) {
                 alert("Sign in unsuccessful");
             });
-            // backendService.signIn($scope.email,$scope.password);
-            // supersonic.logger.log(success);
         };
 
         $scope.signUp = function() {
 
             // supersonic.ui.dialog.alert("Signup working Yo");
-
-
             var modalView = new supersonic.ui.View("example#signup");
+            var options = {
+                animate: true
+            };
+            supersonic.ui.modal.show(modalView, options);
+        };
+        $scope.reset = function() {
+
+            // supersonic.ui.dialog.alert("Signup working Yo");
+
+
+            var modalView = new supersonic.ui.View("example#password");
             var options = {
                 animate: true
             };

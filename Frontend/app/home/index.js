@@ -1,4 +1,4 @@
-var app = angular.module('home', [
+angular.module('home', [
   // Declare any module-specific AngularJS dependencies here
   'common'
 ]);
