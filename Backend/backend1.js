@@ -368,7 +368,7 @@ module.exports =
 			}
 		});
 
-	}
+	},
 	setPreferencesForActivity: function(activity, preferencesList) {
 		var x = 0;
 
@@ -381,7 +381,7 @@ module.exports =
 			database.ref("Activities/"+activity+"/Preferences").update(foo);
 			x++;
 		}
-	}
+	},
 
 	getPreferencesList: function(activity) {
 		var list = [];
@@ -399,7 +399,7 @@ module.exports =
 	  
 	  	return preferencesListPromise;
 
-	}
+	},
 
 	setPreferencesForUser: function(activity, preference) {
 		firebase.auth().onAuthStateChanged(function(user)

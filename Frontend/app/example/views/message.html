@@ -1,19 +1,50 @@
 <div ng-controller="messageController">
-<div class="list">
-<style>
-    .item-input-inset{
-        margin-top : 90vh;
-    }
-</style>
-    {{test}}
-    {{id}}
-    <div class="item item-input-inset">
-        <label class="item-input-wrapper">
-            <input type="text" placeholder="Message">
-        </label>
-        <button class="button button-small">
-            Done
-        </button>
+
+        <style>
+            .item-input-inset{
+                margin-top : 90vh;
+            }
+
+            .talk-bubble {
+                width: 50%;
+                padding: 10px 15px;
+                margin: 5px 0;
+                box-sizing: border-box;
+                background-color: #3CBC8D;
+                color: white;
+                border: 5px solid white;
+                border-right-color: transparent;
+                border-top-color: transparent;
+
+            }
+
+
+        .bar-footer {
+            position: fixed;
+            top: auto;
+
+            bottom: 0;
+        }
+
+        </style>
+
+    <p ng-init="tester1()"></p>
+
+    <div class="talk-bubble" ng-repeat="msg in hasmsg">
+                <p>{{msg.message}}</p>
+            </div>
+    <div class="talk-bubble">
+        <span> {{testmsg}} </span>
     </div>
-</div>
+
+
+        <div class="item item-input-inset">
+            <label class="item-input-wrapper">
+                <input  ng-model="foo" type="text" placeholder="Message">
+            </label>
+            <button class="button button-small" ng-click="inputValue()">
+                Done
+            </button>
+        </div>
+
 </div>

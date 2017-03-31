@@ -11,9 +11,10 @@ angular
 
      $scope.myFunction = function(index){
      	id1= $scope.other_users[index].other_user_uid;
-     	// supersonic.logger.log(id);
         var view = new supersonic.ui.View("example#message");
         supersonic.ui.layers.push(view);
+         window.localStorage.setItem('id5',JSON.stringify(id1));
+
 
      }
 

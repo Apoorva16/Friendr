@@ -155,45 +155,64 @@ var printCurrentUserData= function() {
 
 	var sendMessage= function(other_uid, message)
 	{
-		firebase.auth().onAuthStateChanged(function(user)
-		{
-			if (user)
-			{
-				var conversation_id1 = user.uid + ' ' + other_uid;
-				var conversation_id2 = other_uid + ' ' + user.uid;
+        firebase.auth().onAuthStateChanged(function(user)
+        {
+            if (user)
+            {
+                var conversation_id1 = user.uid + ' ' + other_uid;
+                var conversation_id2 = other_uid + ' ' + user.uid;
 
-				//determine which conversation_id is correct
-				var convoId1 = firebase.database().ref('conversations').child(conversation_id1);
-				var convoId2 = firebase.database().ref('conversations').child(conversation_id2);
+                //determine which conversation_id is correct
+                var convoId1 = database.ref('conversations').child(conversation_id1);
+                var convoId2 = database.ref('conversations').child(conversation_id2);
 
-				var conversation_id;
-				if (convoId1 != null)
-					conversation_id = conversation_id1;
-				else
-					conversation_id = conversation_id2;
+                convoId1.once('value').then(function(snapshot)
+                {
+                    if (snapshot.hasChildren())
+                    {
+                        var messageCount = snapshot.val().MessageCount;
+                        var nextMessageId = messageCount + 1;
+                        var date = new Date();
 
-				//add message to database
-				firebase.database().ref('conversations').child(conversation_id).once('value').then(function(snapshot)
-				{
-					var messageCount = snapshot.val().MessageCount;
-					var nextMessageId = messageCount + 1;
-					var date = new Date();
+                        database.ref('conversations').child(conversation_id1).child('message_list').child(nextMessageId).set(
+                            {
+                                message: message,
+                                sender: user.uid,
+                                date: date.toDateString(),
+                                time: date.toTimeString()
+                            });
 
-					firebase.database().ref('conversations').child(conversation_id).child('message_list').child(nextMessageId).set(
-					{
-						message: message,
-						sender: user.uid,
-						date: date.toDateString(),
-						time: date.toTimeString()
-					});	
+                        database.ref('conversations').child(conversation_id1).update(
+                            {
+                                MessageCount: messageCount+1
+                            });
+                    }
+                });
 
-					firebase.database().ref('conversations').child(conversation_id).update(
-					{
-						MessageCount: messageCount+1
-					});
-				});
-			}
-		});
+                convoId2.once('value').then(function(snapshot)
+                {
+                    if (snapshot.hasChildren())
+                    {
+                        var messageCount = snapshot.val().MessageCount;
+                        var nextMessageId = messageCount + 1;
+                        var date = new Date();
+
+                        database.ref('conversations').child(conversation_id2).child('message_list').child(nextMessageId).set(
+                            {
+                                message: message,
+                                sender: user.uid,
+                                date: date.toDateString(),
+                                time: date.toTimeString()
+                            });
+
+                        database.ref('conversations').child(conversation_id2).update(
+                            {
+                                MessageCount: messageCount+1
+                            });
+                    }
+                });
+            }
+        });
 	};
 
 	var viewConversationList= function()
@@ -222,47 +241,95 @@ var printCurrentUserData= function() {
 		return messageListPromise;
 	};
 
-	var viewConversation= function(other_uid)
-	{
-		var messageListPromise = new Promise(function(resolve, reject)
-		{
-			firebase.auth().onAuthStateChanged(function(user)
-			{
-				if (user)
-				{
-					var conversation_id1 = user.uid + ' ' + other_uid;
-					var conversation_id2 = other_uid + ' ' + user.uid;
-
-					//determine which conversation_id is correct
-					var convoId1 = firebase.database().ref('conversations').child(conversation_id1);
-					var convoId2 = firebase.database().ref('conversations').child(conversation_id2);
-
-					var conversation_id;
-					if (convoId1 != null)
-						conversation_id = conversation_id1;
-					else
-						conversation_id = conversation_id2;
-
-					//get message list
-					firebase.database().ref('conversations').child(conversation_id).child('message_list').once('value').then(function(snapshot)
-					{
-						var list = [];
-						snapshot.forEach(function(childSnapshot)
-						{
-							var childData = childSnapshot.val();
-							list.push(childData);
-						});
-
-						resolve(list);
-					});
-				}
-			});
-		});
-		return messageListPromise;
-	};
+    var viewConversation= function(other_uid)
+    {
+        var messageList = new Promise(function(resolve, reject)
+        {
+            firebase.auth().onAuthStateChanged(function(user)
+            {
+                if (user)
+                {
+                    var conversation_id1 = user.uid + ' ' + other_uid;
+                    var conversation_id2 = other_uid + ' ' + user.uid;
 
 
-	var addActivity= function(activity) 
+                    //determine which conversation_id is correct
+                    var convoId1 = database.ref('conversations').child(conversation_id1);
+                    var convoId2 = database.ref('conversations').child(conversation_id2);
+
+                    convoId1.child('message_list').once('value').then(function(snapshot)
+                    {
+                    	if(snapshot.hasChildren()) {
+                            var list = [];
+                            snapshot.forEach(function (childSnapshot) {
+                                var message = childSnapshot.val();
+                                list.push(message);
+                            });
+
+                            resolve(list);
+                        }
+                    });
+
+                    convoId2.child('message_list').once('value').then(function(snapshot)
+                    {
+                        if(snapshot.hasChildren()) {
+                            var list = [];
+                            snapshot.forEach(function (childSnapshot) {
+                                var message = childSnapshot.val();
+                                list.push(message);
+                            });
+
+                            resolve(list);
+                        }
+                    });
+
+                }
+            });
+        });
+        return messageList;
+    };
+
+    var listenToConversation= function(other_uid)
+    {
+        var incomingMessage = new Promise(function(resolve, reject)
+        {
+            firebase.auth().onAuthStateChanged(function(user)
+            {
+                if (user)
+                {
+                    var conversation_id1 = user.uid + ' ' + other_uid;
+                    var conversation_id2 = other_uid + ' ' + user.uid;
+
+                    //determine which conversation_id is correct
+                    var convoId1 = database.ref('conversations').child(conversation_id1);
+                    var convoId2 = database.ref('conversations').child(conversation_id2);
+
+                    convoId1.child('message_list').on('child_added', function(snapshot, prevKey)
+                    {
+                        if (snapshot.hasChildren())
+                        {
+                            //TODO: insert code to add message to conversation
+                            supersonic.logger.log(snapshot.val());
+                            //resolve(snapshot.val());
+                        }
+                    });
+
+                    convoId2.child('message_list').on('child_added', function(snapshot, prevKey)
+                    {
+                        if (snapshot.hasChildren())
+                        {
+                            //TODO: insert code to add message to conversation
+                            supersonic.logger.log(snapshot.val());
+                           // resolve(snapshot.val());
+                        }
+                    });
+                }
+            });
+        });
+        return incomingMessage;
+    };
+
+    var addActivity= function(activity)
 	{
 		firebase.database().ref('Activities/'+activity).set(
 		{ 
@@ -386,6 +453,7 @@ var printCurrentUserData= function() {
 		sendMessage:sendMessage,
 		viewConversation:viewConversation,
 		viewConversationList:viewConversationList,
+        listenToConversation:listenToConversation,
 		addActivity:addActivity,
 		getActivityList:getActivityList,
 		enterQueue:enterQueue,
