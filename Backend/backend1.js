@@ -541,7 +541,31 @@ module.exports =
 				database.ref('users/'+ user.uid + '/Preferences/' + activity).update(preference);
 			}
 		});
+	},
+	
+	getMatchList: function(uid) 
+	{
+		var match_list = [];
+		var match_listPromise = new Promise(function (resolve, reject)
+		{
+			database.ref('users/' + uid + '/match_list').once('value').then(function(snapshot)
+			{
+				if (snapshot.exists) {
+					snapshot.forEach(function(childSnapshot){
+						var combo = [];
+						combo.push(childSnapshot.key);
+						combo.push(childSnapshot.val());
+
+						match_list.push(combo);
+					});
+				}
+				console.log(match_list);
+				resolve(match_list);
+			});	
+		});
+		return match_listPromise;		
 	}
+	
 }
 
 
