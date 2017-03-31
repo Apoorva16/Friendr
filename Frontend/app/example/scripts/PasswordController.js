@@ -3,7 +3,7 @@
  */
 angular
     .module('example')
-    .controller('PasswordController', function($scope, supersonic) {
+    .controller('PasswordController', function($scope, supersonic,backendService) {
 
         $scope.resetPassword = function() {
 
@@ -14,7 +14,7 @@ angular
         })
         .catch(function(error) {
             alert(JSON.stringify(error));
-            alert("Password changed failed");
+            alert("Password changed failed");   
         });
         };
         $scope.close = function() {

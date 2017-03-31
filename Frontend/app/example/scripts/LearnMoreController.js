@@ -1,6 +1,6 @@
 angular
   .module('example')
-  .controller('LearnMoreController', function($scope, supersonic) {
+  .controller('LearnMoreController', function($scope, supersonic,backendService) {
 
      $scope.myFunction = function(){
          var view = new supersonic.ui.View("example#message");

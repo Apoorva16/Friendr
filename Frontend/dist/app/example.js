@@ -9,7 +9,7 @@ angular.module('example', [
 
 angular
     .module('example')
-    .controller('DrawerController', function($scope, supersonic) {
+    .controller('DrawerController', function($scope, supersonic,backendService) {
 
         $scope.logout = function() {
 
@@ -28,7 +28,7 @@ angular
         $scope.myFunction = function(){
             var view = new supersonic.ui.View("example#getting-started");
             supersonic.ui.layers.push(view);
-            //supersonic.logger.log("Something semi-interesting just happened.");
+            supersonic.logger.log("Something semi-interesting just happened.");
             supersonic.ui.drawers.close();
 
         }
@@ -37,7 +37,7 @@ angular
     });
 angular
     .module('example')
-    .controller('FAQController', function($scope, supersonic) {
+    .controller('FAQController', function($scope, supersonic,backendService) {
 
         $scope.faqs = function() {
 
@@ -56,7 +56,7 @@ angular
 /**
  * Created by apoorvaparmar on 1/14/17.
  */
-//  (function(){
+// (function(){
 //     // some code…
 //     var config = {
 //         apiKey: "AIzaSyB9-bQjCSShbkJuiDeWtyOurzFqTnr7pFU",
@@ -72,10 +72,10 @@ angular
 
 angular
     .module('example')
-    .controller('InitialViewController', function($scope, supersonic, backendService) {
+    .controller('InitialViewController', function($scope, supersonic,backendService) {
 
-        $scope.email = "apudhelu@gmail.com";
-        $scope.password = "test1234";
+        $scope.email = "testing@purdue.edu";
+        $scope.password = "testing";
 
         $scope.login = function() {
 
@@ -90,15 +90,11 @@ angular
             }).catch(function (error) {
                 alert("Sign in unsuccessful");
             });
-            // backendService.signIn($scope.email,$scope.password);
-            // supersonic.logger.log(success);
         };
 
         $scope.signUp = function() {
 
             // supersonic.ui.dialog.alert("Signup working Yo");
-
-
             var modalView = new supersonic.ui.View("example#signup");
             var options = {
                 animate: true
@@ -119,20 +115,12 @@ angular
     });
 angular
   .module('example')
-  .controller('LearnMoreController', function($scope, supersonic, backendService) {
-  		$scope.other_users;
-  		var id1;
-  	 backendService.viewConversationList().then(function(value) {
-         	$scope.other_users = value;
-         	supersonic.logger.log($scope.other_users);
-         	
-      })
+  .controller('LearnMoreController', function($scope, supersonic,backendService) {
 
-     $scope.myFunction = function(index){
-     	id1= $scope.other_users[index].other_user_uid;
-     	// supersonic.logger.log(id);
-        var view = new supersonic.ui.View("example#message");
-        supersonic.ui.layers.push(view);
+     $scope.myFunction = function(){
+         var view = new supersonic.ui.View("example#message");
+         supersonic.ui.layers.push(view);
+         supersonic.logger.log("Something semi-interesting just happened.");
 
      }
 
@@ -144,7 +132,7 @@ angular
  */
 angular
     .module('example')
-    .controller('PasswordController', function($scope, supersonic, backendService) {
+    .controller('PasswordController', function($scope, supersonic,backendService) {
 
         $scope.resetPassword = function() {
 
@@ -155,7 +143,7 @@ angular
         })
         .catch(function(error) {
             alert(JSON.stringify(error));
-            alert("Password changed failed");
+            alert("Password changed failed");   
         });
         };
         $scope.close = function() {
@@ -165,7 +153,7 @@ angular
     });
 angular
     .module('example')
-    .controller('Profile', function($scope, supersonic, backendService) {
+    .controller('Profile', function($scope, supersonic,backendService) {
 
         var userObj = JSON.parse(window.localStorage.getItem("userObj"));
         $scope.profileImage = userObj.photoURL;
@@ -201,7 +189,7 @@ angular
 
 angular
     .module('example')
-    .controller('ProfileController', function($scope, supersonic) {
+    .controller('ProfileController', function($scope, supersonic,backendService) {
 
         $scope.profilefunc = function() {
 
@@ -224,21 +212,14 @@ angular
     .module('example')
     .controller('Settings', function($scope, supersonic, backendService) {
 
-        // $scope.fillDetails = function() {
-            var user = firebase.auth().currentUser;
-            $scope.usernameStr = user.email;
             $scope.username = "";
             $scope.password = "";
             $scope.confirmPassword = "";
             $scope.timestamp = null;
 
-            $scope.userObj = window.localStorage.getItem("userObj");
-        // };
-
-        // setTimeout(function(){ $scope.fillDetails() }, 5000);
-
         $scope.changePass = function() {
             //Change Password
+            var user = firebase.auth().currentUser;
             user.updatePassword($scope.password).then(function(object) {
                 window.localStorage.setItem("userObj", JSON.stringify(object) + "");
                 alert("Sucess password change");
@@ -267,7 +248,7 @@ angular
     });
 angular
   .module('example')
-  .controller('SettingsController', function($scope, supersonic) {
+  .controller('SettingsController', function($scope, supersonic,backendService) {
 
       $scope.settings = function() {
 
@@ -288,11 +269,7 @@ angular
  */
 angular
     .module('example')
-<<<<<<< HEAD
     .controller('SignupController', function($scope, supersonic,backendService) {
-=======
-    .controller('SignupController', function($scope, supersonic, backendService) {
->>>>>>> 885bbeca8414b407ef2b9116ece6884871aff2a8
 
         $scope.email = "abcd@gmail.com";
         $scope.password = "helloworld";
@@ -343,19 +320,11 @@ angular
                 });
         };
     });
-angular
-  .module('example')
-  .controller('messageController', function($scope, supersonic, backendService) {
-        supersonic.logger.log("this is in a new view");
-        $scope.test= "tesght";
-        
-  });
-
 /**
  * Created by srishti on 2/19/17.
  */
 
-     var myFunction = function($scope, supersonic) {
+     var myFunction = function($scope, supersonic,backendService) {
 
         var view = new supersonic.ui.View("example#message");
         supersonic.ui.layers.push(view);

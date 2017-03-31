@@ -3,7 +3,7 @@
  */
 angular
     .module('example')
-    .controller('Settings', function($scope, supersonic) {
+    .controller('Settings', function($scope, supersonic, backendService) {
 
             $scope.username = "";
             $scope.password = "";

@@ -1,6 +1,6 @@
 angular
   .module('example')
-  .controller('SettingsController', function($scope, supersonic) {
+  .controller('SettingsController', function($scope, supersonic,backendService) {
 
       $scope.settings = function() {
 

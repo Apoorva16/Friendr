@@ -1,6 +1,6 @@
 angular
     .module('example')
-    .controller('FAQController', function($scope, supersonic) {
+    .controller('FAQController', function($scope, supersonic,backendService) {
 
         $scope.faqs = function() {
 

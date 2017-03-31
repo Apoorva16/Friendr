@@ -1,6 +1,6 @@
 angular
     .module('example')
-    .controller('Profile', function($scope, supersonic) {
+    .controller('Profile', function($scope, supersonic,backendService) {
 
         var userObj = JSON.parse(window.localStorage.getItem("userObj"));
         $scope.profileImage = userObj.photoURL;

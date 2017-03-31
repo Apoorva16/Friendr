@@ -1,8 +1,8 @@
-
 angular.module('common', [
   // Declare here all AngularJS dependencies that are shared by all modules.
   'supersonic'
 ]);
+
 angular.module('common')
 .service("backendService", function(supersonic) {
 	(function(){
@@ -73,14 +73,6 @@ firebase.auth().onAuthStateChanged(function(_user) {
 				// No user is signed in.
 			}
 		});
-};
-
-function modifyProfilePicture(picture_link) {
-	var user = firebase.auth().currentUser;
-
-	user.updateProfile({
-		photoURL: picture_link
-	});
 };
 
 var signOut= function() {
@@ -503,7 +495,7 @@ firebase.auth().onAuthStateChanged(function(user)
 		modifyUsername: modifyUsername,
 		setPreferencesForActivity: setPreferencesForActivity,
 		getPreferenceList: getPreferenceList,
-		setPreferencesForUser, setPreferencesForUser,
+		setPreferencesForUser: setPreferencesForUser,
 		modifyProfilePicture: modifyProfilePicture,
 		addAuthUser:addAuthUser,
 		deleteUser:deleteUser,

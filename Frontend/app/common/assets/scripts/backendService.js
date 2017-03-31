@@ -490,7 +490,7 @@ firebase.auth().onAuthStateChanged(function(user)
 		modifyUsername: modifyUsername,
 		setPreferencesForActivity: setPreferencesForActivity,
 		getPreferenceList: getPreferenceList,
-		setPreferencesForUser, setPreferencesForUser,
+		setPreferencesForUser: setPreferencesForUser,
 		modifyProfilePicture: modifyProfilePicture,
 		addAuthUser:addAuthUser,
 		deleteUser:deleteUser,
@@ -510,4 +510,4 @@ firebase.auth().onAuthStateChanged(function(user)
 		enterQueue:enterQueue,
 		leaveQueue:leaveQueue
 	}
-});
+})	

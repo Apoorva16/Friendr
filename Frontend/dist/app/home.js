@@ -20,7 +20,6 @@ angular.module('home', [
 angular
 .module('home')
 .controller('IndexController', function($scope, supersonic, backendService, $http) {
-
     // Controller functionality here
     $scope.position = undefined;
 
@@ -32,17 +31,13 @@ angular
 
     $scope.activities = ['Eat', 'Study', 'Work Out'];
 
-    $scope.test = function(){
-        var i = backendService.test(); 
-        supersonic.logger.log(i);
-
-    }
 
     $scope.queue = function(activity) {
         
        backendService.enterQueue(activity);
 
     }
+
 
     drawerBtn = new supersonic.ui.NavigationBarButton({
     	onTap: function() {

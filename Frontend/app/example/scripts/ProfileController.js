@@ -1,6 +1,6 @@
 angular
     .module('example')
-    .controller('ProfileController', function($scope, supersonic) {
+    .controller('ProfileController', function($scope, supersonic,backendService) {
 
         $scope.profilefunc = function() {
 

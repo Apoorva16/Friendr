@@ -4,7 +4,7 @@
 
 angular
     .module('example')
-    .controller('DrawerController', function($scope, supersonic) {
+    .controller('DrawerController', function($scope, supersonic,backendService) {
 
         $scope.logout = function() {
 
