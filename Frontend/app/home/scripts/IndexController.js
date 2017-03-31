@@ -1,3 +1,17 @@
+(function(){
+    // some code…
+    var config = {
+        apiKey: "AIzaSyB9-bQjCSShbkJuiDeWtyOurzFqTnr7pFU",
+        authDomain: "friendr-be400.firebaseapp.com",
+        databaseURL: "https://friendr-be400.firebaseio.com",
+        storageBucket: "friendr-be400.appspot.com",
+        messagingSenderId: "852808235414"
+    };
+
+    firebase.initializeApp(config);
+})();
+
+
 angular
 .module('home')
 .controller('IndexController', function($scope, supersonic, backendService, $http) {
@@ -12,17 +26,13 @@ angular
 
     $scope.activities = ['Eat', 'Study', 'Work Out'];
 
-    $scope.test = function(){
-        var i = backendService.test(); 
-        supersonic.logger.log(i);
-
-    }
 
     $scope.queue = function(activity) {
         
        backendService.enterQueue(activity);
 
     }
+
 
     drawerBtn = new supersonic.ui.NavigationBarButton({
     	onTap: function() {

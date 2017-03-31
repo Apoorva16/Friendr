@@ -1,18 +1,37 @@
 var backend = require('./backend1');
 
-
+//testing@purdue.edu - testing - fjRhMBaMjGSNf1szze23rGg1fts1
+//jradocho@purdue.edu - password - U1PMF6lJBzereWItzrxnQbCrIH03
 backend.signIn("testing@purdue.edu", "testing");
-//backend.addAuthUser("testing@purdue.edu", "testing", "Test", "Tester", "imatester");
-//backend.initiateConversation("9A4qaTgVs6gYu49X228WA6Ui20F3");
-//backend.sendMessage("9A4qaTgVs6gYu49X228WA6Ui20F3", "This is the third message in this conversation.");
-//console.log(backend.getActivityList());
 
-backend.viewConversation("9A4qaTgVs6gYu49X228WA6Ui20F3").then(function(values)
+/*backend.getPreferencesList("Eat").then(function(list){
+	console.log(list);
+});*/
+
+backend.enterQueue("Eat");
+
+//backend.initiateConversation("U1PMF6lJBzereWItzrxnQbCrIH03");
+//backend.sendMessage("U1PMF6lJBzereWItzrxnQbCrIH03", "Newer Test Message");
+
+/*backend.viewConversation("U1PMF6lJBzereWItzrxnQbCrIH03").then(function(value){
+	console.log(value);
+});*/
+
+/*var preferencesList = 
 {
-	var i;
-	for (i = 0; i < values.length; i ++)
-	{
-		console.log(values[i].message);
-	}
-	
-});
+	"Location":["Wiley", "Ford", "Earhart", "Hillenbrand", "Windsor"],
+	"Preferred Match Gender":["No Preference", "Male", "Female"]
+};
+backend.setPreferencesForActivity("Eat", preferencesList);*/
+
+/*var userPreferenceList =
+{
+	"Location":"Earhart",
+	"Preferred Match Gender":"Male"
+}
+backend.setPreferencesForUser("Eat", userPreferenceList);*/
+
+
+/*backend.listenToConversation("fjRhMBaMjGSNf1szze23rGg1fts1").then(function(value){
+	console.log(value);
+});*/

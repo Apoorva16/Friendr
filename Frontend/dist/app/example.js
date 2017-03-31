@@ -35,6 +35,24 @@ angular
 
 
     });
+angular
+    .module('example')
+    .controller('FAQController', function($scope, supersonic) {
+
+        $scope.faqs = function() {
+
+            // supersonic.ui.dialog.alert("Signup working Yo");
+
+
+            var modalView = new supersonic.ui.View("example#faq");
+            var options = {
+                animate: true
+            };
+            supersonic.ui.modal.show(modalView, options);
+        };
+
+    });
+
 /**
  * Created by apoorvaparmar on 1/14/17.
  */
@@ -56,8 +74,9 @@ angular
     .module('example')
     .controller('InitialViewController', function($scope, supersonic, backendService) {
 
-        $scope.email = "jradocho@purdue.edu";
-        $scope.password = "password";
+        $scope.email = "apudhelu@gmail.com";
+        $scope.password = "test1234";
+
         $scope.login = function() {
 
             //firebase.signIn($scope.email, $scope.password);
@@ -86,6 +105,17 @@ angular
             };
             supersonic.ui.modal.show(modalView, options);
         };
+        $scope.reset = function() {
+
+            // supersonic.ui.dialog.alert("Signup working Yo");
+
+
+            var modalView = new supersonic.ui.View("example#password");
+            var options = {
+                animate: true
+            };
+            supersonic.ui.modal.show(modalView, options);
+        };
     });
 angular
   .module('example')
@@ -109,11 +139,147 @@ angular
 
   });
 
+/**
+ * Created by apoorvaparmar on 3/28/17.
+ */
+angular
+    .module('example')
+    .controller('PasswordController', function($scope, supersonic, backendService) {
+
+        $scope.resetPassword = function() {
+
+            firebase.auth().sendPasswordResetEmail($scope.email).then(function(object) {
+                // email sent
+                window.localStorage.setItem("userObj", JSON.stringify(object) + "");
+                alert("Sucess password change");
+        })
+        .catch(function(error) {
+            alert(JSON.stringify(error));
+            alert("Password changed failed");
+        });
+        };
+        $scope.close = function() {
+            supersonic.ui.modal.hide();
+
+        };
+    });
+angular
+    .module('example')
+    .controller('Profile', function($scope, supersonic, backendService) {
+
+        var userObj = JSON.parse(window.localStorage.getItem("userObj"));
+        $scope.profileImage = userObj.photoURL;
+
+        $scope.choosePhoto = function() {
+            var options = {
+                quality: 50,
+                allowEdit: true,
+                targetWidth: 300,
+                targetHeight: 300,
+                encodingType: "jpeg",
+                destinationType: "dataURL"
+            };
+            supersonic.media.camera.getFromPhotoLibrary(options).then( function(result){
+                // save it in database
+                $scope.profileImage = result;
+
+                var user = firebase.auth().currentUser;
+                user.updateProfile({
+                    photoURL: result
+                });
+
+                userObj.photoURL = result;
+                window.localStorage.setItem("userObj", JSON.stringify(userObj));
+
+                // alert()
+            });
+        };
+
+    });/**
+ * Created by apoorvaparmar on 3/29/17.
+ */
+
+angular
+    .module('example')
+    .controller('ProfileController', function($scope, supersonic) {
+
+        $scope.profilefunc = function() {
+
+            // supersonic.ui.dialog.alert("Signup working Yo");
+
+
+            var modalView = new supersonic.ui.View("example#profile");
+            var options = {
+                animate: true
+            };
+            supersonic.ui.modal.show(modalView, options);
+        };
+
+    });
+
+/**
+ * Created by apoorvaparmar on 3/29/17.
+ */
+angular
+    .module('example')
+    .controller('Settings', function($scope, supersonic, backendService) {
+
+        // $scope.fillDetails = function() {
+            var user = firebase.auth().currentUser;
+            $scope.usernameStr = user.email;
+            $scope.username = "";
+            $scope.password = "";
+            $scope.confirmPassword = "";
+            $scope.timestamp = null;
+
+            $scope.userObj = window.localStorage.getItem("userObj");
+        // };
+
+        // setTimeout(function(){ $scope.fillDetails() }, 5000);
+
+        $scope.changePass = function() {
+            //Change Password
+            user.updatePassword($scope.password).then(function(object) {
+                window.localStorage.setItem("userObj", JSON.stringify(object) + "");
+                alert("Sucess password change");
+                //success
+            })
+            .catch(function(error) {
+                alert(JSON.stringify(error));
+                alert("Password changed failed");
+            });
+
+            //Change username
+            firebase.auth().onAuthStateChanged(function(currentUser) {
+                if (currentUser) {
+                    currentUser.updateProfile({
+                        username: $scope.username
+                    });
+
+                    window.localStorage.setItem("userObj", JSON.stringify(currentUser) + "");
+
+                    database.ref('users/' + user.uid).update({
+                        username: $scope.username
+                    });
+                }
+            });
+        };
+    });
 angular
   .module('example')
   .controller('SettingsController', function($scope, supersonic) {
-    $scope.navbarTitle = "Settings";
-        $scope.myName = "BOO BOO";
+
+      $scope.settings = function() {
+
+          // supersonic.ui.dialog.alert("Signup working Yo");
+
+
+          var modalView = new supersonic.ui.View("example#settings");
+          var options = {
+              animate: true
+          };
+          supersonic.ui.modal.show(modalView, options);
+      };
 
   });
 
@@ -122,7 +288,11 @@ angular
  */
 angular
     .module('example')
+<<<<<<< HEAD
     .controller('SignupController', function($scope, supersonic,backendService) {
+=======
+    .controller('SignupController', function($scope, supersonic, backendService) {
+>>>>>>> 885bbeca8414b407ef2b9116ece6884871aff2a8
 
         $scope.email = "abcd@gmail.com";
         $scope.password = "helloworld";
@@ -144,7 +314,9 @@ angular
                     }
 
                     window.localStorage.setItem("userObj", JSON.stringify(currentUser) + "");
-                    supersonic.ui.modal.hide();
+
+
+                    $scope.confirmemail();
                 });
             })
             .catch(function(error) {
@@ -156,6 +328,19 @@ angular
         $scope.close = function() {
             supersonic.ui.modal.hide();
 
+        };
+        $scope.confirmemail = function () {
+
+            user = firebase.auth().currentUser;
+            user.sendEmailVerification().then(function(object) {
+                window.localStorage.setItem("userObj", JSON.stringify(object) + "");
+                alert("Confirmation email sent");
+                supersonic.ui.modal.hide();
+            })
+                .catch(function(error) {
+                    alert(JSON.stringify(error));
+                    alert("Confirmation email failed");
+                });
         };
     });
 angular

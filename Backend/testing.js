@@ -1,24 +1,22 @@
-angular.module('common')
-.service("backendService", function(supersonic) {
-	(function(){
-    // some code…
-    var config = {
-    	apiKey: "AIzaSyB9-bQjCSShbkJuiDeWtyOurzFqTnr7pFU",
-    	authDomain: "friendr-be400.firebaseapp.com",
-    	databaseURL: "https://friendr-be400.firebaseio.com",
-    	storageBucket: "friendr-be400.appspot.com",
-    	messagingSenderId: "852808235414"
-    };
+var firebase = require("firebase");
 
-    firebase.initializeApp(config);
-})();
+var config =
+{
+	apiKey: "AIzaSyB9-bQjCSShbkJuiDeWtyOurzFqTnr7pFU",
+	authDomain: "friendr-be400.firebaseapp.com",
+	databaseURL: "https://friendr-be400.firebaseio.com",
+	storageBucket: "friendr-be400.appspot.com",
+	messagingSenderId: "852808235414"
+};
 
+  
+firebase.initializeApp(config);
 
 var database = firebase.database();
 var user;
-
-var addAuthUser = function(email, password, firstName, lastName, username)
-{
+	
+	function addAuthUser(email, password, firstName, lastName, username)
+	{
 		firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {});
 
 		firebase.auth().onAuthStateChanged(function(currentUser)
@@ -33,10 +31,10 @@ var addAuthUser = function(email, password, firstName, lastName, username)
 				});
 			}
 		});
-};
+	}
 
-var deleteUser=  function() {
-	if (user == null) {
+	function deleteUser() {
+		if (user == null) {
 			getCurrentUser();
 		}
 
@@ -46,19 +44,18 @@ var deleteUser=  function() {
 		}, function(error) {
 			console.log("No account deleted");
 		});
-};
+	}
 
-var signIn= function(email, password) {
+	function signIn(email, password) {
 		firebase.auth().signInWithEmailAndPassword(email, password).catch(function (error) {
 			console.log("Sign in unsuccessful");
 			return;
 		});
 		console.log("Signed into " + email + " successfully");
+	}
 
-};
-
-var getCurrentUser= function() {
-firebase.auth().onAuthStateChanged(function(_user) {
+	function getCurrentUser() {
+		firebase.auth().onAuthStateChanged(function(_user) {
 			if (_user) {
 				user = _user;
 				//printCurrentUserData();
@@ -68,36 +65,36 @@ firebase.auth().onAuthStateChanged(function(_user) {
 				// No user is signed in.
 			}
 		});
-};
-
-var signOut= function() {
-	firebase.auth().signOut().then(function() {
+	}
+	
+	function signOut() {
+		firebase.auth().signOut().then(function() {
 			// signout Successful
 		}, function (error) {
 			// error
 		});
-};
+	}
 
-var resetPassword= function(newPassword) {
-	var user = firebase.auth().currentUser;
+	function resetPassword(newPassword) {
+		var user = firebase.auth().currentUser;
 		user.updatePassword(newPassword).then(function() {
 			//success
 		}, function (error) {
 			//error
 		});
-};
+	}
 
-var sendPasswordResetEmail=function(email) {
-	firebase.auth().sendPasswordResetEmail(email).then(function() {
+	function sendPasswordResetEmail (email) {
+		firebase.auth().sendPasswordResetEmail(email).then(function() {
 			// email sent
 			console.log("email sent to " + email);
 		}, function (error) {
 			//error
 			console.log("Email not sent");
 		});
-};
+	}
 
-var sendEmailVerification= function() {
+	function sendEmailVerification() {
 		user = firebase.auth().currentUser;
 
 		user.sendEmailVerification().then(function() {
@@ -105,9 +102,9 @@ var sendEmailVerification= function() {
 		}, function(error) {
 			console.log("Email not sent - From sendEmailVerification()");
 		});
-};
+	}
 
-var printCurrentUserData= function() {
+	function printCurrentUserData() {
 		var user = firebase.auth().currentUser;
 		if (user != null) {
 			console.log(user.email);
@@ -117,11 +114,11 @@ var printCurrentUserData= function() {
 		else {
 			console.log("No user signed in");
 		}
-	};
+	}
 
-	var initiateConversation= function(other_uid)
+	function initiateConversation (other_uid)
 	{
-	firebase.auth().onAuthStateChanged(function(user)
+		firebase.auth().onAuthStateChanged(function(user)
 		{
 			if(user)
 			{
@@ -145,8 +142,6 @@ var printCurrentUserData= function() {
 					});
 				});
 				
-			
-			
 				database.ref('conversations').child(conversation_id).set(
 				{
 					User1: user.uid,
@@ -155,11 +150,11 @@ var printCurrentUserData= function() {
 				});
 			}
 		});
-	};
+	}
 
-	var sendMessage= function(other_uid, message)
+	function sendMessage (other_uid, message)
 	{
-firebase.auth().onAuthStateChanged(function(user)
+		firebase.auth().onAuthStateChanged(function(user)
 		{
 			if (user)
 			{
@@ -174,7 +169,6 @@ firebase.auth().onAuthStateChanged(function(user)
 				{
 					if (snapshot.hasChildren())
 					{
-						console.log("Message Sent: " + message);
 						var messageCount = snapshot.val().MessageCount;
 						var nextMessageId = messageCount + 1;
 						var date = new Date();
@@ -218,28 +212,9 @@ firebase.auth().onAuthStateChanged(function(user)
 				});
 			}
 		});
-	};
+	}
 
-	var viewConversationList= function()
-	{
-		var messageListPromise = new Promise(function(resolve, reject)
-		{
-			firebase.auth().onAuthStateChanged(function(user)
-			{
-				if (user)
-				{
-					//get conversation list
-					database.ref('users').child(user.uid).child('conversation_list').once('value').then(function(snapshot)
-					{
-		    			resolve(snapshot.val());
-		    		});
-				}
-			});
-		});
-		return messageListPromise;
-	};
-
-	var viewConversation= function(other_uid)
+	function viewConversation (other_uid)
 	{
 		firebase.auth().onAuthStateChanged(function(user)
 		{
@@ -247,7 +222,6 @@ firebase.auth().onAuthStateChanged(function(user)
 			{
 				var conversation_id1 = user.uid + ' ' + other_uid;
 				var conversation_id2 = other_uid + ' ' + user.uid;
-
 
 				//determine which conversation_id is correct
 				var convoId1 = database.ref('conversations').child(conversation_id1);
@@ -261,7 +235,6 @@ firebase.auth().onAuthStateChanged(function(user)
 	    			}
 				});
 
-
 				convoId2.child('message_list').on('child_added', function(snapshot, prevKey)
 				{
 					if (snapshot.hasChildren())
@@ -269,21 +242,20 @@ firebase.auth().onAuthStateChanged(function(user)
 						console.log(snapshot.val().message);
 	    			}
 				});
-
 			}
 		});
-	};
+	}
 
 
-	var addActivity= function(activity) 
+	function addActivity (activity) 
 	{
 		database.ref('Activities/'+activity).set(
   		{ 
         	activity: activity
   		});
-	};
+	}
 
-	var getActivityList= function() {
+	function getActivityList() {
 		var list = [];
 		var activityListPromise = new Promise(function(resolve, reject)
 		{
@@ -298,9 +270,10 @@ firebase.auth().onAuthStateChanged(function(user)
 	  	});
 	  
 	  	return activityListPromise;
-	};
 
-	var enterQueue= function(activity) {
+	}
+
+	function enterQueue (activity) {
 		var matchedUser = new Promise(function(resolve, reject)
 		{
 			firebase.auth().onAuthStateChanged(function(user)
@@ -308,96 +281,44 @@ firebase.auth().onAuthStateChanged(function(user)
 		    	if (user)
 		    	{ // User is signed in.
 		       		//console.log("matching");
-		     	   	database.ref('Activities/'+ activity + '/Searching').once('value').then(function(snapshot1)
+		     	   	database.ref('Activities/'+ activity).once('value').then(function(snapshot)
 		        	{
-		          		if (snapshot1.exists())
+		          		if (snapshot.child("Searching").exists())
 		          		{
-		          			database.ref('users/' + user.uid + '/Preferences').once('value').then(function(snapshot2)
-			          		{
-			          			var matchFound = false;
-			          			snapshot1.forEach(function(childSnapshot1)
-			          			{
-			          				var other_uid = childSnapshot1.key;
-			          				var other_preferences = childSnapshot1.val().preferences;
-			          				console.log("other_uid");
-			          				console.log(other_uid);
-			          				console.log("other_preferences");
-			          				console.log(other_preferences);
+				            // get matched with this user
+				            var other_uid = snapshot.child("Searching").val();
+				            //console.log(user.uid + " matched with user " + other_uid)
+				            database.ref('Activities/' + activity + "/Searching").remove()
+				     
+				            //add user to list of previous matches for both
+				            database.ref('users/' + other_uid).once('value').then(function(snapshot)
+							{
+								database.ref('users/' + user.uid).child("match_list").child(conversation_id).set(
+								{
+									other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName,
+									other_user_uid: other_uid
+								});
+							});
+							database.ref('users/' + user.uid).once('value').then(function(snapshot)
+							{
+								database.ref('users/' + other_uid).child("match_list").child(conversation_id).set(
+								{
+									other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName,
+									other_user_uid: user.uid
+								});
+							});
 
-			          				var my_preferences = snapshot2.val();
-			          				console.log("my_preferences");
-			          				console.log(my_preferences);
-
-			          				var isMatch = true;
-			          				for (var key in my_preferences)
-			          				{
-			          					if (my_preferences.hasOwnProperty(key))
-			          					{
-			          						if (my_preferences[key] == other_preferences[key])
-			          							console.log("Preferences Match: " + key);
-			          						else
-			          						{
-			          							console.log("Preferences Mismatch: " + key);
-			          							isMatch = false;
-			          							break;
-			          						}
-			          					}
-			          				}
-
-			          				if (isMatch)
-			          				{
-			          					//all preferences match, remove other user from queue
-			          					matchFound = true;
-			          					console.log("Match found, removing matching uid from queue " + other_uid);
-			          					database.ref('Activities/' + activity + '/Searching/' + other_uid).remove();
-
-			          					//add each to the match list
-			          					database.ref('users/' + user.uid + '/match_list').set({
-			          						other_uid: other_uid
-			          					});
-
-			          					database.ref('users/' + other_uid + '/match_list').set({
-			          						other_uid: user.uid
-			          					});
-
-			          					resolve(other_uid);
-			          				}
-			          			});
-
-			          			if (!matchFound)
-			          			{
-				          			//match not found, insert into queue
-				          			console.log("No Match Found");
-				          			database.ref('users/' + user.uid + '/Preferences').once('value').then(function(snapshot)
-					          		{
-					          			var userPreferences = snapshot.val();
-					          			console.log(userPreferences);
-
-					          			database.ref('Activities/'+ activity + '/Searching/' + user.uid).update(
-						          		{
-						          			preferences: userPreferences
-						          		});
-						          		console.log(user.uid + " in queue for " + activity);
-					          		});
-				          		
-				          			resolve(null);
-			          			}
-			          		});
+		            		resolve(other_uid);
 		          		}	
-			          	else
+			          	else if(snapshot.exists())
 			          	{
-			          		database.ref('users/' + user.uid + '/Preferences').once('value').then(function(snapshot)
+			          		database.ref('Activities/'+ activity).update(
 			          		{
-			          			var userPreferences = snapshot.val();
-			          			console.log(userPreferences);
-
-			          			database.ref('Activities/'+ activity + '/Searching/' + user.uid).update(
-				          		{
-				          			preferences: userPreferences
-				          		});
-				          		console.log(user.uid + " in queue for " + activity);
+			          			activity: activity,
+			          			Searching: user.uid,
+			          			Preferences: 
 			          		});
-			          		
+			          		console.log(user.uid + " in queue for " + activity);
 			          		resolve(null);
 			          	}
 		       	 	}); 
@@ -405,11 +326,11 @@ firebase.auth().onAuthStateChanged(function(user)
 	  		});
 	  	});
 	  	return matchedUser;
-	};
+	}
 
-	var leaveQueue= function(activity)
+	function leaveQueue (activity)
 	{
-		firebase.auth().onAuthStateChanged(function(user)
+	  	firebase.auth().onAuthStateChanged(function(user)
 	  	{
 		    if (user)
 		    { // User is signed in.
@@ -431,9 +352,10 @@ firebase.auth().onAuthStateChanged(function(user)
 		        // User is signed in.
 		    }
   		});
-	};
+	}
 
-	var modifyProfilePicture = function(picture_link) {
+	function modifyProfilePicture (picture_link)
+	{
 		var user = firebase.auth().currentUser;
 
 		user.updateProfile({
@@ -441,7 +363,8 @@ firebase.auth().onAuthStateChanged(function(user)
 		});
 	}
 
-	var modifyUsername = function(user_name) {
+	function modifyUsername (user_name)
+	{
 		firebase.auth().onAuthStateChanged(function(user)
 		{
 			if (user)
@@ -458,56 +381,66 @@ firebase.auth().onAuthStateChanged(function(user)
 		});
 	}
 
-	var setPreferencesForActivity = function(activity, preferenceList) {
-			database.ref("Activities/"+activity+"/StaticPreferences").update(preferencesList);
+	function setPreferencesForActivity(activity, preferencesList) {
+		var x = 0;
+
+		for (var s in preferencesList) {
+			var p = "p"+x;
+			//console.log("p = " + p);
+			var pref = preferencesList[s];
+			var foo = {};
+			foo[p] = pref;
+			database.ref("Activities/"+activity+"/Preferences").update(foo);
+			x++;
+		}
 	}
 
-	var getPreferenceList = function(activity) {
+	function getPreferencesList(activity) {
+		var list = [];
 		var preferencesListPromise = new Promise(function(resolve, reject)
 		{
-	  		database.ref('Activities/'+activity+'/StaticPreferences').once('value').then(function(snapshot)
+	  		database.ref('Activities/'+activity+'/Preferences').once('value').then(function(snapshot)
 	  		{
-	  			var preferences = snapshot.val();
-	   			resolve(preferences);
+	   			snapshot.forEach(function(child) {
+	      			list.push(child.val());
+	    		});
+	    		//console.log(list.toString());
+	    		resolve(list); //u
 	  		});
 	  	});
 	  
 	  	return preferencesListPromise;
 	}
 
-	var setPreferencesForUser = function(activity, preference) {
+	function setPreferencesForUser(activity, preference) {
 		firebase.auth().onAuthStateChanged(function(user)
 		{
 			if (user)
 			{
-				database.ref('users/'+ user.uid + '/Preferences/' + activity).update(preference);
+				var foo = {};
+				foo[activity] = preference;
+				database.ref('users/'+ user.uid + '/Preferences').update(foo);
 			}
 		});
 	}
-	
 
-	return {
-		modifyUsername: modifyUsername,
-		setPreferencesForActivity: setPreferencesForActivity,
-		getPreferenceList: getPreferenceList,
-		setPreferencesForUser, setPreferencesForUser,
-		modifyProfilePicture: modifyProfilePicture,
-		addAuthUser:addAuthUser,
-		deleteUser:deleteUser,
-		signIn:signIn,
-		getCurrentUser:getCurrentUser,
-		signOut:signOut,
-		resetPassword:resetPassword,
-		sendPasswordResetEmail:sendPasswordResetEmail,
-		sendEmailVerification:sendEmailVerification,
-		printCurrentUserData:printCurrentUserData,
-		initiateConversation:initiateConversation,
-		sendMessage:sendMessage,
-		viewConversation:viewConversation,
-		viewConversationList:viewConversationList,
-		addActivity:addActivity,
-		getActivityList:getActivityList,
-		enterQueue:enterQueue,
-		leaveQueue:leaveQueue
-	}
-});
+
+
+var email = "brandonxia01@gmail.com";
+var password = "password";
+var username = "brandonxia01";
+var firstname = "brandon";
+var lastname = "xia";
+//addAuthUser(email, password, firstname, lastname, username);
+signIn(email,password);
+getPreferencesList("Work Out");
+setPreferencesForUser("Work Out", "Upper Body");
+//var preferencesList = ["No Preference", "Math", "Computer Science"];
+//setPreferencesForActivity("Study", preferencesList);
+//setPreferencesForActivity("Work Out", ["No Preference", "Upper Body", "Lower Body", "Cardio"]);
+//enterQueue("Work Out");
+//leaveQueue("Work Out");
+
+
+
+
