@@ -226,6 +226,8 @@ angular
             $scope.timestamp = null;
 
         $scope.changePass = function() {
+            backendService.modifyUsername($scope.username);
+
             //Change Password
             var user = firebase.auth().currentUser;
             user.updatePassword($scope.password).then(function(object) {
@@ -252,6 +254,9 @@ angular
                     });
                 }
             });
+
+            $scope.password ="";
+            $scope.username= "";
         };
     });
 angular
