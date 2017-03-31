@@ -12,6 +12,14 @@ angular
             supersonic.ui.initialView.show();
             //supersonic.ui.dialog.alert("Say hello");
         };
+
+        $scope.preference = function() {
+            //supersonic.logger.log("hi");
+            var view = new supersonic.ui.View("example#preference");
+            supersonic.ui.layers.push(view);
+            supersonic.ui.drawers.close();
+        }
+
         $scope.myFunction = function(){
             var view = new supersonic.ui.View("example#getting-started");
             supersonic.ui.layers.push(view);

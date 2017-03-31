@@ -1,0 +1,44 @@
+<div ng-controller="preferenceController">
+<div class="list preference">
+ <div class="item item-divider">
+  Eat
+</div>
+<label class="item item-input item-select" ng-repeat="key in eatKey">
+  <div class="input-label">
+    {{key}}
+  </div>
+  <select ng-model="test[key]" ng-change="submitEat(test)">
+    <option ng-repeat="option in eat[key]">{{option}}</option>
+  </select>
+</label>
+
+<div class="item item-divider">
+  Study
+</div>
+<label class="item item-input item-select" ng-repeat="key in studyKey">
+  <div class="input-label">
+    {{key}}
+  </div>
+  <select ng-model="test[key]" ng-change="submitStudy(test)">
+    <option ng-repeat="option in study[key]">{{option}}</option>
+  </select>
+</label>
+
+
+ <div class="item item-divider">
+  Work Out
+</div>
+<label class="item item-input item-select" ng-repeat="key in workoutKey">
+  <div class="input-label">
+    {{key}}
+  </div>
+  <select ng-model="test[key]" ng-change="submitWorkout(test)">
+    <option ng-repeat="option in workout[key]">{{option}}</option>
+  </select>
+</label>
+</div>
+<!-- 
+<button ng-click="submit()" class="button preferenceSubmit icon-right super-chevron-right button-full button-calm">
+  Submit
+</button> -->
+</div>
