@@ -3,7 +3,7 @@
  */
 angular
     .module('example')
-    .controller('SignupController', function($scope, supersonic) {
+    .controller('SignupController', function($scope, supersonic,backendService) {
 
         $scope.email = "abcd@gmail.com";
         $scope.password = "helloworld";
@@ -13,7 +13,6 @@ angular
 
         $scope.signup = function() {
             /* Note: Perform ERROR CHECKING for all fields */
-
             firebase.auth().createUserWithEmailAndPassword($scope.email, $scope.password)
             .then(function(object) {
                 firebase.auth().onAuthStateChanged(function(currentUser) {

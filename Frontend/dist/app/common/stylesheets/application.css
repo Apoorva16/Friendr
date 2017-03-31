@@ -75,6 +75,10 @@
   margin:auto;
 }
 
+.list.preference {
+  width:100vw !important;
+}
+
 .homePage {
     top: 5vh;
   left:0;
@@ -86,6 +90,12 @@
 .recentActivities {
   height: 100vh;
 }
+
+.preferenceSubmit {
+  position:absolute;
+  bottom: 0;
+}
+
 .test {
   text-align:center;
   background-color:transparent;
