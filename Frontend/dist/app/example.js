@@ -335,7 +335,7 @@ angular
         $scope.hasmsg;
         $scope.testmsg;
         $scope.newMessage = -1;
-        $scope.newMsg = [];
+        $scope.msgs = [];
       var id2;
       var obj;
       id2 = window.localStorage.getItem('id5');
@@ -360,7 +360,7 @@ angular
                   var convoId2 = firebase.database().ref('conversations').child(conversation_id2);
                   supersonic.logger.log("Is it working?");
 
-                  convoId1.child('message_list').on('child_added', function (snapshot, prevKey) {
+                  convoId1.child('message_list').limitToLast(1).on('child_added', function (snapshot, prevKey) {
                       if (snapshot.hasChildren()) {
                           supersonic.logger.log("Is it working?");
 
@@ -369,13 +369,13 @@ angular
                         //  obj = JSON.parse(obj1);
                         //  $scope.testmsg = obj;
                           $scope.testmsg = snapshot.val().message;
-                          // $scope.newMsg.push($scope.testmsg);
+                          $scope.msgs.push(snapshot.val().message);
                           //supersonic.logger.log(snapshot.val().message);
                           //resolve(snapshot.val());
                       }
                   });
 
-                  convoId2.child('message_list').on('child_added', function (snapshot, prevKey) {
+                  convoId2.child('message_list').limitToLast(1).on('child_added', function (snapshot, prevKey) {
                       if (snapshot.hasChildren()) {
                           supersonic.logger.log("Is it working?");
 
@@ -384,8 +384,9 @@ angular
                           //obj = JSON.parse(obj1);
 
                          $scope.testmsg = snapshot.val().message;
+                         $scope.msgs.push(snapshot.val().message);
+
                           //$scope.testmsg = obj;
-                          // $scope.newMsg.push($scope.testmsg);
                           // alert("hey");
 
                           //supersonic.logger.log(snapshot.val().message);
@@ -406,7 +407,8 @@ angular
           backendService.sendMessage(JSON.parse(id2),$scope.foo);
           $scope.newMessage++;
           $scope.foo = "";
-          //$scope.apply();
+          //alert($scope.msgs);
+          $scope.apply();
 
          // $scope.currmsg = backendService.listenToConversation(JSON.parse(id2));
           //supersonic.logger.log($scope.currmsg);
