@@ -1,15 +1,15 @@
-(function(){
-    // some code…
-    var config = {
-        apiKey: "AIzaSyB9-bQjCSShbkJuiDeWtyOurzFqTnr7pFU",
-        authDomain: "friendr-be400.firebaseapp.com",
-        databaseURL: "https://friendr-be400.firebaseio.com",
-        storageBucket: "friendr-be400.appspot.com",
-        messagingSenderId: "852808235414"
-    };
+// (function(){
+//     // some code…
+//     var config = {
+//         apiKey: "AIzaSyB9-bQjCSShbkJuiDeWtyOurzFqTnr7pFU",
+//         authDomain: "friendr-be400.firebaseapp.com",
+//         databaseURL: "https://friendr-be400.firebaseio.com",
+//         storageBucket: "friendr-be400.appspot.com",
+//         messagingSenderId: "852808235414"
+//     };
 
-    firebase.initializeApp(config);
-})();
+//     firebase.initializeApp(config);
+// })();
 
 
 angular
@@ -29,7 +29,14 @@ angular
 
     $scope.queue = function(activity) {
         
-       backendService.enterQueue(activity);
+       backendService.enterQueue(activity).then(function(id) {
+            if(id == null) {
+                alert("Placed in Queue");
+            } else {
+                backendService.initiateConversation(id);
+                alert("You're Matched!");
+            }
+       });
 
     }
 

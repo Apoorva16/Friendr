@@ -4,6 +4,8 @@ angular
       supersonic.logger.log("this is in a new view");
         $scope.hasmsg;
         $scope.testmsg;
+        $scope.newMessage = -1;
+        $scope.newMsg = [];
       var id2;
       var obj;
       id2 = window.localStorage.getItem('id5');
@@ -13,7 +15,6 @@ angular
           supersonic.logger.log($scope.hasmsg);
           $scope.testmsg = " ";
       })
-
       var other_data = JSON.parse(id2);
 
       $scope.tester1 = function(){
@@ -38,8 +39,8 @@ angular
                         //  obj = JSON.parse(obj1);
                         //  $scope.testmsg = obj;
                           $scope.testmsg = snapshot.val().message;
-
-                          supersonic.logger.log(snapshot.val().message);
+                          // $scope.newMsg.push($scope.testmsg);
+                          //supersonic.logger.log(snapshot.val().message);
                           //resolve(snapshot.val());
                       }
                   });
@@ -54,8 +55,10 @@ angular
 
                          $scope.testmsg = snapshot.val().message;
                           //$scope.testmsg = obj;
+                          // $scope.newMsg.push($scope.testmsg);
+                          // alert("hey");
 
-                          supersonic.logger.log(snapshot.val().message);
+                          //supersonic.logger.log(snapshot.val().message);
                           // resolve(snapshot.val());
                       }
                   });
@@ -71,7 +74,9 @@ angular
          //alert(JSON.parse(id2));
           supersonic.logger.log("id2 "+ JSON.parse(id2));
           backendService.sendMessage(JSON.parse(id2),$scope.foo);
-
+          $scope.newMessage++;
+          $scope.foo = "";
+          //$scope.apply();
 
          // $scope.currmsg = backendService.listenToConversation(JSON.parse(id2));
           //supersonic.logger.log($scope.currmsg);

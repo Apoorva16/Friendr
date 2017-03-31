@@ -33,7 +33,7 @@
     <div class="talk-bubble" ng-repeat="msg in hasmsg">
                 <p>{{msg.message}}</p>
             </div>
-    <div class="talk-bubble">
+    <div class="talk-bubble" ng-if="newMessage != -1">
         <span> {{testmsg}} </span>
     </div>
 

@@ -372,15 +372,14 @@ var printCurrentUserData= function() {
 			firebase.auth().onAuthStateChanged(function(user)
 			{
 		    	if (user)
-		    	{ // User is signed in.
-		       		//console.log("matching");
+		    	{
 		     	   	database.ref('Activities/'+ activity + '/Searching').once('value').then(function(snapshot1)
 		        	{
-		          		if (snapshot1.exists())
+		        		var matchFound = false;
+		          		if (snapshot1.hasChildren())
 		          		{
-		          			database.ref('users/' + user.uid + '/Preferences').once('value').then(function(snapshot2)
+		          			database.ref('users/' + user.uid + '/Preferences/' + activity).once('value').then(function(snapshot2)
 			          		{
-			          			var matchFound = false;
 			          			snapshot1.forEach(function(childSnapshot1)
 			          			{
 			          				var other_uid = childSnapshot1.key;
@@ -416,14 +415,18 @@ var printCurrentUserData= function() {
 			          					matchFound = true;
 			          					console.log("Match found, removing matching uid from queue " + other_uid);
 			          					database.ref('Activities/' + activity + '/Searching/' + other_uid).remove();
+			          					var date = new Date();
 
-			          					//add each to the match list
-			          					database.ref('users/' + user.uid + '/match_list').set({
-			          						other_uid: other_uid
+			          					database.ref('users/' + user.uid + '/match_list/' + other_uid).update({
+			          						timeMatched: date.toTimeString(),
+			          						dateMatched: date.toDateString(),
+			          						matchedActivity: activity
 			          					});
 
-			          					database.ref('users/' + other_uid + '/match_list').set({
-			          						other_uid: user.uid
+			          					database.ref('users/' + other_uid + '/match_list/' + user.uid).update({
+			          						timeMatched: date.toTimeString(),
+			          						dateMatched: date.toDateString(),
+			          						matchedActivity: activity
 			          					});
 
 			          					resolve(other_uid);
@@ -432,9 +435,9 @@ var printCurrentUserData= function() {
 
 			          			if (!matchFound)
 			          			{
-				          			//match not found, insert into queue
+			          				//match not found, insert into queue
 				          			console.log("No Match Found");
-				          			database.ref('users/' + user.uid + '/Preferences').once('value').then(function(snapshot)
+				          			database.ref('users/' + user.uid + '/Preferences/' + activity).once('value').then(function(snapshot)
 					          		{
 					          			var userPreferences = snapshot.val();
 					          			console.log(userPreferences);
@@ -445,14 +448,16 @@ var printCurrentUserData= function() {
 						          		});
 						          		console.log(user.uid + " in queue for " + activity);
 					          		});
-
+				          		
 				          			resolve(null);
 			          			}
 			          		});
 		          		}
-			          	else
-			          	{
-			          		database.ref('users/' + user.uid + '/Preferences').once('value').then(function(snapshot)
+		          		else
+		          		{
+		          			//match not found, insert into queue
+		          			console.log("No Users Searching");
+		          			database.ref('users/' + user.uid + '/Preferences/' + activity).once('value').then(function(snapshot)
 			          		{
 			          			var userPreferences = snapshot.val();
 			          			console.log(userPreferences);
@@ -463,9 +468,9 @@ var printCurrentUserData= function() {
 				          		});
 				          		console.log(user.uid + " in queue for " + activity);
 			          		});
-
-			          		resolve(null);
-			          	}
+		          		
+		          			resolve(null);
+		          		}
 		       	 	});
 		    	}
 	  		});

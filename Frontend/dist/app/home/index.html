@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script>
-  window.addEventListener('WebComponentsReady', function() {
-    supersonic.app.splashscreen.hide();
-  });
-  </script>
-  <!-- Cloud resource definition file for Supersonic Data -->
-  <script src="/cloud-resources.js"></script>
   <meta charset="utf8">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
@@ -32,70 +25,59 @@
 <body ng-app="home">
 
 <div id="indexCtrl" ng-controller="IndexController">
-	<!-- 		Navigation bar is generated in Controller-->
-	<div class="homePage">
-		<div class="list card margin">
-			<div class="container">
-				<div class="item item-body test">
-					<h1 class="test2"> What do you want to do today? </h1>
-				</div>
+    <!--        Navigation bar is generated in Controller-->
+    <div class="homePage">
+        <div class="list card margin">
+            <div class="container">
+                <div class="item item-body test">
+                    <h1 class="test2"> What do you want to do today? </h1>
+                </div>
 
-				<div class="item item-body test" ng-repeat="activity in activities">
-					<h1 class="test2"> {{activity}} </h1>
-				</div>	
-			</div>
-		</div>
-	</div>
+                <div class="item item-body test" ng-repeat="activity in activities">
+                    <h1 class="test2"> {{activity}} </h1>
+                </div>  
+            </div>
+        </div>
+    </div>
 
-	<div class="recentActivities">
-		<div class="recentContent">
-			<h1> Recent Activities </h1>
-		</div>
-	</div>
-	
+    <div class="recentActivities">
+        <div class="recentContent">
+            <h1 id="recentActivities"> Recent Activities </h1>
+        </div>
+    </div>
+    
 </div>
 
 
 <script>
-
-	var page = 0;
-	var verticalPage = 0;
-	var newPos;
-	var width = $(window).width();
-	var height = $(window).height();
-	var touchDistance = 5;
-	var startX;
-	var startY;
-	var dist;
+    var page = 0;
+    var verticalPage = 0;
+    var newPos;
+    var width = $(window).width();
+    var height = $(window).height();
+    var touchDistance = 5;
+    var startX;
+    var startY;
+    var dist;
         var threshold = 100; //required min distance traveled to be considered swipe
         var allowedTime = 500; // maximum time allowed to travel that distance
         var elapsedTime;
         var startTime;
-
-
 // /**
-// 		This is the logical part (animation) for the search page
+//      This is the logical part (animation) for the search page
 // **/
 $('div.container').on("touchstart", function(e) {
-	var touchobj = e.changedTouches[0]
-	dist = 0
-	startX = touchobj.pageX
-	startY = touchobj.pageY
-		    startTime = new Date().getTime() // record time when finger first makes contact with surface
-
-
-
-		})
-
-
+    var touchobj = e.changedTouches[0]
+    dist = 0
+    startX = touchobj.pageX
+    startY = touchobj.pageY
+            startTime = new Date().getTime() // record time when finger first makes contact with surface
+        })
 $('div.container').on("touchmove", function(e) {
-	e.preventDefault();
-
+    e.preventDefault();
 })
-
-
 $('div.container').on("touchend", function(e) {
-	var touchobj = e.changedTouches[0]
+    var touchobj = e.changedTouches[0]
         dist = touchobj.pageX - startX // get total dist traveled by finger while in contact with surface
         elapsedTime = new Date().getTime() - startTime // get time elapsed
         // check that elapsed time is within specified, horizontal dist traveled >= threshold
@@ -105,256 +87,63 @@ $('div.container').on("touchend", function(e) {
         
     })
 function enterQueue(page) {
-	if (page == 1) {
-
-		firebase.auth().onAuthStateChanged(function(user)
-		{
-			if (user)
-            { // User is signed in.
-            	var activity = "Eat";
-            	supersonic.logger.log("matching");
-            	supersonic.logger.log(activity);
-            	firebase.database().ref('Activities/'+ activity).once('value').then(function(snapshot)
-            	{
-            		if (snapshot.child("Searching").exists())
-            		{
-                        // get matched with this user
-                        var other_uid = snapshot.child("Searching").val();
-                        console.log(user.uid + " matched with user " + other_uid)
-                        firebase.database().ref('Activities/' + activity).set(
-                        {
-                        	activity: activity
-                        });
-                        var conversation_id = user.uid + ' ' + other_uid;
-
-                        firebase.database().ref('users/' + other_uid).once('value').then(function(snapshot)
-                        {
-                        	firebase.database().ref('users/' + user.uid).child("conversation_list").child(conversation_id).set(
-                        	{
-                        		other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName
-                        	});
-                        });
-
-                        firebase.database().ref('users/' + user.uid).once('value').then(function(snapshot)
-                        {
-                        	firebase.database().ref('users/' + other_uid).child("conversation_list").child(conversation_id).set(
-                        	{
-                        		other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName
-                        	});
-                        });
-
-                        firebase.database().ref('conversations').child(conversation_id).set(
-                        {
-                        	User1: user.uid,
-                        	User2: other_uid,
-                        	MessageCount: 0,
-                        });
-                    }   
-                    else if(snapshot.exists())
-                    {
-                    	supersonic.logger.log(activity + "test 2");
-                    	firebase.database().ref('Activities/'+ activity).set(
-                    	{
-                    		activity: activity,
-                    		Searching: user.uid
-                    	});
-                    	console.log(user.uid + " in queue for "+ activity);
-                    	return null;
-                    }
-                }); 
-            }
-
-            supersonic.logger.log("user doesnt exists");
-        });
-
-	} else if (page == 2) {
-				firebase.auth().onAuthStateChanged(function(user)
-		{
-			if (user)
-            { // User is signed in.
-            	var activity = "Study";
-            	supersonic.logger.log("matching");
-            	supersonic.logger.log(activity);
-            	firebase.database().ref('Activities/'+ activity).once('value').then(function(snapshot)
-            	{
-            		if (snapshot.child("Searching").exists())
-            		{
-                        // get matched with this user
-                        var other_uid = snapshot.child("Searching").val();
-                        console.log(user.uid + " matched with user " + other_uid)
-                        firebase.database().ref('Activities/' + activity).set(
-                        {
-                        	activity: activity
-                        });
-                        var conversation_id = user.uid + ' ' + other_uid;
-
-                        firebase.database().ref('users/' + other_uid).once('value').then(function(snapshot)
-                        {
-                        	firebase.database().ref('users/' + user.uid).child("conversation_list").child(conversation_id).set(
-                        	{
-                        		other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName
-                        	});
-                        });
-
-                        firebase.database().ref('users/' + user.uid).once('value').then(function(snapshot)
-                        {
-                        	firebase.database().ref('users/' + other_uid).child("conversation_list").child(conversation_id).set(
-                        	{
-                        		other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName
-                        	});
-                        });
-
-                        firebase.database().ref('conversations').child(conversation_id).set(
-                        {
-                        	User1: user.uid,
-                        	User2: other_uid,
-                        	MessageCount: 0,
-                        });
-                    }   
-                    else if(snapshot.exists())
-                    {
-                    	supersonic.logger.log(activity + "test 2");
-                    	firebase.database().ref('Activities/'+ activity).set(
-                    	{
-                    		activity: activity,
-                    		Searching: user.uid
-                    	});
-                    	console.log(user.uid + " in queue for "+ activity);
-                    	return null;
-                    }
-                }); 
-            }
-
-            supersonic.logger.log("user doesnt exists");
-        });
-
-	} else if (page == 3) {
-		firebase.auth().onAuthStateChanged(function(user)
-		{
-			if (user)
-            { // User is signed in.
-            	var activity = "Work Out";
-            	supersonic.logger.log("matching");
-            	supersonic.logger.log(activity);
-            	firebase.database().ref('Activities/'+ activity).once('value').then(function(snapshot)
-            	{
-            		if (snapshot.child("Searching").exists())
-            		{
-                        // get matched with this user
-                        var other_uid = snapshot.child("Searching").val();
-                        console.log(user.uid + " matched with user " + other_uid)
-                        firebase.database().ref('Activities/' + activity).set(
-                        {
-                        	activity: activity
-                        });
-                        var conversation_id = user.uid + ' ' + other_uid;
-
-                        firebase.database().ref('users/' + other_uid).once('value').then(function(snapshot)
-                        {
-                        	firebase.database().ref('users/' + user.uid).child("conversation_list").child(conversation_id).set(
-                        	{
-                        		other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName
-                        	});
-                        });
-
-                        firebase.database().ref('users/' + user.uid).once('value').then(function(snapshot)
-                        {
-                        	firebase.database().ref('users/' + other_uid).child("conversation_list").child(conversation_id).set(
-                        	{
-                        		other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName
-                        	});
-                        });
-
-                        firebase.database().ref('conversations').child(conversation_id).set(
-                        {
-                        	User1: user.uid,
-                        	User2: other_uid,
-                        	MessageCount: 0,
-                        });
-                    }   
-                    else if(snapshot.exists())
-                    {
-                    	supersonic.logger.log(activity + "test 2");
-                    	firebase.database().ref('Activities/'+ activity).set(
-                    	{
-                    		activity: activity,
-                    		Searching: user.uid
-                    	});
-                    	console.log(user.uid + " in queue for "+ activity);
-                    	return null;
-                    }
-                }); 
-            }
-
-            supersonic.logger.log("user doesnt exists");
-        });
-
-	}
+    if (page == 1) {
+        angular.element($('#indexCtrl')).scope().queue("Eat");
+    } else if (page == 2) {
+        angular.element($('#indexCtrl')).scope().queue("Study");
+    } else if (page == 3) {
+        angular.element($('#indexCtrl')).scope().queue("Work Out");
+    }
 }
-
-
 function handleswipe(result) {
-			//Time is less than elapsed time
-			if(result) {
-				//right Swipe
-				if(Math.abs(dist) < threshold) {
-					if(Math.abs(dist) <= touchDistance) {
-						enterQueue(page);
-					}
-				}
-				else if(dist>0 && Math.abs(dist) >= threshold) {
-					if(page>0) {
-						page--;
-						newPos = page * width;
-					// $('div.container').scrollLeft(curPos);
-					$('div.container').animate({
-						scrollLeft: newPos
-					}, 800);
-				};
-
-			}
-				//left Swipe
-				else if (dist<0 && Math.abs(dist) >= threshold) {
-					if(page< 3){
-						page++;
-						newPos = page * width;
-						$('div.container').animate({
-							scrollLeft: newPos
-						}, 800);
-
-					}
-				}
-			}
-		}
-
+            //Time is less than elapsed time
+            if(result) {
+                //right Swipe
+                if(Math.abs(dist) < threshold) {
+                    if(Math.abs(dist) <= touchDistance) {
+                        enterQueue(page);
+                    }
+                }
+                else if(dist>0 && Math.abs(dist) >= threshold) {
+                    if(page>0) {
+                        page--;
+                        newPos = page * width;
+                    // $('div.container').scrollLeft(curPos);
+                    $('div.container').animate({
+                        scrollLeft: newPos
+                    }, 800);
+                };
+            }
+                //left Swipe
+                else if (dist<0 && Math.abs(dist) >= threshold) {
+                    if(page< 4){
+                        page++;
+                        newPos = page * width;
+                        $('div.container').animate({
+                            scrollLeft: newPos
+                        }, 800);
+                    }
+                }
+            }
+        }
 /**
-	This is the logical part for the interaction between homepage and activities page
-
-	**/
-
-
+    This is the logical part for the interaction between homepage and activities page
+    **/
 /**
-
-		This Handles the scrolling from home page
-
-		**/
-		$('div.homePage').on("touchstart", function(e) {
-			var touchobj = e.changedTouches[0];
-			dist = 0
-			startY = touchobj.pageY
-		    startTime = new Date().getTime() // record time when finger first makes contact with surface
-		    e.preventDefault()
-		})
-
-
-		$('div.homePage').on("touchmove", function(e) {
-			e.preventDefault();
-
-		})
-
-
-		$('div.homePage').on("touchend", function(e) {
-			var touchobj = e.changedTouches[0]
+        This Handles the scrolling from home page
+        **/
+        $('div.homePage').on("touchstart", function(e) {
+            var touchobj = e.changedTouches[0];
+            dist = 0
+            startY = touchobj.pageY
+            startTime = new Date().getTime() // record time when finger first makes contact with surface
+            e.preventDefault()
+        })
+        $('div.homePage').on("touchmove", function(e) {
+            e.preventDefault();
+        })
+        $('div.homePage').on("touchend", function(e) {
+            var touchobj = e.changedTouches[0]
         dist = touchobj.pageY - startY // get total dist traveled by finger while in contact with surface
         elapsedTime = new Date().getTime() - startTime // get time elapsed
         // check that elapsed time is within specified, horizontal dist traveled >= threshold
@@ -363,39 +152,35 @@ function handleswipe(result) {
         handleSwipeDown(swipeDownBol)
         e.preventDefault()
     });
-		function handleSwipeDown(result) {
-			//Time is less than elapsed time
-			if(result) {
-				if(dist < 0 && Math.abs(dist) >= threshold) {
-				// supersonic.logger.log(height);
-				$("html, body").animate({
-					scrollTop: height
-				}, 800);
-			}
-		}
-	}
-
+        function handleSwipeDown(result) {
+            //Time is less than elapsed time
+            if(result) {
+                if(dist < 0 && Math.abs(dist) >= threshold) {
+                // supersonic.logger.log(height);
+                $("html, body").animate({
+                    scrollTop: height
+                }, 800);
+            }
+        }
+    }
+        $('h1#recentActivities').on("touchend", function(e){
+            angular.element($('#indexCtrl')).scope().test();
+        })
 // *
-
-// 		This Handles the scrolling from Recent Activities Page
+//      This Handles the scrolling from Recent Activities Page
 // *
 $('div.recentActivities').on("touchstart", function(e) {
-	var touchobj = e.changedTouches[0];
-	dist = 0
-	startY = touchobj.pageY
-		    startTime = new Date().getTime() // record time when finger first makes contact with surface
-		    e.preventDefault()
-		})
-
-
+    var touchobj = e.changedTouches[0];
+    dist = 0
+    startY = touchobj.pageY
+            startTime = new Date().getTime() // record time when finger first makes contact with surface
+            e.preventDefault()
+        })
 $('div.recentActivities').on("touchmove", function(e) {
-	e.preventDefault();
-
+    e.preventDefault();
 })
-
-
 $('div.recentActivities').on("touchend", function(e) {
-	var touchobj = e.changedTouches[0]
+    var touchobj = e.changedTouches[0]
         dist = touchobj.pageY - startY // get total dist traveled by finger while in contact with surface
         elapsedTime = new Date().getTime() - startTime // get time elapsed
         // check that elapsed time is within specified, horizontal dist traveled >= threshold
@@ -405,17 +190,16 @@ $('div.recentActivities').on("touchend", function(e) {
         e.preventDefault();
     });
 function handleSwipeUp(result) {
-			//Time is less than elapsed time
-			if(result) {
-				if ( dist > 0 && Math.abs(dist) >= threshold) {
-				// supersonic.logger.log(height);
-				$("html, body").animate({
-					scrollTop: 0
-				}, 800);
-			}
-		}
-	}
-
+            //Time is less than elapsed time
+            if(result) {
+                if ( dist > 0 && Math.abs(dist) >= threshold) {
+                // supersonic.logger.log(height);
+                $("html, body").animate({
+                    scrollTop: 0
+                }, 800);
+            }
+        }
+    }
 </script>
 
 </body>
