@@ -513,25 +513,9 @@ module.exports =
 		});
 	},
 
-<<<<<<< HEAD
-	},
-	setPreferencesForActivity: function(activity, preferencesList) {
-		var x = 0;
-
-		for (var s in preferencesList) {
-			var p = "p"+x;
-			//console.log("p = " + p);
-			var pref = preferencesList[s];
-			var foo = {};
-			foo[p] = pref;
-			database.ref("Activities/"+activity+"/Preferences").update(foo);
-			x++;
-		}
-=======
 	setPreferencesForActivity: function(activity, preferencesList)
 	{
 		database.ref("Activities/"+activity+"/StaticPreferences").update(preferencesList);
->>>>>>> 793c66ae640a726e0086a5ee9e9118919c635b18
 	},
 
 	getPreferencesList: function(activity)
@@ -548,14 +532,8 @@ module.exports =
 	  	return preferencesListPromise;
 	},
 
-<<<<<<< HEAD
-	},
-
-	setPreferencesForUser: function(activity, preference) {
-=======
 	setPreferencesForUser: function(activity, preference)
 	{
->>>>>>> 793c66ae640a726e0086a5ee9e9118919c635b18
 		firebase.auth().onAuthStateChanged(function(user)
 		{
 			if (user)
