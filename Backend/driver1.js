@@ -1,16 +1,22 @@
 var backend = require('./backend1');
 
-//testing@purdue.edu - testing - fjRhMBaMjGSNf1szze23rGg1fts1
-//jradocho@purdue.edu - password - U1PMF6lJBzereWItzrxnQbCrIH03
-backend.signIn("jradocho@purdue.edu", "password");
-//backend.addAuthUser("testing@purdue.edu", "testing", "Test", "Tester", "imatester");
-//backend.initiateConversation("fjRhMBaMjGSNf1szze23rGg1fts1");
-//backend.sendMessage("fjRhMBaMjGSNf1szze23rGg1fts1", "New Test Message");
+//testing@purdue.edu - testing - QPcfMZziKuhPqapjh1j9fOX0X2d2
+//jradocho@purdue.edu - password - M8Ca19FlM1cIyYkYIjrfMiOI8vO2
+backend.signIn("testing@purdue.edu", "testing");
+
+//backend.addAuthUser("jradocho@purdue.edu", "password", "Josh", "Rado", "joshrado", "Male");
+
+//backend.setPreferencesForUser("Eat", {"Location":"Earhart", "Gender":"Male"});
+//backend.enterQueue("Eat");
+//backend.initiateConversation("qmve6W2IsQenoh8Ndb8l3mav4ZG2");
+//backend.sendMessage("qmve6W2IsQenoh8Ndb8l3mav4ZG2", "New Test Message");
 //console.log(backend.getActivityList());
 
-//backend.viewConversation("fjRhMBaMjGSNf1szze23rGg1fts1");
+//backend.viewConversation("qmve6W2IsQenoh8Ndb8l3mav4ZG2");
 //backend.modifyUsername("joshrado");
-//backend.setPreferencesForUser("Eat", "Dining Court");
-backend.enterQueue("Eat");
 
-//backend.listenToConversation("fjRhMBaMjGSNf1szze23rGg1fts1");
+backend.searchForMatch("Josh", "Rado").then(function(value)
+{
+	console.log("Search Found:");
+	console.log(value);
+});

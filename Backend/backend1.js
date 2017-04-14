@@ -17,7 +17,7 @@ var user;
 
 module.exports = 
 {	
-	addAuthUser: function(email, password, firstName, lastName, username)
+	addAuthUser: function(email, password, firstName, lastName, username, gender)
 	{
 		firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {});
 
@@ -25,11 +25,12 @@ module.exports =
 		{
 			if(currentUser)
 			{
-				database.ref('users/' + currentUser.uid).set(
+				database.ref('Users/' + currentUser.uid + '/Profile').set(
 				{
-					firstName: firstName,
-					lastName: lastName,
-					username: username
+					FirstName: firstName,
+					LastName: lastName,
+					UserName: username,
+					Gender: gender
 				});
 			}
 		});
@@ -126,27 +127,25 @@ module.exports =
 			{
 				var conversation_id = user.uid + ' ' + other_uid;
 		
-				database.ref('users/' + other_uid).once('value').then(function(snapshot)
+				database.ref('Users/' + other_uid + '/Profile').once('value').then(function(snapshot)
 				{
-					database.ref('users/' + user.uid).child("conversation_list").child(conversation_id).set(
+					database.ref('Users/' + user.uid + "/Conversation_List").child(conversation_id).set(
 					{
-						other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName,
+						other_user: snapshot.val().FirstName + ' ' + snapshot.val().LastName,
 						other_user_uid: other_uid
 					});
 				});
 				
-				database.ref('users/' + user.uid).once('value').then(function(snapshot)
+				database.ref('Users/' + user.uid + '/Profile').once('value').then(function(snapshot)
 				{
-					database.ref('users/' + other_uid).child("conversation_list").child(conversation_id).set(
+					database.ref('Users/' + other_uid + "/Conversation_List").child(conversation_id).set(
 					{
-						other_user: snapshot.val().firstName + ' ' + snapshot.val().lastName,
+						other_user: snapshot.val().FirstName + ' ' + snapshot.val().LastName,
 						other_user_uid: user.uid
 					});
 				});
 				
-			
-			
-				database.ref('conversations').child(conversation_id).set(
+				database.ref('Conversations/' + conversation_id).set(
 				{
 					User1: user.uid,
 					User2: other_uid,
@@ -166,8 +165,8 @@ module.exports =
 				var conversation_id2 = other_uid + ' ' + user.uid;
 
 				//determine which conversation_id is correct
-				var convoId1 = database.ref('conversations').child(conversation_id1);
-				var convoId2 = database.ref('conversations').child(conversation_id2);
+				var convoId1 = database.ref('Conversations/' + conversation_id1);
+				var convoId2 = database.ref('Conversations/' + conversation_id2);
 
 				convoId1.once('value').then(function(snapshot)
 				{
@@ -178,15 +177,15 @@ module.exports =
 						var nextMessageId = messageCount + 1;
 						var date = new Date();
 					
-						database.ref('conversations').child(conversation_id1).child('message_list').child(nextMessageId).set(
+						database.ref('Conversations/' + conversation_id1 + '/Message_List').child(nextMessageId).set(
 						{
-							message: message,
-							sender: user.uid,
-							date: date.toDateString(),
-							time: date.toTimeString()
+							Message: message,
+							Sender: user.uid,
+							Date: date.toDateString(),
+							Time: date.toTimeString()
 						});	
 
-						database.ref('conversations').child(conversation_id1).update(
+						database.ref('Conversations').child(conversation_id1).update(
 						{
 							MessageCount: messageCount+1
 						});
@@ -201,15 +200,15 @@ module.exports =
 						var nextMessageId = messageCount + 1;
 						var date = new Date();
 					
-						database.ref('conversations').child(conversation_id2).child('message_list').child(nextMessageId).set(
+						database.ref('Conversations/' + conversation_id2 + '/Message_List/' + nextMessageId).set(
 						{
-							message: message,
-							sender: user.uid,
-							date: date.toDateString(),
-							time: date.toTimeString()
+							Message: message,
+							Sender: user.uid,
+							Date: date.toDateString(),
+							Time: date.toTimeString()
 						});	
 
-						database.ref('conversations').child(conversation_id2).update(
+						database.ref('Conversations/' + conversation_id2).update(
 						{
 							MessageCount: messageCount+1
 						});
@@ -228,7 +227,7 @@ module.exports =
 				if (user)
 				{
 					//get conversation list
-					database.ref('users').child(user.uid).child('conversation_list').once('value').then(function(snapshot)
+					database.ref('Users/' + user.uid + '/Conversation_List').once('value').then(function(snapshot)
 					{
 		    			resolve(snapshot.val());
 		    		});
@@ -250,10 +249,10 @@ module.exports =
 					var conversation_id2 = other_uid + ' ' + user.uid;
 
 					//determine which conversation_id is correct
-					var convoId1 = database.ref('conversations').child(conversation_id1);
-					var convoId2 = database.ref('conversations').child(conversation_id2);
+					var convoId1 = database.ref('Conversations/' + conversation_id1);
+					var convoId2 = database.ref('Conversations/' + conversation_id2);
 
-					convoId1.child('message_list').once('value').then(function(snapshot)
+					convoId1.child('Message_List').once('value').then(function(snapshot)
 					{
 						if (snapshot.hasChildren())
 						{
@@ -267,7 +266,7 @@ module.exports =
 						}
 					});
 
-					convoId2.child('message_list').once('value').then(function(snapshot)
+					convoId2.child('Message_List').once('value').then(function(snapshot)
 					{
 						if(snapshot.hasChildren())
 						{
@@ -299,15 +298,15 @@ module.exports =
 					var conversation_id2 = other_uid + ' ' + user.uid;
 
 					//determine which conversation_id is correct
-					var convoId1 = database.ref('conversations/' + conversation_id1);
-					var convoId2 = database.ref('conversations/' + conversation_id2);
+					var convoId1 = database.ref('Conversations/' + conversation_id1);
+					var convoId2 = database.ref('Conversations/' + conversation_id2);
 
 					convoId1.once('value').then(function(snapshotP)
 					{
 						if (snapshotP.hasChildren())
 						{
 							console.log("ConversationId1 is valid.");
-							convoId1.child('message_list').on('child_added', function(snapshot, prevKey)
+							convoId1.child('Message_List').on('child_added', function(snapshot, prevKey)
 							{
 								if (snapshot.hasChildren())
 								{
@@ -319,7 +318,7 @@ module.exports =
 						else
 						{
 							console.log("ConversationId2 is valid.");
-							convoId2.child('message_list').on('child_added', function(snapshot, prevKey)
+							convoId2.child('Message_List').on('child_added', function(snapshot, prevKey)
 							{
 								if (snapshot.hasChildren())
 								{
@@ -337,28 +336,27 @@ module.exports =
 
 	addActivity: function(activity) 
 	{
-		database.ref('Activities/'+activity).set(
+		database.ref('Activities/' + activity).set(
   		{ 
         	activity: activity
   		});
 	},
 
-	getActivityList: function() {
+	getActivityList: function()
+	{
 		var list = [];
 		var activityListPromise = new Promise(function(resolve, reject)
 		{
 	  		database.ref('Activities/').once('value').then(function(snapshot)
 	  		{
-	   			snapshot.forEach(function(childSnapshot) {
+	   			snapshot.forEach(function(childSnapshot)
+	   			{
 	      			list.push(childSnapshot.key);
 	    		});
-	    		//console.log(list.toString());
-	    		resolve(list); //u
+	    		resolve(list);
 	  		});
 	  	});
-	  
 	  	return activityListPromise;
-
 	},
 
 	enterQueue: function(activity)
@@ -374,33 +372,68 @@ module.exports =
 		        		var matchFound = false;
 		          		if (snapshot1.hasChildren())
 		          		{
-		          			database.ref('users/' + user.uid + '/Preferences/' + activity).once('value').then(function(snapshot2)
+		          			database.ref('Users/' + user.uid).once('value').then(function(snapshot2)
 			          		{
 			          			snapshot1.forEach(function(childSnapshot1)
 			          			{
-			          				var other_uid = childSnapshot1.key;
-			          				var other_preferences = childSnapshot1.val().preferences;
-			          				console.log("other_uid");
-			          				console.log(other_uid);
+									var isMatch = true;
+
+			          				var matchUID = childSnapshot1.key;
+			          				var matchPreferences = childSnapshot1.val().Preferences;
+			          				var matchGender = childSnapshot1.val().Gender;
 			          				console.log("other_preferences");
-			          				console.log(other_preferences);
+			          				console.log(matchPreferences);
 
-			          				var my_preferences = snapshot2.val();
-			          				console.log("my_preferences");
-			          				console.log(my_preferences);
-
-			          				var isMatch = true;
-			          				for (var key in my_preferences)
+			          				//check for searching for myself
+			          				if (user.uid == matchUID)
 			          				{
-			          					if (my_preferences.hasOwnProperty(key))
+			          					console.log("Can't match with myself");
+			          					isMatch = false;
+			          					//will update queue preferences if changed recently...
+			          				}
+
+			          				var myUserPreferences = snapshot2.val().Preferences[activity];
+				          			var myGender = snapshot2.val().Profile['Gender'];
+			          				console.log("myUserPreferences");
+			          				console.log(myUserPreferences);
+			          				console.log(myGender);
+			          				
+			          				for (var key in myUserPreferences)
+			          				{
+			          					if (myUserPreferences.hasOwnProperty(key))
 			          					{
-			          						if (my_preferences[key] == other_preferences[key])
-			          							console.log("Preferences Match: " + key);
+			          						if (key != 'Gender')
+			          						{
+				          						if (myUserPreferences[key] == matchPreferences[key])
+				          							console.log("Preferences Match: " + key);
+				          						else
+				          						{
+				          							console.log("Preferences Mismatch: " + key);
+				          							isMatch = false;
+				          							break;
+				          						}
+			          						}
 			          						else
 			          						{
-			          							console.log("Preferences Mismatch: " + key);
-			          							isMatch = false;
-			          							break;
+			          							if (myUserPreferences[key] != 'NoPref')
+			          							{
+			          								if (myUserPreferences[key] != matchGender)
+			          								{
+			          									console.log("Preferences Mismatch: " + key);
+			          									isMatch = false;
+			          									break;
+			          								}
+			          							}
+
+			          							if (matchPreferences[key] != 'NoPref')
+			          							{
+			          								if (matchPreferences[key] != myGender)
+			          								{
+			          									console.log("Preferences Mismatch: " + key);
+			          									isMatch = false;
+			          									break;
+			          								}
+			          							}
 			          						}
 			          					}
 			          				}
@@ -409,23 +442,23 @@ module.exports =
 			          				{
 			          					//all preferences match, remove other user from queue
 			          					matchFound = true;
-			          					console.log("Match found, removing matching uid from queue " + other_uid);
-			          					database.ref('Activities/' + activity + '/Searching/' + other_uid).remove();
+			          					console.log("Match found, removing matching uid from queue " + matchUID);
+			          					database.ref('Activities/' + activity + '/Searching/' + matchUID).remove();
 			          					var date = new Date();
 
-			          					database.ref('users/' + user.uid + '/match_list/' + other_uid).update({
-			          						timeMatched: date.toTimeString(),
-			          						dateMatched: date.toDateString(),
-			          						matchedActivity: activity
+			          					database.ref('Users/' + user.uid + '/Match_List/' + matchUID).update({
+			          						TimeMatched: date.toTimeString(),
+			          						DateMatched: date.toDateString(),
+			          						MatchedActivity: activity
 			          					});
 
-			          					database.ref('users/' + other_uid + '/match_list/' + user.uid).update({
-			          						timeMatched: date.toTimeString(),
-			          						dateMatched: date.toDateString(),
-			          						matchedActivity: activity
+			          					database.ref('Users/' + matchUID + '/Match_List/' + user.uid).update({
+			          						TimeMatched: date.toTimeString(),
+			          						DateMatched: date.toDateString(),
+			          						MatchedActivity: activity
 			          					});
 
-			          					resolve(other_uid);
+			          					resolve(matchUID);
 			          				}
 			          			});
 
@@ -433,17 +466,15 @@ module.exports =
 			          			{
 			          				//match not found, insert into queue
 				          			console.log("No Match Found");
-				          			database.ref('users/' + user.uid + '/Preferences/' + activity).once('value').then(function(snapshot)
-					          		{
-					          			var userPreferences = snapshot.val();
-					          			console.log(userPreferences);
+				          			var userPreferences = snapshot2.val().Preferences[activity];
+				          			var gender = snapshot2.val().Gender;
 
-					          			database.ref('Activities/'+ activity + '/Searching/' + user.uid).update(
-						          		{
-						          			preferences: userPreferences
-						          		});
-						          		console.log(user.uid + " in queue for " + activity);
+				          			database.ref('Activities/'+ activity + '/Searching/' + user.uid).update(
+					          		{
+					          			Preferences: userPreferences,
+					          			Gender: gender
 					          		});
+					          		console.log(user.uid + " in queue for " + activity);
 				          		
 				          			resolve(null);
 			          			}
@@ -453,14 +484,16 @@ module.exports =
 		          		{
 		          			//match not found, insert into queue
 		          			console.log("No Users Searching");
-		          			database.ref('users/' + user.uid + '/Preferences/' + activity).once('value').then(function(snapshot)
+		          			database.ref('Users/' + user.uid).once('value').then(function(snapshot)
 			          		{
-			          			var userPreferences = snapshot.val();
+			          			var userPreferences = snapshot.val().Preferences[activity];
+			          			var gender = snapshot.val().Profile['Gender'];
 			          			console.log(userPreferences);
 
 			          			database.ref('Activities/'+ activity + '/Searching/' + user.uid).update(
 				          		{
-				          			preferences: userPreferences
+				          			Preferences: userPreferences,
+				          			Gender: gender
 				          		});
 				          		console.log(user.uid + " in queue for " + activity);
 			          		});
@@ -502,12 +535,12 @@ module.exports =
 			if (user)
 			{
 				user.updateProfile({
-					username: user_name
+					UserName: user_name
 				});
 
-				database.ref('users/' + user.uid).update(
+				database.ref('Users/' + user.uid + '/Profile').update(
 				{
-					username: user_name
+					UserName: user_name
 				});
 			}
 		});
@@ -515,14 +548,14 @@ module.exports =
 
 	setPreferencesForActivity: function(activity, preferencesList)
 	{
-		database.ref("Activities/"+activity+"/StaticPreferences").update(preferencesList);
+		database.ref("Activities/" + activity + "/StaticPreferences").update(preferencesList);
 	},
 
 	getPreferencesList: function(activity)
 	{
 		var preferencesListPromise = new Promise(function(resolve, reject)
 		{
-	  		database.ref('Activities/'+activity+'/StaticPreferences').once('value').then(function(snapshot)
+	  		database.ref('Activities/' + activity + '/StaticPreferences').once('value').then(function(snapshot)
 	  		{
 	  			var preferences = snapshot.val();
 	   			resolve(preferences);
@@ -538,7 +571,7 @@ module.exports =
 		{
 			if (user)
 			{
-				database.ref('users/'+ user.uid + '/Preferences/' + activity).update(preference);
+				database.ref('Users/'+ user.uid + '/Preferences/' + activity).update(preference);
 			}
 		});
 	},
@@ -548,7 +581,7 @@ module.exports =
 		var match_list = [];
 		var match_listPromise = new Promise(function (resolve, reject)
 		{
-			database.ref('users/' + uid + '/match_list').once('value').then(function(snapshot)
+			database.ref('Users/' + uid + '/Match_List').once('value').then(function(snapshot)
 			{
 				if (snapshot.exists) {
 					snapshot.forEach(function(childSnapshot){
@@ -564,6 +597,86 @@ module.exports =
 			});	
 		});
 		return match_listPromise;		
+	},
+
+	clearConversation: function(conversation_id)
+	{
+		firebase.auth().onAuthStateChanged(function(user)
+		{
+			if (user)
+			{
+				database.ref('Conversations/' + conversation_id).update({
+					MessageCount: 0
+				});
+
+				database.ref('Conversations/' + conversation_id + '/Message_List').remove();
+			}
+		});
+	},
+
+	deleteMatch: function(other_uid)
+	{
+		firebase.auth().onAuthStateChanged(function(user)
+		{
+			if (user)
+			{
+				var conversation_id1 = user.uid + ' ' + other_uid;
+				var conversation_id2 = other_uid + ' ' + user.uid;
+
+				//determine which conversation_id is correct
+				var convoId1 = database.ref('Conversations/' + conversation_id1);
+				var convoId2 = database.ref('Conversations/' + conversation_id2);
+
+				convoId1.once('value').then(function(snapshotP)
+				{
+					if (snapshotP.hasChildren())
+					{
+						convoId1.remove();
+						database.ref('Users/' + user.uid + '/Conversation_List/' + conversation_id1).remove();
+						database.ref('Users/' + other_uid + '/Conversation_List/' + conversation_id1).remove();
+					}
+					else
+					{
+						convoId2.remove();
+						database.ref('Users/' + user.uid + '/Conversation_List/' + conversation_id2).remove();
+						database.ref('Users/' + other_uid + '/Conversation_List/' + conversation_id2).remove();
+					}
+				});
+			}
+		});
+	},
+
+	searchForMatch: function(srchFirstName, srchLastName)
+	{
+		var matchedUser = new Promise(function(resolve, reject)
+		{
+			firebase.auth().onAuthStateChanged(function(user)
+			{
+				if (user)
+				{
+					database.ref('Users/' + user.uid + '/Match_List').once('value').then(function(snapshot)
+					{
+						snapshot.forEach(function(childSnapshot)
+						{
+							var other_uid = childSnapshot.key;
+							database.ref('Users/' + other_uid + '/Profile').once('value').then(function(snapshot1)
+							{
+								var other_user = snapshot1.val();
+								if (srchFirstName == other_user.FirstName)
+								{
+									if (srchLastName == other_user.LastName)
+									{
+										resolve(other_user);
+									}
+								}
+							});
+						});
+					});
+				}
+			});
+		});
+
+		return matchedUser;
 	}
 	
 }
