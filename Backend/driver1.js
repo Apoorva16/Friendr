@@ -8,15 +8,20 @@ backend.signIn("testing@purdue.edu", "testing");
 
 //backend.setPreferencesForUser("Eat", {"Location":"Earhart", "Gender":"Male"});
 //backend.enterQueue("Eat");
-//backend.initiateConversation("qmve6W2IsQenoh8Ndb8l3mav4ZG2");
+//backend.initiateConversation("M8Ca19FlM1cIyYkYIjrfMiOI8vO2");
 //backend.sendMessage("qmve6W2IsQenoh8Ndb8l3mav4ZG2", "New Test Message");
 //console.log(backend.getActivityList());
 
 //backend.viewConversation("qmve6W2IsQenoh8Ndb8l3mav4ZG2");
 //backend.modifyUsername("joshrado");
 
-backend.searchForMatch("Josh", "Rado").then(function(value)
+/*backend.searchForMatch("Josh", "Rado").then(function(value)
 {
 	console.log("Search Found:");
+	console.log(value);
+});*/
+
+backend.viewConversationList().then(function(value)
+{
 	console.log(value);
 });

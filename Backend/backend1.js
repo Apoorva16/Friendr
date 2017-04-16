@@ -13,7 +13,6 @@ var config =
 firebase.initializeApp(config);
 
 var database = firebase.database();
-var user;
 
 module.exports = 
 {	
@@ -21,11 +20,11 @@ module.exports =
 	{
 		firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {});
 
-		firebase.auth().onAuthStateChanged(function(currentUser)
+		firebase.auth().onAuthStateChanged(function(user)
 		{
-			if(currentUser)
+			if(user)
 			{
-				database.ref('Users/' + currentUser.uid + '/Profile').set(
+				database.ref('Users/' + user.uid + '/Profile').set(
 				{
 					FirstName: firstName,
 					LastName: lastName,
@@ -52,7 +51,6 @@ module.exports =
 	signIn: function(email, password) {
 		firebase.auth().signInWithEmailAndPassword(email, password).catch(function (error) {
 			console.log("Sign in unsuccessful");
-			return;
 		});
 		console.log("Signed into " + email + " successfully");
 	},
@@ -521,10 +519,31 @@ module.exports =
 
 	modifyProfilePicture: function(picture_link)
 	{
-		var user = firebase.auth().currentUser;
+		firebase.auth().onAuthStateChanged(function(user)
+		{
+			if (user)
+			{
+				database.ref('Users/' + user.uid + '/Profile').update({
+					 PictureLink: picture_link
+				});
+			}
 
-		user.updateProfile({
-			photoURL: picture_link
+			user.updateProfile({
+				photoURL: picture_link
+			});
+		});
+	},
+
+	modifyAboutMe: function(description)
+	{
+		firebase.auth().onAuthStateChanged(function(user)
+		{
+			if (user)
+			{
+				database.ref('Users/' + user.uid + '/Profile').update({
+					AboutMe: description
+				});
+			}
 		});
 	},
 
@@ -677,8 +696,7 @@ module.exports =
 		});
 
 		return matchedUser;
-	}
-	
+	}	
 }
 
 
