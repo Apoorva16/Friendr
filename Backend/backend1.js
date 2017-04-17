@@ -602,7 +602,7 @@ module.exports =
 		{
 			database.ref('Users/' + uid + '/Match_List').once('value').then(function(snapshot)
 			{
-				if (snapshot.exists) {
+				if (snapshot.exists()) {
 					snapshot.forEach(function(childSnapshot){
 						var combo = [];
 						combo.push(childSnapshot.key);
@@ -696,7 +696,108 @@ module.exports =
 		});
 
 		return matchedUser;
-	}	
+	},
+
+	addToFavorites: function (other_uid) 
+	{
+		firebase.auth().onAuthStateChanged(function(user)
+		{
+			if (user)
+			{
+				var other_name;
+				
+				database.ref('Users').once('value').then(function(snapshot)
+				{
+					if (!snapshot.child(other_uid).exists()) {
+						console.log("uid not found");
+					}
+					else {
+
+						database.ref('Users/'+ other_uid + '/Profile').once('value').then(function(snapshot)
+						{
+							other_name = snapshot.child("UserName").val();	
+						});
+						
+						database.ref('Users/'+user.uid).once('value').then(function(snapshot)
+						{
+							if (snapshot.child("Favorites").exists())
+							{
+								if (!snapshot.child("Favorites").child(other_uid).exists())
+								{
+									var length = snapshot.child("Favorites").child("length").val();
+									length++;
+									//console.log(length);
+									
+									database.ref('Users/' +user.uid + '/Favorites').update({
+										length: length,
+										[other_uid]: other_name
+									});
+								}
+							}
+							else {
+								database.ref("Users/" +user.uid + "/Favorites").set({
+									[other_uid]: other_name,
+									length: 1
+									
+								});
+							}
+						});
+					}
+				});
+			}
+		});
+	},
+
+	getFavoritesList: function() 
+	{
+		firebase.auth().onAuthStateChanged(function(user)
+		{
+			if (user) {
+				var favorites_list = [];
+				var favorites_listPromise = new Promise(function (resolve, reject)
+				{
+					database.ref('Users/' + user.uid + '/Favorites').once('value').then(function(snapshot)
+					{ 
+						if (snapshot.exists()) 
+						{
+							snapshot.forEach(function(childSnapshot){
+								//childSnapshot.key or .val()
+								if (childSnapshot.key != 'length') {
+									favorites_list.push(childSnapshot.key);
+								}
+							});
+						}
+						console.log(favorites_list);
+						resolve(favorites_list);
+					});	
+				});
+				return favorites_listPromise;	
+			}	
+		});
+	},
+	removeFromFavorites: function(other_uid) 
+	{
+		firebase.auth().onAuthStateChanged(function(user)
+		{
+			if (user) {
+				database.ref('Users/' + user.uid).once('value').then(function(snapshot)
+				{
+					if (snapshot.child("Favorites").exists()) {
+						if (snapshot.child("Favorites").child(other_uid).exists()) {
+							database.ref('Users/'+user.uid+'/Favorites/'+other_uid).remove();
+							var length = snapshot.child("Favorites").child("length").val();
+							length--;
+							database.ref('Users/'+user.uid+'/Favorites').update({
+								length: length
+							})
+						}
+					}
+				});
+			}
+		});
+	}
+
+
 }
 
 
