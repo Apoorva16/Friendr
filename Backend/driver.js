@@ -13,7 +13,9 @@ var gender = "Male";
 //testing@purdue.edu - testing - fjRhMBaMjGSNf1szze23rGg1fts1
 //jradocho@purdue.edu - password - U1PMF6lJBzereWItzrxnQbCrIH03
 backend.signIn(email, password);
+//backend.addToFavorites("M8Ca19FlM1cIyYkYIjrfMiOI8vO2");
 backend.addToFavorites("QPcfMZziKuhPqapjh1j9fOX0X2d2");
+//backend.removeFromFavorites("QPcfMZziKuhPqapjh1j9fOX0X2d2");
 //backend.getFavoritesList();
 
 
