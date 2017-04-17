@@ -1,8 +1,21 @@
 var backend = require('./backend1');
 
+var email = "brandonxia01@gmail.com";
+var password = "password";
+var username = "brandonxia01";
+var firstname = "brandon";
+var lastname = "xia";
+var gender = "Male";
+//backend.addAuthUser(email, password, firstname, lastname, username, gender);
+
+
+
 //testing@purdue.edu - testing - fjRhMBaMjGSNf1szze23rGg1fts1
 //jradocho@purdue.edu - password - U1PMF6lJBzereWItzrxnQbCrIH03
-//backend.signIn("testing@purdue.edu", "testing");
+backend.signIn(email, password);
+backend.addToFavorites("1839asd72483asdasd5");
+//backend.getFavoritesList();
+
 
 //backend.enterQueue("Eat");
 //backend.initiateConversation("U1PMF6lJBzereWItzrxnQbCrIH03");

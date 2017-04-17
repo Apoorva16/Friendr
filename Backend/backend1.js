@@ -602,7 +602,7 @@ module.exports =
 		{
 			database.ref('Users/' + uid + '/Match_List').once('value').then(function(snapshot)
 			{
-				if (snapshot.exists) {
+				if (snapshot.exists()) {
 					snapshot.forEach(function(childSnapshot){
 						var combo = [];
 						combo.push(childSnapshot.key);
@@ -696,7 +696,65 @@ module.exports =
 		});
 
 		return matchedUser;
-	}	
+	},
+
+	addToFavorites: function (other_uid) 
+	{
+		firebase.auth().onAuthStateChanged(function(user)
+		{
+			if (user)
+			{
+				database.ref('Users/'+user.uid).once('value').then(function(snapshot)
+				{
+					if (snapshot.child("Favorites").exists())
+					{
+						var length = snapshot.child("length").val();
+						length++;
+						database.ref('Users/' +user.uid + '/Favorites').update({
+							length: length,
+							[length]: other_uid
+						});
+					}
+					else {
+						database.ref("Users/" +user.uid + "/Favorites").set({
+							length: 1,
+							1:other_uid
+						});
+					}
+				});
+			}
+		});
+	},
+
+	getFavoritesList: function() 
+	{
+		firebase.auth().onAuthStateChanged(function(user)
+		{
+			if (user) {
+				var favorites_list = [];
+				var favorites_listPromise = new Promise(function (resolve, reject)
+				{
+					database.ref('Users/' + user.uid + '/Favorites').once('value').then(function(snapshot)
+					{ 
+						if (snapshot.exists()) 
+						{
+							snapshot.forEach(function(childSnapshot){
+								//childSnapshot.key or .val()
+
+								favorites_list.push(childSnapshot.key);
+							});
+						}
+						console.log(favorites_list);
+						resolve(favorites_list);
+					});	
+				});
+				return favorites_listPromise;	
+			}	
+		});
+	
+	}
+
+
 }
 
 
