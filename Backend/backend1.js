@@ -708,9 +708,10 @@ module.exports =
 				{
 					if (snapshot.child("Favorites").exists())
 					{
-						var length = snapshot.child("length").val();
+						var length = snapshot.child("Favorites").child("length").val();
 						length++;
-						database.ref('Users/' +user.uid + '/Favorites').update({
+						//console.log(length);
+							database.ref('Users/' +user.uid + '/Favorites').update({
 							length: length,
 							[length]: other_uid
 						});
@@ -740,8 +741,9 @@ module.exports =
 						{
 							snapshot.forEach(function(childSnapshot){
 								//childSnapshot.key or .val()
-
-								favorites_list.push(childSnapshot.key);
+								if (childSnapshot.key != 'length') {
+									favorites_list.push(childSnapshot.val());
+								}
 							});
 						}
 						console.log(favorites_list);
