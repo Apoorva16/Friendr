@@ -558,6 +558,12 @@ module.exports =
 					database.ref('Users/' + user.uid).once('value').then(function(snapshot)
 					{
 						if (snapshot.child("Pending").exists() && snapshot.child("Pending").child(other_uid).exists()) {
+							// removing pending immediately, maybe turn to no instead
+							/*database.ref('Users/' + user.uid + '/Pending/' + other_uid).update({
+								Response: "no"
+							});
+							*/
+
 							database.ref('Users/' + user.uid + '/Pending/' + other_uid).remove();
 							database.ref('Users/' + other_uid + '/Pending/' + user.uid).remove();
 							console.log("Pending closed");
@@ -592,6 +598,7 @@ module.exports =
 		          						DateMatched: date.toDateString(),
 		          						MatchedActivity: activity
 		          					});
+		          					console.log("Users Matched: " other_uid+ " " + user.uid);
 
 		          					database.ref('Users/' + user.uid + '/Pending/' + other_uid).remove();
 		          					database.ref('Users/' + other_uid + '/Pending/' + user.uid).remove();
@@ -614,7 +621,23 @@ module.exports =
 	},
 
 	checkPendingStatus: function(other_uid) {
-
+		var pendingStatus = new Promise(function(resolve, reject)
+		{
+			firebase.auth().onAuthStateChanged(function(user)
+			{
+				if (user)
+				{
+	  				database.ref('Users/' + other_uid + '/Pending/' + user.uid).once('value').then(function(snapshot)
+	  				{
+	  					var status = snapshot.child("Response").val();
+	  					console.log(status);
+	   					resolve(status);
+	  				});
+	  			}
+	  		});
+	  	});
+	  
+	  	return pendingStatus;
 	}, 
 
 	modifyProfilePicture: function(picture_link)

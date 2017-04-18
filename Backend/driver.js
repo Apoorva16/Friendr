@@ -27,6 +27,7 @@ backend.signIn(email, password);
 //backend.leaveQueue();
 backend.respondToPending("M8Ca19FlM1cIyYkYIjrfMiOI8vO2", "yes");
 //backend.respondToPending("PVJ77iZOsGfeBwUVfoIAZEiUkAS2", "yes");
+//backend.checkPendingStatus("M8Ca19FlM1cIyYkYIjrfMiOI8vO2");
 
 //backend.initiateConversation("U1PMF6lJBzereWItzrxnQbCrIH03");
 //backend.sendMessage("U1PMF6lJBzereWItzrxnQbCrIH03", "Newer Test Message");
