@@ -440,8 +440,25 @@ module.exports =
 			          				{
 			          					//all preferences match, remove other user from queue
 			          					matchFound = true;
-			          					console.log("Match found, removing matching uid from queue " + matchUID);
+			  		          		
+			          					console.log("Match found, both users in Pending " + matchUID);
 			          					database.ref('Activities/' + activity + '/Searching/' + matchUID).remove();
+			          					
+			          					//Instead of starting the match right away, both users get a new field called Pending.
+			          					// in this, they respond yes or no then when both say yes, create the match
+			          					// if either say no, remove pending from both, delete match.
+
+			          					database.ref('Users/' + user.uid + '/Pending/' + matchUID).update({
+			          						Response: "pending",
+			          						Activity: activity
+			          					});
+			          					database.ref('Users/' + matchUID + '/Pending/' + user.uid).update({
+			          						Response: "pending",
+			          						Activity: activity
+			          					});
+
+
+			          					/*
 			          					var date = new Date();
 
 			          					database.ref('Users/' + user.uid + '/Match_List/' + matchUID).update({
@@ -457,6 +474,8 @@ module.exports =
 			          					});
 
 			          					resolve(matchUID);
+			          					*/
+			          					resolve(null);
 			          				}
 			          			});
 
@@ -529,6 +548,74 @@ module.exports =
 		    }
   		});
 	},
+
+	respondToPending: function(other_uid, answer) {
+		firebase.auth().onAuthStateChanged(function(user)
+		{
+			if (user)
+			{
+				if (answer.toLowerCase() == "no") {
+					database.ref('Users/' + user.uid).once('value').then(function(snapshot)
+					{
+						if (snapshot.child("Pending").exists() && snapshot.child("Pending").child(other_uid).exists()) {
+							database.ref('Users/' + user.uid + '/Pending/' + other_uid).remove();
+							database.ref('Users/' + other_uid + '/Pending/' + user.uid).remove();
+							console.log("Pending closed");
+						}
+						else {
+							console.log("Pending already removed");
+						}
+					});
+				}
+				if (answer.toLowerCase() == "yes") {
+					database.ref('Users/' + user.uid).once('value').then(function(snapshot)
+					{
+						if (snapshot.child("Pending").exists() && snapshot.child("Pending").child(other_uid).exists()) {
+							
+							// only if my pending of the other user exists then i look to the other user's pending of me
+							database.ref('Users/' + other_uid + '/Pending/' + user.uid).once('value').then(function(snapshot2) {
+								var response = snapshot2.child("Response").val();
+								console.log("Other user's response = " + response);
+								if (response.toLowerCase() == "yes") { // both responded yes
+
+									var date = new Date();
+									var activity = snapshot2.child("Activity").val();
+
+		          					database.ref('Users/' + user.uid + '/Match_List/' + other_uid).update({
+		          						TimeMatched: date.toTimeString(),
+		          						DateMatched: date.toDateString(),
+		          						MatchedActivity: activity
+		          					});
+
+		          					database.ref('Users/' + other_uid + '/Match_List/' + user.uid).update({
+		          						TimeMatched: date.toTimeString(),
+		          						DateMatched: date.toDateString(),
+		          						MatchedActivity: activity
+		          					});
+
+		          					database.ref('Users/' + user.uid + '/Pending/' + other_uid).remove();
+		          					database.ref('Users/' + other_uid + '/Pending/' + user.uid).remove();
+
+								}
+								else { // other guy hasnt responded yet
+									database.ref('Users/' + user.uid + '/Pending/' + other_uid).update({
+										Response: "yes"
+									});
+								}
+							});
+						}// if this is false then the other guy said no
+						else {
+							console.log("Pending not found, The other guy probably said no");
+						}
+					});
+				}
+			}
+		});
+	},
+
+	checkPendingStatus: function(other_uid) {
+
+	}, 
 
 	modifyProfilePicture: function(picture_link)
 	{
