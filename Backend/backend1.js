@@ -521,13 +521,11 @@ module.exports =
 	   						if (childSnapshot.child("Searching").child(user.uid).exists()) 
 	   						{
 	   							database.ref("Activities/" + childSnapshot.key + "/Searching/"+user.uid).remove();
+	   							console.log("User remove from: " + childSnapshot.key);
 	   						}
 	   					}
 	    			});
-	  			});
-
-		        database.ref('Activities/' + activity + '/Searching/' + user.uid).remove();
-		        console.log("User out of queue.");
+	  			});   
 		    }
   		});
 	},
