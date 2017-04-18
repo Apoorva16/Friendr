@@ -465,7 +465,7 @@ module.exports =
 			          				//match not found, insert into queue
 				          			console.log("No Match Found");
 				          			var userPreferences = snapshot2.val().Preferences[activity];
-				          			var gender = snapshot2.val().Gender;
+				          			var gender = snapshot2.val().Profile['Gender'];
 
 				          			database.ref('Activities/'+ activity + '/Searching/' + user.uid).update(
 					          		{
@@ -505,14 +505,27 @@ module.exports =
 	  	return matchedUser;
 	},
 
-	leaveQueue: function(activity)
+	leaveQueue: function()
 	{
 	  	firebase.auth().onAuthStateChanged(function(user)
 	  	{
 		    if (user)
 		    {
-		        database.ref('Activities/' + activity + '/Searching/' + user.uid).remove();
-		        console.log("User out of queue.");
+
+		    	database.ref('Activities/').once('value').then(function(snapshot)
+	  			{
+	   				snapshot.forEach(function(childSnapshot)
+	   				{
+	   					if (childSnapshot.child("Searching").exists()) 
+	   					{
+	   						if (childSnapshot.child("Searching").child(user.uid).exists()) 
+	   						{
+	   							database.ref("Activities/" + childSnapshot.key + "/Searching/"+user.uid).remove();
+	   							console.log("User remove from: " + childSnapshot.key);
+	   						}
+	   					}
+	    			});
+	  			});   
 		    }
   		});
 	},
