@@ -24,7 +24,9 @@ backend.signIn(email, password);
 
 //backend.enterQueue("Eat");
 //backend.enterQueue("Study");
-backend.leaveQueue();
+//backend.leaveQueue();
+backend.respondToPending("M8Ca19FlM1cIyYkYIjrfMiOI8vO2", "yes");
+//backend.respondToPending("PVJ77iZOsGfeBwUVfoIAZEiUkAS2", "yes");
 
 //backend.initiateConversation("U1PMF6lJBzereWItzrxnQbCrIH03");
 //backend.sendMessage("U1PMF6lJBzereWItzrxnQbCrIH03", "Newer Test Message");
