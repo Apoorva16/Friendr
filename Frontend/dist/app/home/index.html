@@ -47,17 +47,14 @@
         </div>
     </div>
 
-    <!--<div class="recentActivities">-->
-        <!--<div class="recentContent">-->
-            <!--<h1 id="recentActivities"> Recent Activities </h1>-->
-        <!--</div>-->
-    <!--</div>-->
+    <div class="recentActivities">
+        <div class="recentContent">
+            <h1 id="recentActivities"> Recent Activities </h1>
+        </div>
+    </div>
     
 </div>
 
-<div id ="indexCtrl4" ng-controller="ActivitiesController">
-    <button class="button button-block button-positive">Recent Activities</button>
-</div>
 
 <script>
     var page = 0;
@@ -73,9 +70,6 @@
         var allowedTime = 500; // maximum time allowed to travel that distance
         var elapsedTime;
         var startTime;
-    $('div#indexCtrl4').on("touchstart", function() {
-        angular.element($('#indexCtrl4')).scope().recent();
-    })
 // /**
 //      This is the logical part (animation) for the search page
 // **/

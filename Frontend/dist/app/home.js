@@ -3,22 +3,6 @@ angular.module('home', [
   'common'
 ]);
 
-angular
-    .module('home')
-    .controller('ActivitiesController', function($scope, supersonic) {
-
-
-        $scope.recent = function () {
-
-            // supersonic.ui.dialog.alert("Signup working Yo");
-            var modalView = new supersonic.ui.View("home#activites");
-            var options = {
-                animate: true
-            };
-            supersonic.ui.modal.show(modalView, options);
-        };
-    });
-
 // (function(){
 //     // some code…
 //     var config = {
@@ -77,21 +61,3 @@ angular
     	}
     }).then(supersonic.ui.navigationBar.show());
 });
-
-/**
- * Created by apoorvaparmar on 4/16/17.
- */
-/**
- * Created by apoorvaparmar on 1/14/17.
- */
-angular
-    .module('home')
-    .controller('RecentActivities', function($scope, supersonic) {
-
-
-        $scope.close = function() {
-            supersonic.ui.modal.hide();
-
-        };
-
-    });
