@@ -21,7 +21,14 @@ backend.signIn("testing@purdue.edu", "testing");
 	console.log(value);
 });*/
 
-backend.viewConversationList().then(function(value)
+/*backend.viewConversationList().then(function(value)
+{
+	console.log(value);
+});*/
+
+backend.viewConversation("M8Ca19FlM1cIyYkYIjrfMiOI8vO2").then(function(value)
 {
 	console.log(value);
 });
+
+/*backend.listenToConversation("M8Ca19FlM1cIyYkYIjrfMiOI8vO2");*/

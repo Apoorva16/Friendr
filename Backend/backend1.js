@@ -227,7 +227,14 @@ module.exports =
 					//get conversation list
 					database.ref('Users/' + user.uid + '/Conversation_List').once('value').then(function(snapshot)
 					{
-		    			resolve(snapshot.val());
+						var list = [];
+						snapshot.forEach(function(childSnapshot)
+						{
+							var childData = childSnapshot.val();
+							list.push(childData);
+						});
+
+		    			resolve(list);
 		    		});
 				}
 			});
@@ -257,7 +264,7 @@ module.exports =
 							var list = [];
 							snapshot.forEach(function(childSnapshot)
 							{
-								var message = childSnapshot.val().message;
+								var message = childSnapshot.val().Message;
 								list.push(message);
 							});
 							resolve(list);
@@ -271,7 +278,7 @@ module.exports =
 							var list = [];
 							snapshot.forEach(function(childSnapshot)
 							{
-								var message = childSnapshot.val().message;
+								var message = childSnapshot.val().Message;
 								list.push(message);
 							});
 							resolve(list);
@@ -598,7 +605,7 @@ module.exports =
 		          						DateMatched: date.toDateString(),
 		          						MatchedActivity: activity
 		          					});
-		          					console.log("Users Matched: " other_uid+ " " + user.uid);
+		          					console.log("Users Matched: " + other_uid+ " " + user.uid);
 
 		          					database.ref('Users/' + user.uid + '/Pending/' + other_uid).remove();
 		          					database.ref('Users/' + other_uid + '/Pending/' + user.uid).remove();
@@ -853,13 +860,13 @@ module.exports =
 									
 									database.ref('Users/' +user.uid + '/Favorites').update({
 										length: length,
-										[other_uid]: other_name
+										other_uid: other_name
 									});
 								}
 							}
 							else {
 								database.ref("Users/" +user.uid + "/Favorites").set({
-									[other_uid]: other_name,
+									other_uid: other_name,
 									length: 1
 									
 								});
