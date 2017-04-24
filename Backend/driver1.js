@@ -9,13 +9,19 @@ backend.signIn("testing@purdue.edu", "testing");
 //backend.setPreferencesForUser("Eat", {"Location":"Earhart", "Gender":"Male"});
 //backend.enterQueue("Eat");
 //backend.initiateConversation("M8Ca19FlM1cIyYkYIjrfMiOI8vO2");
-//backend.sendMessage("qmve6W2IsQenoh8Ndb8l3mav4ZG2", "New Test Message");
-//console.log(backend.getActivityList());
+//backend.sendMessage("M8Ca19FlM1cIyYkYIjrfMiOI8vO2", "New Test Message");
+//backend.respondToPending("M8Ca19FlM1cIyYkYIjrfMiOI8vO2", "yes");
+//backend.clearConversation("M8Ca19FlM1cIyYkYIjrfMiOI8vO2");
+//backend.deleteMatch("M8Ca19FlM1cIyYkYIjrfMiOI8vO2");
+//backend.addToFavorites("M8Ca19FlM1cIyYkYIjrfMiOI8vO2");
+//backend.removeFromFavorites("M8Ca19FlM1cIyYkYIjrfMiOI8vO2");
 
-//backend.viewConversation("qmve6W2IsQenoh8Ndb8l3mav4ZG2");
-//backend.modifyUsername("joshrado");
+/*backend.getActivityList().then(function(value)
+{
+	console.log(value);
+});*/
 
-/*backend.searchForMatch("Josh", "Rado").then(function(value)
+/*backend.searchForMatch("Brandon", "Xia").then(function(value)
 {
 	console.log("Search Found:");
 	console.log(value);
@@ -26,9 +32,27 @@ backend.signIn("testing@purdue.edu", "testing");
 	console.log(value);
 });*/
 
-backend.viewConversation("M8Ca19FlM1cIyYkYIjrfMiOI8vO2").then(function(value)
+/*backend.viewConversation("M8Ca19FlM1cIyYkYIjrfMiOI8vO2").then(function(value)
 {
 	console.log(value);
-});
+});*/
 
 /*backend.listenToConversation("M8Ca19FlM1cIyYkYIjrfMiOI8vO2");*/
+
+/*backend.getMatchList().then(function(value)
+{
+	value.forEach(function(match)
+	{
+		console.log(match[0]);
+		console.log(match[1]);
+	});
+});*/
+
+/*backend.getFavoritesList().then(function(value)
+{
+	value.forEach(function(match)
+	{
+		console.log(match[0]);
+		console.log(match[1]);
+	});
+});*/

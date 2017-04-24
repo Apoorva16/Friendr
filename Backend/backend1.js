@@ -463,25 +463,6 @@ module.exports =
 			          						Response: "pending",
 			          						Activity: activity
 			          					});
-
-
-			          					/*
-			          					var date = new Date();
-
-			          					database.ref('Users/' + user.uid + '/Match_List/' + matchUID).update({
-			          						TimeMatched: date.toTimeString(),
-			          						DateMatched: date.toDateString(),
-			          						MatchedActivity: activity
-			          					});
-
-			          					database.ref('Users/' + matchUID + '/Match_List/' + user.uid).update({
-			          						TimeMatched: date.toTimeString(),
-			          						DateMatched: date.toDateString(),
-			          						MatchedActivity: activity
-			          					});
-
-			          					resolve(matchUID);
-			          					*/
 			          					resolve(null);
 			          				}
 			          			});
@@ -725,40 +706,62 @@ module.exports =
 		});
 	},
 	
-	getMatchList: function(uid) 
+	getMatchList: function() 
 	{
-		var match_list = [];
 		var match_listPromise = new Promise(function (resolve, reject)
 		{
-			database.ref('Users/' + uid + '/Match_List').once('value').then(function(snapshot)
+			firebase.auth().onAuthStateChanged(function(user)
 			{
-				if (snapshot.exists()) {
-					snapshot.forEach(function(childSnapshot){
-						var combo = [];
-						combo.push(childSnapshot.key);
-						combo.push(childSnapshot.val());
-
-						match_list.push(combo);
-					});
+				if (user)
+				{
+					database.ref('Users/' + user.uid + '/Match_List').once('value').then(function(snapshot)
+					{
+						var match_list = [];
+						snapshot.forEach(function(childSnapshot)
+						{
+							var match = [];
+							match.push(childSnapshot.key);
+							match.push(childSnapshot.val());
+							match_list.push(match);
+						});
+						resolve(match_list);
+					});	
 				}
-				console.log(match_list);
-				resolve(match_list);
-			});	
+			});
 		});
 		return match_listPromise;		
 	},
 
-	clearConversation: function(conversation_id)
+	clearConversation: function(other_uid)
 	{
 		firebase.auth().onAuthStateChanged(function(user)
 		{
 			if (user)
 			{
-				database.ref('Conversations/' + conversation_id).update({
-					MessageCount: 0
-				});
+				var conversation_id1 = user.uid + ' ' + other_uid;
+				var conversation_id2 = other_uid + ' ' + user.uid;
 
-				database.ref('Conversations/' + conversation_id + '/Message_List').remove();
+				//determine which conversation_id is correct
+				var convoId1 = database.ref('Conversations/' + conversation_id1);
+				var convoId2 = database.ref('Conversations/' + conversation_id2);
+
+				convoId1.once('value').then(function(snapshotP)
+				{
+					if (snapshotP.hasChildren())
+					{
+						database.ref('Conversations/' + conversation_id1).update({
+						MessageCount: 0
+						});
+						database.ref('Conversations/' + conversation_id1 + '/Message_List').remove();
+					}
+					else
+					{
+						database.ref('Conversations/' + conversation_id2).update({
+							MessageCount: 0
+						});
+						database.ref('Conversations/' + conversation_id2 + '/Message_List').remove();
+					}
+				});
 			}
 		});
 	},
@@ -783,12 +786,18 @@ module.exports =
 						convoId1.remove();
 						database.ref('Users/' + user.uid + '/Conversation_List/' + conversation_id1).remove();
 						database.ref('Users/' + other_uid + '/Conversation_List/' + conversation_id1).remove();
+
+						database.ref('Users/' + user.uid + '/Match_List/' + other_uid).remove();
+						database.ref('Users/' + other_uid + '/Match_List/' + user.uid).remove();
 					}
 					else
 					{
 						convoId2.remove();
 						database.ref('Users/' + user.uid + '/Conversation_List/' + conversation_id2).remove();
 						database.ref('Users/' + other_uid + '/Conversation_List/' + conversation_id2).remove();
+
+						database.ref('Users/' + user.uid + '/Match_List/' + other_uid).remove();
+						database.ref('Users/' + other_uid + '/Match_List/' + user.uid).remove();
 					}
 				});
 			}
@@ -817,6 +826,14 @@ module.exports =
 									{
 										resolve(other_user);
 									}
+									else
+									{
+										resolve("None Found.")
+									}
+								}
+								else
+								{
+									resolve("None Found.")
 								}
 							});
 						});
@@ -845,32 +862,13 @@ module.exports =
 
 						database.ref('Users/'+ other_uid + '/Profile').once('value').then(function(snapshot)
 						{
-							other_name = snapshot.child("UserName").val();	
-						});
-						
-						database.ref('Users/'+user.uid).once('value').then(function(snapshot)
-						{
-							if (snapshot.child("Favorites").exists())
-							{
-								if (!snapshot.child("Favorites").child(other_uid).exists())
-								{
-									var length = snapshot.child("Favorites").child("length").val();
-									length++;
-									//console.log(length);
-									
-									database.ref('Users/' +user.uid + '/Favorites').update({
-										length: length,
-										other_uid: other_name
-									});
-								}
-							}
-							else {
-								database.ref("Users/" +user.uid + "/Favorites").set({
-									other_uid: other_name,
-									length: 1
-									
-								});
-							}
+							firstName = snapshot.child("FirstName").val();
+							lastName = snapshot.child("LastName").val();
+
+							database.ref('Users/' + user.uid + '/Favorites/' + other_uid).update({
+								FirstName: firstName,
+								LastName: lastName
+							});
 						});
 					}
 				});
@@ -880,54 +878,39 @@ module.exports =
 
 	getFavoritesList: function() 
 	{
-		firebase.auth().onAuthStateChanged(function(user)
+		var listPromise = new Promise(function (resolve, reject)
 		{
-			if (user) {
-				var favorites_list = [];
-				var favorites_listPromise = new Promise(function (resolve, reject)
+			firebase.auth().onAuthStateChanged(function(user)
+			{
+				if (user)
 				{
 					database.ref('Users/' + user.uid + '/Favorites').once('value').then(function(snapshot)
-					{ 
-						if (snapshot.exists()) 
+					{
+						var favorites_list = [];
+						snapshot.forEach(function(childSnapshot)
 						{
-							snapshot.forEach(function(childSnapshot){
-								//childSnapshot.key or .val()
-								if (childSnapshot.key != 'length') {
-									favorites_list.push(childSnapshot.key);
-								}
-							});
-						}
-						console.log(favorites_list);
+							var favorite = [];
+							favorite.push(childSnapshot.key);
+							favorite.push(childSnapshot.val());
+							favorites_list.push(favorite);
+						});
 						resolve(favorites_list);
 					});	
-				});
-				return favorites_listPromise;	
-			}	
+				}	
+			});
 		});
+		return listPromise;
 	},
+
 	removeFromFavorites: function(other_uid) 
 	{
 		firebase.auth().onAuthStateChanged(function(user)
 		{
 			if (user) {
-				database.ref('Users/' + user.uid).once('value').then(function(snapshot)
-				{
-					if (snapshot.child("Favorites").exists()) {
-						if (snapshot.child("Favorites").child(other_uid).exists()) {
-							database.ref('Users/'+user.uid+'/Favorites/'+other_uid).remove();
-							var length = snapshot.child("Favorites").child("length").val();
-							length--;
-							database.ref('Users/'+user.uid+'/Favorites').update({
-								length: length
-							})
-						}
-					}
-				});
+				database.ref('Users/' + user.uid + '/Favorites/' + other_uid).remove();
 			}
 		});
 	}
-
-
 }
 
 
