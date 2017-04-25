@@ -265,7 +265,7 @@ var printCurrentUserData= function() {
 							var list = [];
 							snapshot.forEach(function(childSnapshot)
 							{
-								var message = childSnapshot.val().Message;
+								var message = childSnapshot.val();
 								list.push(message);
 							});
 							resolve(list);
@@ -279,7 +279,7 @@ var printCurrentUserData= function() {
 							var list = [];
 							snapshot.forEach(function(childSnapshot)
 							{
-								var message = childSnapshot.val().Message;
+								var message = childSnapshot.val();
 								list.push(message);
 							});
 							resolve(list);
