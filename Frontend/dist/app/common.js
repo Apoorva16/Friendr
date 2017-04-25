@@ -173,7 +173,7 @@ var printCurrentUserData= function() {
 				if (user)
 				{
 					//get conversation list
-					database.ref('Users').child(user.uid).child('Conversation_List').once('value').then(function(snapshot)
+					database.ref('users').child(user.uid).child('conversation_list').once('value').then(function(snapshot)
 					{
 						var list = [];
 						snapshot.forEach(function(childSnapshot)
