@@ -4,6 +4,67 @@ angular.module('example', [
 ]);
 
 /**
+ * Created by apoorvaparmar on 4/25/17.
+ */
+/**
+ * Created by apoorvaparmar on 3/29/17.
+ */
+angular
+    .module('example')
+    .controller('Activity', function($scope, supersonic, backendService) {
+
+        $scope.matchedlistusers;
+        backendService.viewConversationList().then(function (value) {
+            $scope.matchedlistusers = value;
+            alert($scope.matchedlistusers[0].other_user);
+
+        })
+
+        $scope.searchforuser = function() {
+
+            var matchedUser = new Promise(function(resolve, reject)
+            {
+                firebase.auth().onAuthStateChanged(function(user)
+                {
+                    if (user)
+                    {
+                        database.ref('Users/' + user.uid + '/Match_List').once('value').then(function(snapshot)
+                        {
+                            snapshot.forEach(function(childSnapshot)
+                            {
+                                var other_uid = childSnapshot.key;
+                                database.ref('Users/' + other_uid + '/Profile').once('value').then(function(snapshot1)
+                                {
+                                    var other_user = snapshot1.val();
+                                    if (srchFirstName == other_user.FirstName)
+                                    {
+                                        if (srchLastName == other_user.LastName)
+                                        {
+                                            resolve(other_user);
+                                        }
+                                        else
+                                        {
+                                            resolve("None Found.")
+                                        }
+                                    }
+                                    else
+                                    {
+                                        resolve("None Found.")
+                                    }
+                                });
+                            });
+                        });
+                    }
+                });
+            });
+
+            return matchedUser;
+
+        };
+
+
+});
+/**
  * Created by apoorvaparmar on 1/14/17.
  */
 
@@ -75,7 +136,7 @@ angular
     .controller('InitialViewController', function($scope, supersonic,backendService) {
 
         $scope.email = "testing@purdue.edu";
-        $scope.password = "test1234";
+        $scope.password = "testing";
 
         $scope.login = function() {
 
@@ -165,6 +226,9 @@ angular
 
         var userObj = JSON.parse(window.localStorage.getItem("userObj"));
         $scope.profileImage = userObj.photoURL;
+        // var userObj = JSON.parse(window.localStorage.getItem("userObj"));
+        // $scope.PictureLink = userObj.PictureLink;
+        $scope.description = "Please provide a description for yourself"
 
         $scope.choosePhoto = function() {
             var options = {
@@ -178,17 +242,49 @@ angular
             supersonic.media.camera.getFromPhotoLibrary(options).then( function(result){
                 // save it in database
                 $scope.profileImage = result;
+                // s
 
-                var user = firebase.auth().currentUser;
-                user.updateProfile({
-                    photoURL: result
+                // var user = firebase.auth().currentUser;
+                firebase.auth().onAuthStateChanged(function(currentUser) {
+                    if (currentUser) {
+                        {
+                            database.ref('Users/' + currentUser.uid + '/Profile').update({
+                                PictureLink: $scope.profileImage
+                            });
+                        }
+                        currentUser.updateProfile({
+                            photoURL: $scope.profileImage
+                        });
+                    }
                 });
 
                 userObj.photoURL = result;
-                window.localStorage.setItem("userObj", JSON.stringify(userObj));
+                // userObj.PictureLink = result;
+                window.localStorage.setItem("userObj", JSON.stringify(userObj) + "");
 
-                // alert()
+
+                // console.log("JSON.stringify(userObj)");
             });
+        };
+
+        $scope.aboutme = function() {
+
+            var user = firebase.auth().currentUser;
+            firebase.auth().onAuthStateChanged(function(object) {
+                if (user) {
+                    database.ref('Users/' + user.uid + '/Profile').update({
+                        AboutMe: $scope.description
+                    });
+                }
+
+                window.localStorage.setItem("userObj", JSON.stringify(object) + "");
+                alert("Your changes have been made");
+            })
+                .catch(function(error) {
+                    alert(JSON.stringify(error));
+                    alert("Your changes were not made");
+                });
+
         };
 
     });/**
