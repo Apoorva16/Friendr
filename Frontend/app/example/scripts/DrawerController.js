@@ -25,6 +25,12 @@ angular
             supersonic.ui.layers.push(view);
             supersonic.logger.log("Something semi-interesting just happened.");
             supersonic.ui.drawers.close();
+        }
+
+        $scope.queues = function() {
+            var view = new supersonic.ui.View("example#myQueues");
+            supersonic.ui.layers.push(view);
+            supersonic.ui.drawers.close();
 
         }
 

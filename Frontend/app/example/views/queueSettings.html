@@ -1,0 +1,16 @@
+
+ <div ng-controller="queueController">
+<div class="list preference">
+ <div class="item item-divider">
+  {{activity}}
+</div>
+<label class="item item-input item-select" ng-repeat="key in keys">
+  <div class="input-label">
+    {{key}}
+  </div>
+  <select ng-model="test[key]">
+    <option ng-repeat="option in preferences[key]">{{option}}</option>
+  </select>
+</label>
+<button ng-click="submit()" class="button button-block button-positive queue">Queue</button>
+</div>

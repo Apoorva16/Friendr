@@ -1,16 +1,3 @@
-// (function(){
-//     // some code…
-//     var config = {
-//         apiKey: "AIzaSyB9-bQjCSShbkJuiDeWtyOurzFqTnr7pFU",
-//         authDomain: "friendr-be400.firebaseapp.com",
-//         databaseURL: "https://friendr-be400.firebaseio.com",
-//         storageBucket: "friendr-be400.appspot.com",
-//         messagingSenderId: "852808235414"
-//     };
-
-//     firebase.initializeApp(config);
-// })();
-
 angular
 .module('home')
 .controller('IndexController', function($scope, supersonic, backendService, $http) {
@@ -27,15 +14,12 @@ angular
 
 
     $scope.queue = function(activity) {
-        
-       backendService.enterQueue(activity).then(function(id) {
-            if(id == null) {
-                alert("Placed in Queue");
-            } else {
-                backendService.initiateConversation(id);
-                alert("You're Matched!");
-            }
-       });
+        backendService.getPreferenceList(activity).then(function(data) {
+            window.localStorage.setItem('preferences',JSON.stringify(data));
+        });
+        var view = new supersonic.ui.View("example#queueSettings");
+        window.localStorage.setItem('activity',JSON.stringify(activity));
+        supersonic.ui.layers.push(view);
     };
 
 

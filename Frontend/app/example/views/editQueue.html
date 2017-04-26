@@ -1,0 +1,15 @@
+<div ng-controller="editQueueController">
+	
+<div class="list preference">
+<label class="item item-input item-select" ng-repeat="key in keys">
+  <div class="input-label">
+    {{key}}
+  </div>
+  <select ng-model="test[key]">
+    <option ng-repeat="option in preferences[key]">{{option}}</option>
+  </select>
+</label>
+<button ng-click="editQueue()" class="button button-block button-positive queue">Edit</button>
+<button ng-click="leaveQueue()" class="button button-block button-assertive queue">Leave Queue</button>
+
+</div>
