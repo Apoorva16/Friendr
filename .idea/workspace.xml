@@ -2,15 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0e270204-0f65-4c01-8a58-f3a1e0ab2719" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Frontend/app/example/scripts/Profile.js" afterPath="$PROJECT_DIR$/Frontend/app/example/scripts/Profile.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Frontend/app/example/scripts/Settings.js" afterPath="$PROJECT_DIR$/Frontend/app/example/scripts/Settings.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Frontend/app/example/scripts/SignupController.js" afterPath="$PROJECT_DIR$/Frontend/app/example/scripts/SignupController.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Frontend/app/example/views/profile.html" afterPath="$PROJECT_DIR$/Frontend/app/example/views/profile.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Frontend/app/example/views/signup.html" afterPath="$PROJECT_DIR$/Frontend/app/example/views/signup.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Frontend/config/structure.coffee" afterPath="$PROJECT_DIR$/Frontend/config/structure.coffee" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Frontend/dist/app/common.js" afterPath="$PROJECT_DIR$/Frontend/dist/app/common.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Frontend/dist/app/example.js" afterPath="$PROJECT_DIR$/Frontend/dist/app/example.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Frontend/logs/steroids.log" afterPath="$PROJECT_DIR$/Frontend/logs/steroids.log" />
     </list>
     <ignored path="Friendr.iws" />
@@ -47,8 +44,8 @@
       <file leaf-file-name="activity.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Frontend/app/example/views/activity.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="405">
-              <caret line="27" column="98" selection-start-line="27" selection-start-column="98" selection-end-line="27" selection-end-column="98" />
+            <state relative-caret-position="285">
+              <caret line="19" column="23" selection-start-line="19" selection-start-column="23" selection-end-line="19" selection-end-column="23" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
               </folding>
@@ -79,8 +76,8 @@
       <file leaf-file-name="profile.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Frontend/app/example/views/profile.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="423">
-              <caret line="32" column="44" selection-start-line="32" selection-start-column="44" selection-end-line="32" selection-end-column="44" />
+            <state relative-caret-position="78">
+              <caret line="8" column="4" selection-start-line="8" selection-start-column="4" selection-end-line="8" selection-end-column="4" />
               <folding />
             </state>
           </provider>
@@ -139,8 +136,8 @@
         <option value="$PROJECT_DIR$/Frontend/app/example/scripts/InitialViewController.js" />
         <option value="$PROJECT_DIR$/Frontend/app/example/scripts/SignupController.js" />
         <option value="$PROJECT_DIR$/Frontend/app/example/scripts/Activity.js" />
-        <option value="$PROJECT_DIR$/Frontend/app/example/views/activity.html" />
         <option value="$PROJECT_DIR$/Frontend/app/example/scripts/Profile.js" />
+        <option value="$PROJECT_DIR$/Frontend/app/example/views/activity.html" />
         <option value="$PROJECT_DIR$/Frontend/app/example/views/profile.html" />
       </list>
     </option>
@@ -558,12 +555,12 @@
       <option name="presentableId" value="Default" />
       <updated>1493070320497</updated>
       <workItem from="1493070323526" duration="1000" />
-      <workItem from="1493070335398" duration="18243000" />
+      <workItem from="1493070335398" duration="18827000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="18244000" />
+    <option name="totallyTimeSpent" value="18828000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="20" y="35" width="1389" height="818" extended-state="0" />
@@ -717,8 +714,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Frontend/app/example/views/activity.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="98" selection-start-line="27" selection-start-column="98" selection-end-line="27" selection-end-column="98" />
+        <state relative-caret-position="285">
+          <caret line="19" column="23" selection-start-line="19" selection-start-column="23" selection-end-line="19" selection-end-column="23" />
           <folding>
             <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
           </folding>
@@ -735,8 +732,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Frontend/app/example/views/profile.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="423">
-          <caret line="32" column="44" selection-start-line="32" selection-start-column="44" selection-end-line="32" selection-end-column="44" />
+        <state relative-caret-position="78">
+          <caret line="8" column="4" selection-start-line="8" selection-start-column="4" selection-end-line="8" selection-end-column="4" />
           <folding />
         </state>
       </provider>
