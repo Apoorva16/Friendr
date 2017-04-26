@@ -9,9 +9,14 @@ angular
       var id2;
       var obj;
       id2 = window.localStorage.getItem('id5');
+      var id12 = window.localStorage.getItem('id10');
+
+      $scope.viewTitle = JSON.parse(id12);
+      $scope.msgS = JSON.parse(id2);
 
       backendService.viewConversation(JSON.parse(id2)).then(function(value){
           $scope.hasmsg= value;
+         //alert($scope.hasmsg);
           supersonic.logger.log($scope.hasmsg);
           $scope.testmsg = " ";
       })
@@ -26,11 +31,11 @@ angular
                   supersonic.logger.log("Is it working?");
 
                   //determine which conversation_id is correct
-                  var convoId1 = firebase.database().ref('conversations').child(conversation_id1);
-                  var convoId2 = firebase.database().ref('conversations').child(conversation_id2);
+                  var convoId1 = firebase.database().ref('Conversations').child(conversation_id1);
+                  var convoId2 = firebase.database().ref('Conversations').child(conversation_id2);
                   supersonic.logger.log("Is it working?");
 
-                  convoId1.child('message_list').limitToLast(1).on('child_added', function (snapshot, prevKey) {
+                  convoId1.child('Message_List').limitToLast(1).on('child_added', function (snapshot, prevKey) {
                       if (snapshot.hasChildren()) {
                           supersonic.logger.log("Is it working?");
 
@@ -38,14 +43,15 @@ angular
                          // var obj1 = snapshot.val().message;
                         //  obj = JSON.parse(obj1);
                         //  $scope.testmsg = obj;
-                          $scope.testmsg = snapshot.val().message;
-                          $scope.msgs.push(snapshot.val().message);
+                          $scope.testmsg = snapshot.val().Message;
+                          //alert($scope.testmsg);
+                          $scope.msgs.push(snapshot.val());
                           //supersonic.logger.log(snapshot.val().message);
                           //resolve(snapshot.val());
                       }
                   });
 
-                  convoId2.child('message_list').limitToLast(1).on('child_added', function (snapshot, prevKey) {
+                  convoId2.child('Message_List').limitToLast(1).on('child_added', function (snapshot, prevKey) {
                       if (snapshot.hasChildren()) {
                           supersonic.logger.log("Is it working?");
 
@@ -53,8 +59,9 @@ angular
                           //var obj1 = snapshot.val().message;
                           //obj = JSON.parse(obj1);
 
-                         $scope.testmsg = snapshot.val().message;
-                         $scope.msgs.push(snapshot.val().message);
+                         $scope.testmsg = snapshot.val().Message;
+                          //alert($scope.testmsg);
+                         $scope.msgs.push(snapshot.val());
 
                           //$scope.testmsg = obj;
                           // alert("hey");

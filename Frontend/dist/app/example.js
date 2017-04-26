@@ -4,6 +4,69 @@ angular.module('example', [
 ]);
 
 /**
+ * Created by apoorvaparmar on 4/25/17.
+ */
+/**
+ * Created by apoorvaparmar on 3/29/17.
+ */
+angular
+    .module('example')
+    .controller('Activity', function($scope, supersonic, backendService) {
+
+        $scope.matchedlistusers;
+
+        backendService.viewConversationList().then(function (value) {
+            $scope.$apply();
+            $scope.matchedlistusers = value;
+            $scope.$apply();
+            alert($scope.matchedlistusers[0].other_user);
+        });
+
+       /* $scope.searchforuser = function() {
+
+            var matchedUser = new Promise(function(resolve, reject)
+            {
+                firebase.auth().onAuthStateChanged(function(user)
+                {
+                    if (user)
+                    {
+                        database.ref('Users/' + user.uid + '/Match_List').once('value').then(function(snapshot)
+                        {
+                            snapshot.forEach(function(childSnapshot)
+                            {
+                                var other_uid = childSnapshot.key;
+                                database.ref('Users/' + other_uid + '/Profile').once('value').then(function(snapshot1)
+                                {
+                                    var other_user = snapshot1.val();
+                                    if (srchFirstName == other_user.FirstName)
+                                    {
+                                        if (srchLastName == other_user.LastName)
+                                        {
+                                            resolve(other_user);
+                                        }
+                                        else
+                                        {
+                                            resolve("None Found.")
+                                        }
+                                    }
+                                    else
+                                    {
+                                        resolve("None Found.")
+                                    }
+                                });
+                            });
+                        });
+                    }
+                });
+            });
+
+            return matchedUser;
+
+        };*/
+
+
+});
+/**
  * Created by apoorvaparmar on 1/14/17.
  */
 
@@ -170,7 +233,11 @@ angular
     .controller('Profile', function($scope, supersonic,backendService) {
 
         var userObj = JSON.parse(window.localStorage.getItem("userObj"));
+        $scope.userObj = userObj;
         $scope.profileImage = userObj.photoURL;
+        // var userObj = JSON.parse(window.localStorage.getItem("userObj"));
+        // $scope.PictureLink = userObj.PictureLink;
+        $scope.description = "";
 
         $scope.choosePhoto = function() {
             var options = {
@@ -184,17 +251,67 @@ angular
             supersonic.media.camera.getFromPhotoLibrary(options).then( function(result){
                 // save it in database
                 $scope.profileImage = result;
+                // s
 
-                var user = firebase.auth().currentUser;
-                user.updateProfile({
-                    photoURL: result
+
+                /* SUPER IDEAL
+                1. First user selects image.
+                2. Appgyver gives to us a base64 string.
+                3. we need to make api call to send this image to firebase.
+                4. backend should host the image, which means we get a hyperlink for it. www.aws/s3/myimage ...
+                5. backend should send us this URL in the userObj they send us on login.
+                 */
+
+                /* How we did it for Sprint 2.
+                 1. First user selects image.
+                 2. Appgyver gives to us a base64 string.
+                 3. We save this entire image itself (which is a base64 string) into 'photoURL'
+                 4. photoURL is something firebase already includes when in the default userObj, which we get upon login.
+                 */
+
+                // var user = firebase.auth().currentUser;
+                firebase.auth().onAuthStateChanged(function(currentUser) {
+                    // if (currentUser) {
+                    //     {
+                    //         database.ref('Users/' + currentUser.uid + '/Profile').update({
+                    //             PictureLink: $scope.profileImage
+                    //         });
+                    //     }
+                        currentUser.updateProfile({
+                            photoURL: $scope.profileImage  /*is base64 */
+                        });
+                    // }
                 });
 
                 userObj.photoURL = result;
-                window.localStorage.setItem("userObj", JSON.stringify(userObj));
+                // userObj.PictureLink = result;
+                // window.localStorage.setItem("userObj", JSON.stringify(userObj) + "");
+                window.localStorage.setItem("userObj", JSON.stringify(currentUser) + "");
 
-                // alert()
+                // console.log("JSON.stringify(userObj)");
             });
+        };
+
+        $scope.aboutme = function() {
+
+            // var user = firebase.auth().currentUser;
+            firebase.auth().onAuthStateChanged(function(currentUser) {
+                if (currentUser) {
+                    alert("I'm here");
+                    database.ref('Users/' + user.uid + '/Profile').update({
+                        AboutMe: $scope.description
+                    });
+                    alert("I'm here2");
+                }
+                alert("I'm here3");
+                window.localStorage.setItem("userObj", JSON.stringify(currentUser) + "");
+                alert("Your changes have been made");
+            })
+                .catch(function(error) {
+                    alert(JSON.stringify(error));
+                    alert("Your changes were not made");
+                });
+
         };
 
     });/**
@@ -255,7 +372,7 @@ angular
 
                     window.localStorage.setItem("userObj", JSON.stringify(currentUser) + "");
 
-                    database.ref('users/' + user.uid).update({
+                    database.ref('Users/' + user.uid).update({
                         username: $scope.username
                     });
                 }
@@ -291,35 +408,38 @@ angular
     .module('example')
     .controller('SignupController', function($scope, supersonic,backendService) {
 
-        $scope.email = "abcd@gmail.com";
+        $scope.email = "apu@gmail.com";
         $scope.password = "helloworld";
         $scope.firstName = "Alpha";
         $scope.lastName = "Numeric";
         $scope.username = "alpha";
+        $scope.gender = "Female";
 
         $scope.signup = function() {
             /* Note: Perform ERROR CHECKING for all fields */
             firebase.auth().createUserWithEmailAndPassword($scope.email, $scope.password)
-            .then(function(object) {
-                firebase.auth().onAuthStateChanged(function(currentUser) {
-                    if(currentUser) {
-                        firebase.database().ref('users/' + currentUser.uid).set({
-                            firstName: $scope.firstName,
-                            lastName: $scope.lastName,
-                            username: $scope.username
-                        });
-                    }
+                .then(function(object) {
+                    firebase.auth().onAuthStateChanged(function(currentUser) {
+                        if(currentUser) {
+                            firebase.database().ref('Users/' + currentUser.uid + '/Profile').set({
+                                FirstName: $scope.firstName,
+                                LastName: $scope.lastName,
+                                Username: $scope.username,
+                                Gender: $scope.gender
+                            });
+                            //fi
+                        }
 
-                    window.localStorage.setItem("userObj", JSON.stringify(currentUser) + "");
+                        window.localStorage.setItem("userObj", JSON.stringify(currentUser) + "");
 
 
-                    $scope.confirmemail();
+                        $scope.confirmemail();
+                    });
+                })
+                .catch(function(error) {
+                    alert(JSON.stringify(error));
+                    alert("Sign up unsuccessful");
                 });
-            })
-            .catch(function(error) {
-                alert(JSON.stringify(error));
-                alert("Sign up unsuccessful");
-            });
         };
 
         $scope.close = function() {
@@ -376,9 +496,14 @@ angular
       var id2;
       var obj;
       id2 = window.localStorage.getItem('id5');
+      var id12 = window.localStorage.getItem('id10');
+
+      $scope.viewTitle = JSON.parse(id12);
+      $scope.msgS = JSON.parse(id2);
 
       backendService.viewConversation(JSON.parse(id2)).then(function(value){
           $scope.hasmsg= value;
+         //alert($scope.hasmsg);
           supersonic.logger.log($scope.hasmsg);
           $scope.testmsg = " ";
       })
@@ -393,11 +518,11 @@ angular
                   supersonic.logger.log("Is it working?");
 
                   //determine which conversation_id is correct
-                  var convoId1 = firebase.database().ref('conversations').child(conversation_id1);
-                  var convoId2 = firebase.database().ref('conversations').child(conversation_id2);
+                  var convoId1 = firebase.database().ref('Conversations').child(conversation_id1);
+                  var convoId2 = firebase.database().ref('Conversations').child(conversation_id2);
                   supersonic.logger.log("Is it working?");
 
-                  convoId1.child('message_list').limitToLast(1).on('child_added', function (snapshot, prevKey) {
+                  convoId1.child('Message_List').limitToLast(1).on('child_added', function (snapshot, prevKey) {
                       if (snapshot.hasChildren()) {
                           supersonic.logger.log("Is it working?");
 
@@ -405,14 +530,15 @@ angular
                          // var obj1 = snapshot.val().message;
                         //  obj = JSON.parse(obj1);
                         //  $scope.testmsg = obj;
-                          $scope.testmsg = snapshot.val().message;
-                          $scope.msgs.push(snapshot.val().message);
+                          $scope.testmsg = snapshot.val().Message;
+                          //alert($scope.testmsg);
+                          $scope.msgs.push(snapshot.val());
                           //supersonic.logger.log(snapshot.val().message);
                           //resolve(snapshot.val());
                       }
                   });
 
-                  convoId2.child('message_list').limitToLast(1).on('child_added', function (snapshot, prevKey) {
+                  convoId2.child('Message_List').limitToLast(1).on('child_added', function (snapshot, prevKey) {
                       if (snapshot.hasChildren()) {
                           supersonic.logger.log("Is it working?");
 
@@ -420,8 +546,9 @@ angular
                           //var obj1 = snapshot.val().message;
                           //obj = JSON.parse(obj1);
 
-                         $scope.testmsg = snapshot.val().message;
-                         $scope.msgs.push(snapshot.val().message);
+                         $scope.testmsg = snapshot.val().Message;
+                          //alert($scope.testmsg);
+                         $scope.msgs.push(snapshot.val());
 
                           //$scope.testmsg = obj;
                           // alert("hey");
