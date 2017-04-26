@@ -30,6 +30,12 @@ angular
             supersonic.ui.layers.push(view);
             supersonic.logger.log("Something semi-interesting just happened.");
             supersonic.ui.drawers.close();
+        }
+
+        $scope.queues = function() {
+            var view = new supersonic.ui.View("example#myQueues");
+            supersonic.ui.layers.push(view);
+            supersonic.ui.drawers.close();
 
         }
 
@@ -256,7 +262,8 @@ angular
             });
 
             $scope.password ="";
-            $scope.username= "";
+            $scope.username = "";
+            $scope.confirmPassword= ""
         };
     });
 angular
@@ -333,6 +340,31 @@ angular
                 });
         };
     });
+angular
+.module('example')
+.controller('editQueueController', function($scope, supersonic,backendService) {
+
+	$scope.data = window.localStorage.getItem('activity');
+	$scope.activityName = window.localStorage.getItem('activityName');
+	$scope.activity = JSON.parse($scope.data);
+	$scope.test = $scope.activity.Preferences;
+	backendService.getPreferenceList($scope.activityName).then(function(data) {
+		$scope.preferences = data;
+		$scope.keys = Object.keys($scope.preferences);
+		$scope.$apply();
+	})
+
+	$scope.editQueue = function() {
+		backendService.editQueue($scope.activityName,$scope.test);
+		supersonic.ui.layers.pop();
+	}
+	$scope.leaveQueue = function() {
+		backendService.leaveQueue($scope.activityName);
+		supersonic.ui.layers.pop();
+
+	}
+
+});
 angular
   .module('example')
   .controller('messageController', function($scope, supersonic, backendService) {
@@ -441,6 +473,33 @@ angular
     };
 
 angular
+    .module('example')
+    .controller('myQueuesController', function($scope, supersonic,backendService) {
+
+    backendService.getQueueList().then(function(data) {
+        $scope.activities = data;
+        $scope.queueKeys = Object.keys(data);
+        $scope.$apply();
+
+    })
+
+    document.addEventListener("visibilitychange", onVisibilityChange, false);
+
+    function onVisibilityChange() {
+        location.reload();
+    }   
+
+
+    $scope.editQueue = function(key) {
+        window.localStorage.setItem('activity',JSON.stringify($scope.activities[key]));
+        window.localStorage.setItem('activityName',key);
+
+        var view = new supersonic.ui.View("example#editQueue");
+        supersonic.ui.layers.push(view);
+
+    }
+    });
+angular
 	.module('example')
 	.controller('preferenceController', function($scope,supersonic,$http,backendService){
 		$scope.studyKey = [];
@@ -506,3 +565,17 @@ angular
 			backendService.setPreferencesForUser("Study", value);
 		}
 	})
+angular
+.module('example')
+.controller('queueController', function($scope,supersonic,$http,backendService){
+    $scope.activity = window.localStorage.getItem('activity');
+    $scope.activity = $scope.activity.replace(/^"(.*)"$/, '$1');
+    $scope.data = window.localStorage.getItem('preferences');
+    $scope.preferences = JSON.parse($scope.data);
+    $scope.keys = Object.keys($scope.preferences);
+    $scope.test = {};
+    $scope.submit = function() {
+    backendService.enterQueue($scope.activity, $scope.test);
+    supersonic.ui.layers.pop();
+    }
+})

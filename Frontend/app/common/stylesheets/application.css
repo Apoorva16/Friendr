@@ -84,6 +84,7 @@
   border-radius: 50% !important;
   height:100vw;
   width:100vw;
+  z-index: 1;
 /*  background-color: blue !important;
 */  
 }
@@ -116,7 +117,6 @@
 .test {
   text-align:center;
   background-color:transparent;
-    border-radius: 50% !important;
     border-width: 0px;
   height:100%;
   width:100%;
@@ -132,8 +132,17 @@
     -ms-transform: translateY(-50%);
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
+  
 }
-
+.study {
+  background-color: red;
+}
+.eat {
+  background-color: blue;
+}
+.workout {
+  background-color: green;
+}
 .container {
   height:100vw;
   width:100vw;

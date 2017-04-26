@@ -41,6 +41,7 @@ angular
             });
 
             $scope.password ="";
-            $scope.username= "";
+            $scope.username = "";
+            $scope.confirmPassword= ""
         };
     });

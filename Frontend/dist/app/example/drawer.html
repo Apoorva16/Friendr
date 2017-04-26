@@ -39,11 +39,11 @@
 
   <ul class="list" ng-controller="DrawerController">
     <li ng-controller="ProfileController" ng-click="profilefunc()" class="item"> Profile </li>
-    <li class="item" onclick="supersonic.ui.drawers.close()">Home</li>
     <li ng-controller="SettingsController" ng-click="settings()" class="item">Settings </li>
     <li class="item" ng-click="myFunction();">Messages</li>
-      <li class="item" ng-click="preference()">Preferences</li>
-    <li ng-controller="FAQController" ng-click="faqs()" class="item"> FAQ </li>
+    <li class="item" ng-click="queues();">My Queues</li>
+<!--     <li class="item" ng-click="preference()">Preferences</li>
+ -->    <li ng-controller="FAQController" ng-click="faqs()" class="item"> FAQ </li>
     <li class="item" ng-click="logout();">Logout</li>
   </ul>
 
