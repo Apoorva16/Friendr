@@ -13,7 +13,29 @@
             <i class="fa fa-picture-o"></i> Choose Profile Picture
         </button>
     </div>
-    <button onclick="supersonic.ui.modal.hide()" class="button button-block button-positive">Close</button>
 
+    <div class="padding">
+        <h4>About</h4>
+    <!--<div class="item item-button-right">-->
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Description</span>
+                <input type="text" ng-model="description" placeholder="abcd">
+            </label>
+            <button ng-click ="aboutme()" class="button button-block button-positive">
+                Modify
+            </button>
+    <!--</div>-->
+    </div>
+    <div class="text-left">
+        <h4>
+            <ul class="list">
+                <li class="item"> FirstName </li>
+                <li class="item"> Last Name </li>
+                <li class="item"> Username </li>
+                <li class="item"> Gender </li>
+            </ul>
+        </h4>
+    </div>
+    <button onclick="supersonic.ui.modal.hide()" class="button button-block button-positive">Close</button>
 
 </div>
