@@ -19,3 +19,16 @@ module.exports =
   initialView:
     id: "initialView"
     location: "example#initial-view"
+
+  tabs: [
+    {
+      title: "Index"
+      id: "index"
+      location: "home#index" # Supersonic module#view type navigation
+    }
+    {
+      title: "Activities"
+      id: "settings"
+      location: "example#activity"
+    }
+  ]

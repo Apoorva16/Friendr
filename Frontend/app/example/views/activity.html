@@ -1,0 +1,39 @@
+<div ng-controller="Activity">
+    <super-navbar>
+        <super-navbar-title>
+            Activities
+        </super-navbar-title>
+    </super-navbar>
+    <!--<div class="list list-inset" style="position: fixed; width: 90%">-->
+        <!--<h1>-->
+            <!--<label class="item item-input">-->
+                <!--<input type="text" placeholder="Search">-->
+                <!--<span>-->
+                        <!--<button ng-click="searchforuser()" class="button button-positive" type="button">-->
+                           <!--<i class="icon super-ios-search-strong placeholder-icon"></i>-->
+                        <!--</button>-->
+                <!--</span>-->
+            <!--</label>-->
+        <!--</h1>-->
+    <div class="padding">
+        <h1>
+            <div class="font-activity">
+                <p> Favourited Matches
+            </div>
+        </h1>
+
+
+        <h2>
+            <ul class="list">
+                <li class="item" ng-repeat="user in matchedlistusers">{{user.other_user}}
+                    <div align="right">
+                        <i class="icon super-heart"></i>
+                    </div>
+                </li>
+            </ul>
+        </h2>
+    </div>
+
+    <!--</div>-->
+
+</div>

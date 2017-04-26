@@ -5,35 +5,38 @@ angular
     .module('example')
     .controller('SignupController', function($scope, supersonic,backendService) {
 
-        $scope.email = "abcd@gmail.com";
+        $scope.email = "apu@gmail.com";
         $scope.password = "helloworld";
         $scope.firstName = "Alpha";
         $scope.lastName = "Numeric";
         $scope.username = "alpha";
+        $scope.gender = "Female";
 
         $scope.signup = function() {
             /* Note: Perform ERROR CHECKING for all fields */
             firebase.auth().createUserWithEmailAndPassword($scope.email, $scope.password)
-            .then(function(object) {
-                firebase.auth().onAuthStateChanged(function(currentUser) {
-                    if(currentUser) {
-                        firebase.database().ref('users/' + currentUser.uid).set({
-                            firstName: $scope.firstName,
-                            lastName: $scope.lastName,
-                            username: $scope.username
-                        });
-                    }
+                .then(function(object) {
+                    firebase.auth().onAuthStateChanged(function(currentUser) {
+                        if(currentUser) {
+                            firebase.database().ref('Users/' + currentUser.uid + '/Profile').set({
+                                FirstName: $scope.firstName,
+                                LastName: $scope.lastName,
+                                Username: $scope.username,
+                                Gender: $scope.gender
+                            });
+                            //fi
+                        }
 
-                    window.localStorage.setItem("userObj", JSON.stringify(currentUser) + "");
+                        window.localStorage.setItem("userObj", JSON.stringify(currentUser) + "");
 
 
-                    $scope.confirmemail();
+                        $scope.confirmemail();
+                    });
+                })
+                .catch(function(error) {
+                    alert(JSON.stringify(error));
+                    alert("Sign up unsuccessful");
                 });
-            })
-            .catch(function(error) {
-                alert(JSON.stringify(error));
-                alert("Sign up unsuccessful");
-            });
         };
 
         $scope.close = function() {
