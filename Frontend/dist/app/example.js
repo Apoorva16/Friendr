@@ -233,25 +233,6 @@ angular
         // $scope.PictureLink = userObj.PictureLink;
         $scope.description = "";
 
-        // $scope.getdetails;
-        // $scope.getMyProfile = function()
-        // {
-        //     var profilePromise = new Promise(function(resolve, reject)
-        //     {
-        //         firebase.auth().onAuthStateChanged(function(user)
-        //         {
-        //             if (user)
-        //             {
-        //                 database.ref('Users/' + user.uid + '/Profile').once('value').then(function(snapshot)
-        //                 {
-        //                     resolve(snapshot.val());
-        //                 });
-        //             }
-        //             $scope.getdetails = snapshot.val();
-        //         });
-        //     });
-        //     return profilePromise;
-        // };
         $scope.choosePhoto = function() {
             var options = {
                 quality: 50,
