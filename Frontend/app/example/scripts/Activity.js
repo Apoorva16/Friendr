@@ -17,6 +17,11 @@ angular
             alert($scope.matchedlistusers[0].other_user);
         });
 
+        $scope.toggleFavorite = function(matchedUser) {
+            backendService.addToFavorites(matchedUser.other_user_uid);
+            alert("here");
+        };
+
        /* $scope.searchforuser = function() {
 
             var matchedUser = new Promise(function(resolve, reject)

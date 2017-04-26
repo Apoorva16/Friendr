@@ -3,10 +3,9 @@ angular
     .controller('Profile', function($scope, supersonic,backendService) {
 
         var userObj = JSON.parse(window.localStorage.getItem("userObj"));
-        $scope.userObj = userObj;
-        $scope.profileImage = userObj.photoURL;
-        // var userObj = JSON.parse(window.localStorage.getItem("userObj"));
-        // $scope.PictureLink = userObj.PictureLink;
+        $scope.profile = JSON.parse(window.localStorage.getItem("profile"));
+        $scope.profile.image = userObj.photoURL;
+
         $scope.description = "";
 
         $scope.choosePhoto = function() {
@@ -18,11 +17,9 @@ angular
                 encodingType: "jpeg",
                 destinationType: "dataURL"
             };
-            supersonic.media.camera.getFromPhotoLibrary(options).then( function(result){
+            supersonic.media.camera.getFromPhotoLibrary(options).then(function(result){
+                $scope.profile.image = result;
                 // save it in database
-                $scope.profileImage = result;
-                // s
-
 
                 /* SUPER IDEAL
                 1. First user selects image.
@@ -39,31 +36,19 @@ angular
                  4. photoURL is something firebase already includes when in the default userObj, which we get upon login.
                  */
 
-                // var user = firebase.auth().currentUser;
+                var user = firebase.auth().currentUser;
                 firebase.auth().onAuthStateChanged(function(currentUser) {
-                    // if (currentUser) {
-                    //     {
-                    //         database.ref('Users/' + currentUser.uid + '/Profile').update({
-                    //             PictureLink: $scope.profileImage
-                    //         });
-                    //     }
-                        currentUser.updateProfile({
-                            photoURL: $scope.profileImage  /*is base64 */
-                        });
-                    // }
+                    currentUser.updateProfile({
+                        photoURL: $scope.profile.image  /*is base64 */
+                    });
                 });
 
                 userObj.photoURL = result;
-                // userObj.PictureLink = result;
-                // window.localStorage.setItem("userObj", JSON.stringify(userObj) + "");
-                window.localStorage.setItem("userObj", JSON.stringify(currentUser) + "");
-
-                // console.log("JSON.stringify(userObj)");
+                window.localStorage.setItem("userObj", JSON.stringify(userObj) + "");
             });
         };
 
         $scope.aboutme = function() {
-
             // var user = firebase.auth().currentUser;
             firebase.auth().onAuthStateChanged(function(currentUser) {
                 if (currentUser) {
@@ -77,11 +62,10 @@ angular
                 window.localStorage.setItem("userObj", JSON.stringify(currentUser) + "");
                 alert("Your changes have been made");
             })
-                .catch(function(error) {
-                    alert(JSON.stringify(error));
-                    alert("Your changes were not made");
-                });
-
+            .catch(function(error) {
+                alert(JSON.stringify(error));
+                alert("Your changes were not made");
+            });
         };
 
     });/**

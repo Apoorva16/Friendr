@@ -21,10 +21,9 @@ angular
                             firebase.database().ref('Users/' + currentUser.uid + '/Profile').set({
                                 FirstName: $scope.firstName,
                                 LastName: $scope.lastName,
-                                Username: $scope.username,
+                                UserName: $scope.username,
                                 Gender: $scope.gender
                             });
-                            //fi
                         }
 
                         window.localStorage.setItem("userObj", JSON.stringify(currentUser) + "");

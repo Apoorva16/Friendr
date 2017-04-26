@@ -18,7 +18,7 @@ angular
             var view = new supersonic.ui.View("example#preference");
             supersonic.ui.layers.push(view);
             supersonic.ui.drawers.close();
-        }
+        };
 
         $scope.myFunction = function(){
             var view = new supersonic.ui.View("example#getting-started");

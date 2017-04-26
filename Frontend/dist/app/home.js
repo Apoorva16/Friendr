@@ -16,7 +16,6 @@ angular.module('home', [
 //     firebase.initializeApp(config);
 // })();
 
-
 angular
 .module('home')
 .controller('IndexController', function($scope, supersonic, backendService, $http) {
@@ -42,8 +41,7 @@ angular
                 alert("You're Matched!");
             }
        });
-
-    }
+    };
 
 
     drawerBtn = new supersonic.ui.NavigationBarButton({

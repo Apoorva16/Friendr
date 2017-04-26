@@ -15,20 +15,18 @@
                 <!--</span>-->
             <!--</label>-->
         <!--</h1>-->
-    <div class="padding">
+    <div class="micro-padding">
         <h1>
             <div class="font-activity">
-                <p> Favourited Matches
+                <p> Matches
             </div>
         </h1>
-
-
         <h2>
             <ul class="list">
-                <li class="item" ng-repeat="user in matchedlistusers">{{user.other_user}}
-                    <div align="right">
-                        <i class="icon super-heart"></i>
-                    </div>
+                <li class="item item-icon-left item-icon-right" ng-repeat="matchedUser in matchedlistusers">
+                    <i class="icon "></i>
+                    {{ matchedUser.other_user }}
+                    <i ng-click="toggleFavorite(matchedUser)" class="icon super-heart"></i>
                 </li>
             </ul>
         </h2>
