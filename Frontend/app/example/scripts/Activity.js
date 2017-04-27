@@ -14,7 +14,7 @@ angular
             $scope.$apply();
             $scope.matchedlistusers = value;
             $scope.$apply();
-            alert($scope.matchedlistusers[0].other_user);
+          // alert($scope.matchedlistusers[0].other_user);
         });
 
         $scope.toggleFavorite = function(matchedUser) {
