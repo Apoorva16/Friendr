@@ -14,12 +14,43 @@ angular
             $scope.$apply();
             $scope.matchedlistusers = value;
             $scope.$apply();
+
+            $scope.favoritesList = backendService.getFavoritesList();
+            alert(JSON.stringify($sope.favoritesList));
+
           // alert($scope.matchedlistusers[0].other_user);
         });
 
         $scope.toggleFavorite = function(matchedUser) {
-            backendService.addToFavorites(matchedUser.other_user_uid);
-            alert("here");
+            matchedUser.isFavorite = !matchedUser.isFavorite;
+            //alert(matchedUser.other_user_uid);
+
+            //firebase.auth().onAuthStateChanged(function(user) {
+            //    alert("BOO");
+            //var user = firebase.auth().currentUser;
+            //if (user) {
+            //    var other_name;
+            //    database.ref('Users').once('value' ).then(function(snapshot)
+            //    {
+            //        if (!snapshot.child(matchedUser.other_user_uid).exists()) {
+            //            alert("HERE");
+            //            console.log("uid not found");
+            //        }
+            //        else {
+            //            alert("HERE2");
+            //            database.ref('Users/'+ matchedUser.other_user_uid + '/Profile').once('value').then(function(snapshot)
+            //            {
+            //                firstName = snapshot.child("FirstName").val();
+            //                lastName = snapshot.child("LastName").val();
+            //
+            //                database.ref('Users/' + user.uid + '/Favorites/' + matchedUser.other_user_uid).set({
+            //                    FirstName: firstName,
+            //                    LastName: lastName
+            //                });
+            //            });
+            //        }
+            //    });
+            //}
         };
 
        /* $scope.searchforuser = function() {
@@ -63,6 +94,4 @@ angular
             return matchedUser;
 
         };*/
-
-
 });

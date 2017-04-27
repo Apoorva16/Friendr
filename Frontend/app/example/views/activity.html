@@ -1,3 +1,12 @@
+
+<style>
+    .redColor {
+        color: red;
+        font-color: red;
+        font: red;
+    }
+</style>
+
 <div ng-controller="Activity">
     <super-navbar>
         <super-navbar-title>
@@ -26,10 +35,11 @@
                 <li class="item item-icon-left item-icon-right" ng-repeat="matchedUser in matchedlistusers">
                     <i class="icon "></i>
                     {{ matchedUser.other_user }}
-                    <i ng-click="toggleFavorite(matchedUser)" class="icon super-heart"></i>
+                    <i ng-click="toggleFavorite(matchedUser)" ng-class="{redColor: matchedUser.isFavorite}" class="icon super-heart"></i>
                 </li>
             </ul>
         </h2>
+        <!--{{favoritesList}}-->
     </div>
 
     <!--</div>-->
