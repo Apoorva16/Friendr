@@ -5,7 +5,7 @@
 
 navigation-bar {
   background-color: #1527df;
-  color: #1527df;
+  color: #ffffff;
 }
 
 navigation-bar title {
@@ -31,7 +31,7 @@ tab-bar tab-bar-item {
 }
 
 tab-bar tab-bar-item:selected {
-  color: #1596f7;
+  color: #ffffff;
 }
 
 tab-bar-item#settings {

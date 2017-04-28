@@ -34,13 +34,14 @@ angular
 
                     window.localStorage.setItem("userObj", JSON.stringify(currentUser) + "");
 
-                    database.ref('users/' + user.uid).update({
+                    database.ref('Users/' + user.uid).update({
                         username: $scope.username
                     });
                 }
             });
 
             $scope.password ="";
-            $scope.username= "";
+            $scope.username = "";
+            $scope.confirmPassword= ""
         };
     });
