@@ -1,8 +1,16 @@
-<div class="list" ng-controller="LearnMoreController">
+<super-navbar>
+  <super-navbar-button onclick="supersonic.ui.modal.hide()">
+    Close
+  </super-navbar-button>
+  <super-navbar-title>
+    Messages
+  </super-navbar-title>
+</super-navbar>
 
-  <a class="item item-avatar" ng-repeat="user in other_users" ng-click="myFunction($index)">
-    <img class="img-circle" img src="https://www.codeproject.com/KB/web-image/ASPNetUpDownloadFiles/RunAppDownload.jpg">
-    <h2>{{user.other_user}}</h2>
+<div class="list" ng-controller="LearnMoreController">
+  <a class="item item-avatar" ng-repeat="conversation in conversationList" ng-click="viewConversation($index)">
+    <img ng-src="data:image/jpeg;base64,{{conversation.user.profile.Image}}">
+    <h2>{{conversation.user.profile.FirstName + ' ' + conversation.user.profile.LastName}}</h2>
   </a>
 
 

@@ -136,15 +136,19 @@
   
 }
 .study{
-  background-color:transparent;
+  background-image: url("/images/study2.jpg");
+  /*background-color:transparent;*/
+
 }
 
 .eat {
-  background-color:transparent;
+  background-image: url("/images/eat1.png");
+  /*background-color:transparent;*/
 }
 
 .workout {
-  background-color:transparent;
+  background-image: url("/images/workout1.jpg");
+  /*background-color:transparent;*/
 }
 
 .sample {

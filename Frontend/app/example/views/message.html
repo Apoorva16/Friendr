@@ -1,5 +1,9 @@
-<div ng-controller="messageController">
+<super-navbar>
+    <super-navbar-title ng-bind="title">
+    </super-navbar-title>
+</super-navbar>
 
+<div ng-controller="messageController">
         <style>
 
             /*.item-input-inset{*/
@@ -115,7 +119,7 @@
 
         </style>
     <super-navbar>
-        <super-navbar-title ng-bind="viewTitle"></super-navbar-title>
+        <super-navbar-title ng-bind="title"></super-navbar-title>
     </super-navbar>
 
     <p ng-init="tester1()"></p>

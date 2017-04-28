@@ -25,19 +25,13 @@
             <!--</label>-->
         <!--</h1>-->
     <div class="micro-padding">
-
-        <h1>
-            <ul class="list">
-                <li class="item item-icon-left item-icon-right" ng-repeat="matchedUser in matchedlistusers">
-                    <i class="icon "></i>
-                    {{ matchedUser.other_user }}
-                    <i ng-click="toggleFavorite(matchedUser)" ng-class="{redColor: matchedUser.isFavorite}" class="icon super-heart"></i>
-                </li>
-            </ul>
-        </h1>
-        <!--{{favoritesList}}-->
+        <div class="list">
+            <a class="item item-avatar item-icon-right" ng-repeat="matchedUser in matchedlistusers track by $index" href="#">
+                <img ng-src="data:image/jpeg;base64,{{matchedUser.profile.Image}}">
+                <h2>{{ matchedUser.profile.FirstName + ' ' + matchedUser.profile.LastName}}</h2>
+                <!--<p>Gender: {{matchedUser.profile.Gender}}</p>-->
+                <i ng-click="toggleFavorite($index)" ng-class="{'redColor': matchedlistusers[$index].isFavorite == true}" class="icon super-heart"></i>
+            </a>
+        </div>
     </div>
-
-    <!--</div>-->
-
 </div>
