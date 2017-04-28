@@ -59,7 +59,7 @@
   padding-right: 1px;
 }
 .wrap-buttons {
-  color: blue;
+  color: #3b5998;
 }
 .logo-login {
   margin-top: 5%;
@@ -101,7 +101,7 @@
   left:0;
   height:100vh;
   width:100vw;
-    background: linear-gradient(white, black);
+    background-color: #dfe3ee;
 }
 
 .recentActivities {

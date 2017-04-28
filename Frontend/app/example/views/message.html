@@ -106,15 +106,23 @@
                 right: -5px;
             }
 
-
         .bar-footer {
             position: fixed;
             top: auto;
             bottom: 0;
         }
+            navigation-bar button {
+                font-size: 16px;
+                font-weight: bold;
+                color: #ffffff;
+            }
+
 
         </style>
     <super-navbar>
+        <super-navbar-button ng-click="buttonTapped()" side="right">
+            Clear
+        </super-navbar-button>
         <super-navbar-title ng-bind="viewTitle"></super-navbar-title>
     </super-navbar>
 
