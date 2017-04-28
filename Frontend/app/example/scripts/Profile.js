@@ -41,7 +41,7 @@ angular
                     currentUser.updateProfile({
                         photoURL: $scope.profile.image  /*is base64 */
                     });
-                    alert(currentUser.uid);
+                   // alert(currentUser.uid);
                     firebase.database().ref('Users/' + currentUser.uid + '/Profile').update({
                         Image: $scope.profile.image
                     });
@@ -56,13 +56,13 @@ angular
             // var user = firebase.auth().currentUser;
             firebase.auth().onAuthStateChanged(function(currentUser) {
                 if (currentUser) {
-                    alert("I'm here");
+                   // alert("I'm here");
                     database.ref('Users/' + user.uid + '/Profile').update({
                         AboutMe: $scope.description
                     });
-                    alert("I'm here2");
+                   // alert("I'm here2");
                 }
-                alert("I'm here3");
+               // alert("I'm here3");
                 window.localStorage.setItem("userObj", JSON.stringify(currentUser) + "");
                 alert("Your changes have been made");
             })
