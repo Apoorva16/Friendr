@@ -801,7 +801,7 @@ angular
     $scope.keys = Object.keys($scope.preferences);
     $scope.test = {};
     $scope.submit = function() {
-    backendService.enterQueue($scope.activity, $scope.test);
-    supersonic.ui.layers.pop();
-    }
+        backendService.enterQueue($scope.activity, $scope.test);
+            supersonic.ui.layers.pop();
+        }
 })
