@@ -12,7 +12,25 @@ angular
 
     $scope.activities = ['Eat', 'Study', 'Work Out'];
 
-
+    backendService.listenForPending().then(function(data) {
+        var activityName = data.Activity;
+        var otherUserID = data.OtherUID;
+        backendService.getOtherProfile(otherUserID).then(function(userData) {
+            var profile = userData;
+            var options = {
+                message: activityName + "\nName: " + profile.FirstName + " " + profile.LastName,
+                buttonLabels: ["Accept", "Reject"]
+            };
+            supersonic.ui.dialog.confirm("A Match was Found!", options).then(function(index) {
+                if (index == 0) {
+                    backendService.respondToPending(otherUserID, "yes");
+                } else {
+                    backendService.respondToPending(otherUserID, "no");
+                }
+            });
+        });
+    });
+    
     $scope.queue = function(activity) {
         backendService.getPreferenceList(activity).then(function(data) {
             window.localStorage.setItem('preferences',JSON.stringify(data));

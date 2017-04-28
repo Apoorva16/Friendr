@@ -265,7 +265,7 @@ var printCurrentUserData= function() {
 							var list = [];
 							snapshot.forEach(function(childSnapshot)
 							{
-								var message = childSnapshot.val().Message;
+								var message = childSnapshot.val();
 								list.push(message);
 							});
 							resolve(list);
@@ -279,7 +279,7 @@ var printCurrentUserData= function() {
 							var list = [];
 							snapshot.forEach(function(childSnapshot)
 							{
-								var message = childSnapshot.val().Message;
+								var message = childSnapshot.val();
 								list.push(message);
 							});
 							resolve(list);
@@ -378,7 +378,7 @@ var printCurrentUserData= function() {
 						var matchFound = false;
 						if (snapshot1.hasChildren())
 						{
-							database.ref('Users/' + user.uid).once('value').then(function(snapshot2)
+							database.ref('Users/' + user.uid + '/Profile').once('value').then(function(snapshot2)
 							{
 								snapshot1.forEach(function(childSnapshot1)
 								{
@@ -398,19 +398,18 @@ var printCurrentUserData= function() {
 			          					//will update queue preferences if changed recently...
 			          				}
 
-			          				var myUserPreferences = preferences;
-			          				var myGender = snapshot2.val().Profile['Gender'];
+			          				var myGender = snapshot2.val().Gender;
 			          				console.log("myUserPreferences");
-			          				console.log(myUserPreferences);
+			          				console.log(preferences);
 			          				console.log(myGender);
 			          				
-			          				for (var key in myUserPreferences)
+			          				for (var key in preferences)
 			          				{
-			          					if (myUserPreferences.hasOwnProperty(key))
+			          					if (preferences.hasOwnProperty(key))
 			          					{
 			          						if (key != 'Gender')
 			          						{
-			          							if (myUserPreferences[key] == matchPreferences[key])
+			          							if (preferences[key] == matchPreferences[key])
 			          								console.log("Preferences Match: " + key);
 			          							else
 			          							{
@@ -421,9 +420,9 @@ var printCurrentUserData= function() {
 			          						}
 			          						else
 			          						{
-			          							if (myUserPreferences[key] != 'NoPref')
+			          							if (preferences[key] != 'NoPref')
 			          							{
-			          								if (myUserPreferences[key] != matchGender)
+			          								if (preferences[key] != matchGender)
 			          								{
 			          									console.log("Preferences Mismatch: " + key);
 			          									isMatch = false;
@@ -458,11 +457,13 @@ var printCurrentUserData= function() {
 
 			          					database.ref('Users/' + user.uid + '/Pending/' + matchUID).update({
 			          						Response: "pending",
-			          						Activity: activity
+			          						Activity: activity,
+			          						OtherUID: matchUID
 			          					});
 			          					database.ref('Users/' + matchUID + '/Pending/' + user.uid).update({
 			          						Response: "pending",
-			          						Activity: activity
+			          						Activity: activity,
+			          						OtherUID: user.uid
 			          					});
 			          					resolve(null);
 			          				}
@@ -472,14 +473,14 @@ var printCurrentUserData= function() {
 								{
 			          				//match not found, insert into queue
 			          				console.log("No Match Found");
-			          				var userPreferences = preferences;
 			          				var gender = snapshot2.val().Profile['Gender'];
 
 			          				database.ref('Activities/'+ activity + '/Searching/' + user.uid).update(
 			          				{
-			          					Preferences: userPreferences,
+			          					Preferences: preferences,
 			          					Gender: gender
 			          				});
+
 			          				var date = new Date();
 
 			          				database.ref('Users/' + user.uid + '/Queue_List/' + activity).set({
@@ -497,15 +498,14 @@ else
 {
 		          			//match not found, insert into queue
 		          			console.log("No Users Searching");
-		          			database.ref('Users/' + user.uid).once('value').then(function(snapshot)
+		          			database.ref('Users/' + user.uid + '/Profile').once('value').then(function(snapshot)
 		          			{
-		          				var userPreferences = preferences;
-		          				var gender = snapshot.val().Profile['Gender'];
-		          				console.log(userPreferences);
+		          				var gender = snapshot.val().Gender;
+		          				console.log(preferences);
 
 		          				database.ref('Activities/'+ activity + '/Searching/' + user.uid).update(
 		          				{
-		          					Preferences: userPreferences,
+		          					Preferences: preferences,
 		          					Gender: gender
 		          				});
 
@@ -517,6 +517,9 @@ else
 		          					Preferences: preferences
 		          				});
 		          				console.log(user.uid + " in queue for " + activity);
+		          			}, function(error)
+		          			{
+		          				console.log(error);
 		          			});
 
 		          			resolve(null);
@@ -547,9 +550,9 @@ var respondToPending = function(other_uid,answer) {
 		if (user)
 		{
 			if (answer.toLowerCase() == "no") {
-				database.ref('Users/' + user.uid).once('value').then(function(snapshot)
+				database.ref('Users/' + user.uid + '/Pending').once('value').then(function(snapshot)
 				{
-					if (snapshot.child("Pending").exists() && snapshot.child("Pending").child(other_uid).exists()) {
+					if (snapshot.exists() && snapshot.child(other_uid).exists()) {
 							// removing pending immediately, maybe turn to no instead
 							/*database.ref('Users/' + user.uid + '/Pending/' + other_uid).update({
 								Response: "no"
@@ -558,6 +561,8 @@ var respondToPending = function(other_uid,answer) {
 
 							database.ref('Users/' + user.uid + '/Pending/' + other_uid).remove();
 							database.ref('Users/' + other_uid + '/Pending/' + user.uid).remove();
+							database.ref('Users/' + user.uid + '/Queue_List/' + activity).remove();
+							database.ref('Users/' + other_uid + '/Queue_List/' + activity).remove();
 							console.log("Pending closed");
 						}
 						else {
@@ -566,9 +571,9 @@ var respondToPending = function(other_uid,answer) {
 					});
 			}
 			if (answer.toLowerCase() == "yes") {
-				database.ref('Users/' + user.uid).once('value').then(function(snapshot)
+				database.ref('Users/' + user.uid + '/Pending').once('value').then(function(snapshot)
 				{
-					if (snapshot.child("Pending").exists() && snapshot.child("Pending").child(other_uid).exists()) {
+					if (snapshot.exists() && snapshot.child(other_uid).exists()) {
 
 							// only if my pending of the other user exists then i look to the other user's pending of me
 							database.ref('Users/' + other_uid + '/Pending/' + user.uid).once('value').then(function(snapshot2) {
@@ -592,6 +597,16 @@ var respondToPending = function(other_uid,answer) {
 									});
 									console.log("Users Matched: " + other_uid+ " " + user.uid);
 
+									database.ref('Users/' + user.uid + '/Pending/' + other_uid).remove();
+									database.ref('Users/' + other_uid + '/Pending/' + user.uid).remove();
+
+									database.ref('Users/' + user.uid + '/Queue_List/' + activity).remove();
+									database.ref('Users/' + other_uid + '/Queue_List/' + activity).remove();
+									initiateConversation(other_uid);
+								}
+								else if (response.toLowerCase() == "no")
+								{
+									//the other person has rejected
 									database.ref('Users/' + user.uid + '/Pending/' + other_uid).remove();
 									database.ref('Users/' + other_uid + '/Pending/' + user.uid).remove();
 
@@ -697,15 +712,6 @@ var getPreferenceList = function(activity) {
 	return preferencesListPromise;
 }
 
-var setPreferencesForUser = function(activity, preference) {
-	firebase.auth().onAuthStateChanged(function(user)
-	{
-		if (user)
-		{
-			database.ref('Users/'+ user.uid + '/Preferences/' + activity).update(preference);
-		}
-	});
-}
 
 var getMatchList = function() {
 	var match_listPromise = new Promise(function (resolve, reject)
@@ -802,7 +808,7 @@ var deleteMatch = function(other_uid) {
 		});
 
 }
-var searchForMatch = function(srchFirstName, srchLastName) {
+var searchForMatch = function(srchName) {
 	var matchedUser = new Promise(function(resolve, reject)
 	{
 		firebase.auth().onAuthStateChanged(function(user)
@@ -817,16 +823,11 @@ var searchForMatch = function(srchFirstName, srchLastName) {
 						database.ref('Users/' + other_uid + '/Profile').once('value').then(function(snapshot1)
 						{
 							var other_user = snapshot1.val();
-							if (srchFirstName == other_user.FirstName)
+							var concatName = other_user.FirstName + ' ' + other_user.LastName;
+
+							if (srchName == concatName)
 							{
-								if (srchLastName == other_user.LastName)
-								{
-									resolve(other_user);
-								}
-								else
-								{
-									resolve("None Found.")
-								}
+								resolve(other_user);
 							}
 							else
 							{
@@ -941,12 +942,60 @@ var getQueueList = function() {
 	return queueListPromise;
 }
 
+var listenForPending = function(){
+	var promise = new Promise(function(resolve, reject)
+	{
+		firebase.auth().onAuthStateChanged(function(user)
+		{
+			if (user)
+			{
+				database.ref('Users/' + user.uid + '/Pending').on('child_added', function(snapshot, prevKey) 
+				{
+					resolve(snapshot.val());
+				});
+			}
+		});
+	});
+	return promise;
+}
+
+var getOtherProfile = function(other_uid) {
+	var promise = new Promise(function(resolve, reject)
+	{
+		firebase.auth().onAuthStateChanged(function(user)
+		{
+			if (user)
+			{
+				database.ref('Users/' + other_uid + '/Profile').once('value').then(function(snapshot) {
+					resolve(snapshot.val());
+				});
+			}
+		});
+	});
+	return promise;
+}
+
+var getMyProfile = function() {
+	var profilePromise = new Promise(function(resolve, reject)
+	{
+		firebase.auth().onAuthStateChanged(function(user)
+		{
+			if (user)
+			{
+				database.ref('Users/' + user.uid + '/Profile').once('value').then(function(snapshot)
+				{
+					resolve(snapshot.val());
+				});
+			}
+		});
+	});
+	return profilePromise;
+}
 
 return {
 	modifyUsername: modifyUsername,
 	setPreferencesForActivity: setPreferencesForActivity,
 	getPreferenceList: getPreferenceList,
-	setPreferencesForUser: setPreferencesForUser,
 	modifyProfilePicture: modifyProfilePicture,
 	addAuthUser:addAuthUser,
 	deleteUser:deleteUser,
@@ -977,6 +1026,9 @@ return {
 	getFavoritesList: getFavoritesList,
 	removeFromFavorites: removeFromFavorites,
 	editQueue: editQueue,
-	getQueueList: getQueueList
+	getQueueList: getQueueList,
+	listenForPending: listenForPending,
+	getOtherProfile: getOtherProfile,
+	getMyProfile: getMyProfile
 }
 })

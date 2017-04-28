@@ -46,13 +46,6 @@
             </div>
         </div>
     </div>
-
-    <div class="recentActivities">
-        <div class="recentContent">
-            <h1 id="recentActivities"> Recent Activities </h1>
-        </div>
-    </div>
-    
 </div>
 
 
@@ -139,74 +132,74 @@ function handleswipe(result) {
 /**
         This Handles the scrolling from home page
         **/
-        $('div.homePage').on("touchstart", function(e) {
-            var touchobj = e.changedTouches[0];
-            dist = 0
-            startY = touchobj.pageY
-            startTime = new Date().getTime() // record time when finger first makes contact with surface
-            e.preventDefault()
-        })
-        $('div.homePage').on("touchmove", function(e) {
-            e.preventDefault();
-        })
-        $('div.homePage').on("touchend", function(e) {
-            var touchobj = e.changedTouches[0]
-        dist = touchobj.pageY - startY // get total dist traveled by finger while in contact with surface
-        elapsedTime = new Date().getTime() - startTime // get time elapsed
-        // check that elapsed time is within specified, horizontal dist traveled >= threshold
-        var swipeDownBol = (elapsedTime <= allowedTime)
-        // supersonic.logger.log(swipeDownBol);
-        handleSwipeDown(swipeDownBol)
-        e.preventDefault()
-    });
-        function handleSwipeDown(result) {
-            //Time is less than elapsed time
-            if(result) {
-                if(dist < 0 && Math.abs(dist) >= threshold) {
-                // supersonic.logger.log(height);
-                $("html, body").animate({
-                    scrollTop: height
-                }, 800);
-            }
-        }
-    }
-        $('h1#recentActivities').on("touchend", function(e){
-            angular.element($('#indexCtrl')).scope().test();
-        })
-// *
-//      This Handles the scrolling from Recent Activities Page
-// *
-$('div.recentActivities').on("touchstart", function(e) {
-    var touchobj = e.changedTouches[0];
-    dist = 0
-    startY = touchobj.pageY
-            startTime = new Date().getTime() // record time when finger first makes contact with surface
-            e.preventDefault()
-        })
-$('div.recentActivities').on("touchmove", function(e) {
-    e.preventDefault();
-})
-$('div.recentActivities').on("touchend", function(e) {
-    var touchobj = e.changedTouches[0]
-        dist = touchobj.pageY - startY // get total dist traveled by finger while in contact with surface
-        elapsedTime = new Date().getTime() - startTime // get time elapsed
-        // check that elapsed time is within specified, horizontal dist traveled >= threshold
-        var swipeUpBol = (elapsedTime <= allowedTime)
-        // supersonic.logger.log(swipeUpBol);
-        handleSwipeUp(swipeUpBol);
-        e.preventDefault();
-    });
-function handleSwipeUp(result) {
-            //Time is less than elapsed time
-            if(result) {
-                if ( dist > 0 && Math.abs(dist) >= threshold) {
-                // supersonic.logger.log(height);
-                $("html, body").animate({
-                    scrollTop: 0
-                }, 800);
-            }
-        }
-    }
+//         $('div.homePage').on("touchstart", function(e) {
+//             var touchobj = e.changedTouches[0];
+//             dist = 0
+//             startY = touchobj.pageY
+//             startTime = new Date().getTime() // record time when finger first makes contact with surface
+//             e.preventDefault()
+//         })
+//         $('div.homePage').on("touchmove", function(e) {
+//             e.preventDefault();
+//         })
+//         $('div.homePage').on("touchend", function(e) {
+//             var touchobj = e.changedTouches[0]
+//         dist = touchobj.pageY - startY // get total dist traveled by finger while in contact with surface
+//         elapsedTime = new Date().getTime() - startTime // get time elapsed
+//         // check that elapsed time is within specified, horizontal dist traveled >= threshold
+//         var swipeDownBol = (elapsedTime <= allowedTime)
+//         // supersonic.logger.log(swipeDownBol);
+//         handleSwipeDown(swipeDownBol)
+//         e.preventDefault()
+//     });
+//         function handleSwipeDown(result) {
+//             //Time is less than elapsed time
+//             if(result) {
+//                 if(dist < 0 && Math.abs(dist) >= threshold) {
+//                 // supersonic.logger.log(height);
+//                 $("html, body").animate({
+//                     scrollTop: height
+//                 }, 800);
+//             }
+//         }
+//     }
+//         $('h1#recentActivities').on("touchend", function(e){
+//             angular.element($('#indexCtrl')).scope().test();
+//         })
+// // *
+// //      This Handles the scrolling from Recent Activities Page
+// // *
+// $('div.recentActivities').on("touchstart", function(e) {
+//     var touchobj = e.changedTouches[0];
+//     dist = 0
+//     startY = touchobj.pageY
+//             startTime = new Date().getTime() // record time when finger first makes contact with surface
+//             e.preventDefault()
+//         })
+// $('div.recentActivities').on("touchmove", function(e) {
+//     e.preventDefault();
+// })
+// $('div.recentActivities').on("touchend", function(e) {
+//     var touchobj = e.changedTouches[0]
+//         dist = touchobj.pageY - startY // get total dist traveled by finger while in contact with surface
+//         elapsedTime = new Date().getTime() - startTime // get time elapsed
+//         // check that elapsed time is within specified, horizontal dist traveled >= threshold
+//         var swipeUpBol = (elapsedTime <= allowedTime)
+//         // supersonic.logger.log(swipeUpBol);
+//         handleSwipeUp(swipeUpBol);
+//         e.preventDefault();
+//     });
+// function handleSwipeUp(result) {
+//             //Time is less than elapsed time
+//             if(result) {
+//                 if ( dist > 0 && Math.abs(dist) >= threshold) {
+//                 // supersonic.logger.log(height);
+//                 $("html, body").animate({
+//                     scrollTop: 0
+//                 }, 800);
+//             }
+//         }
+//     }
 </script>
 
 </body>
