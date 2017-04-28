@@ -456,11 +456,13 @@ module.exports =
 
 			          					database.ref('Users/' + user.uid + '/Pending/' + matchUID).update({
 			          						Response: "pending",
-			          						Activity: activity
+			          						Activity: activity,
+			          						OtherUID: matchUID
 			          					});
 			          					database.ref('Users/' + matchUID + '/Pending/' + user.uid).update({
 			          						Response: "pending",
-			          						Activity: activity
+			          						Activity: activity,
+			          						OtherUID: user.uid
 			          					});
 			          					resolve(null);
 			          				}
@@ -548,15 +550,14 @@ module.exports =
 				if (answer.toLowerCase() == "no") {
 					database.ref('Users/' + user.uid + '/Pending').once('value').then(function(snapshot)
 					{
-						if (snapshot.exists() && snapshot.child(other_uid).exists()) {
-							// removing pending immediately, maybe turn to no instead
-							/*database.ref('Users/' + user.uid + '/Pending/' + other_uid).update({
-								Response: "no"
-							});
-							*/
-
+						if (snapshot.exists() && snapshot.child(other_uid).exists())
+						{
 							database.ref('Users/' + user.uid + '/Pending/' + other_uid).remove();
 							database.ref('Users/' + other_uid + '/Pending/' + user.uid).remove();
+
+							database.ref('Users/' + user.uid + '/Queue_List/' + activity).remove();
+		          			database.ref('Users/' + other_uid + '/Queue_List/' + activity).remove();
+
 							console.log("Pending closed");
 						}
 						else {
@@ -592,6 +593,15 @@ module.exports =
 		          					console.log("Users Matched: " + other_uid+ " " + user.uid);
 
 		          					database.ref('Users/' + user.uid + '/Pending/' + other_uid).remove();
+		          					database.ref('Users/' + other_uid + '/Pending/' + user.uid).remove();
+
+		          					database.ref('Users/' + user.uid + '/Queue_List/' + activity).remove();
+		          					database.ref('Users/' + other_uid + '/Queue_List/' + activity).remove();
+								}
+								else if (response.toLowerCase() == "no")
+								{
+									//the other person has rejected
+									database.ref('Users/' + user.uid + '/Pending/' + other_uid).remove();
 		          					database.ref('Users/' + other_uid + '/Pending/' + user.uid).remove();
 
 		          					database.ref('Users/' + user.uid + '/Queue_List/' + activity).remove();
@@ -879,8 +889,6 @@ module.exports =
 		{
 			if (user)
 			{
-				var other_name;
-				
 				database.ref('Users/' + other_uid + '/Profile').once('value').then(function(snapshot)
 				{
 					firstName = snapshot.child("FirstName").val();
@@ -951,6 +959,41 @@ module.exports =
 			});
 		});
 		return profilePromise;
+	},
+
+	listenForPending: function()
+	{
+		var promise = new Promise(function(resolve, reject)
+		{
+			firebase.auth().onAuthStateChanged(function(user)
+			{
+				if (user)
+				{
+					database.ref('Users/' + user.uid + '/Pending').on('child_added', function(snapshot, prevKey) 
+					{
+						resolve(snapshot.val());
+					});
+				}
+			});
+		});
+		return promise;
+	},
+
+	getOtherProfile: function(other_uid)
+	{
+		var promise = new Promise(function(resolve, reject)
+		{
+			firebase.auth().onAuthStateChanged(function(user)
+			{
+				if (user)
+				{
+					database.ref('Users/' + other_uid + '/Profile').once('value').then(function(snapshot) {
+						resolve(snapshot.val());
+					});
+				}
+			});
+		});
+		return promise;
 	}
 }
 
