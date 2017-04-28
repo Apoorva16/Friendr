@@ -26,12 +26,23 @@ angular
 
             //firebase.signIn($scope.email, $scope.password);
             firebase.auth().signInWithEmailAndPassword($scope.email, $scope.password).then(function(object) {
-
                 window.localStorage.setItem("userObj", JSON.stringify(object) + "");
-                supersonic.ui.initialView.dismiss();
 
-                // alert(JSON.stringify(object));
-                // alert("Sign in successful");
+                /* AP: Get user's profile */
+                firebase.database().ref('Users/' + object.uid + '/Profile').once('value').then(function(snapshot) {
+                    var profile = {
+                        FirstName: snapshot.val().FirstName,
+                        LastName: snapshot.val().LastName,
+                        Gender: snapshot.val().Gender,
+                        UserName: snapshot.val().UserName
+                    };
+                    window.localStorage.setItem("profile", JSON.stringify(profile) + "");
+
+                    supersonic.ui.initialView.dismiss();
+                }).catch(function(error) {
+                    /* AP: Error in retrieving user's profile */
+                   alert(JSON.stringify(error)) ;
+                });
             }).catch(function (error) {
                 alert("Sign in unsuccessful");
             });

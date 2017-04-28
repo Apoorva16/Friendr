@@ -1,0 +1,37 @@
+
+<style>
+    .redColor {
+        color: red;
+        font-color: red;
+        font: red;
+    }
+</style>
+
+<div ng-controller="Activity">
+    <super-navbar>
+        <super-navbar-title>
+            Favourites
+        </super-navbar-title>
+    </super-navbar>
+    <!--<div class="list list-inset" style="position: fixed; width: 90%">-->
+        <!--<h1>-->
+            <!--<label class="item item-input">-->
+                <!--<input type="text" placeholder="Search">-->
+                <!--<span>-->
+                        <!--<button ng-click="searchforuser()" class="button button-positive" type="button">-->
+                           <!--<i class="icon super-ios-search-strong placeholder-icon"></i>-->
+                        <!--</button>-->
+                <!--</span>-->
+            <!--</label>-->
+        <!--</h1>-->
+    <div class="micro-padding">
+        <div class="list">
+            <a class="item item-avatar item-icon-right" ng-repeat="matchedUser in matchedlistusers track by $index" href="#">
+                <img ng-src="data:image/jpeg;base64,{{matchedUser.profile.Image}}">
+                <h2>{{ matchedUser.profile.FirstName + ' ' + matchedUser.profile.LastName}}</h2>
+                <!--<p>Gender: {{matchedUser.profile.Gender}}</p>-->
+                <i ng-click="toggleFavorite($index)" ng-class="{'redColor': matchedlistusers[$index].isFavorite == true}" class="icon super-heart"></i>
+            </a>
+        </div>
+    </div>
+</div>

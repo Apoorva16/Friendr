@@ -4,8 +4,13 @@
  ***********************************************************/
 
 navigation-bar {
+<<<<<<< HEAD
   background-color: #3b5998;
   color: #3b5998;
+=======
+  background-color: #1527df;
+  color: #ffffff;
+>>>>>>> 0e0bae3e1badac6325f5e99b3704c0c3c5845bf5
 }
 
 navigation-bar title {
@@ -31,7 +36,7 @@ tab-bar tab-bar-item {
 }
 
 tab-bar tab-bar-item:selected {
-  color: #1596f7;
+  color: #ffffff;
 }
 
 tab-bar-item#settings {

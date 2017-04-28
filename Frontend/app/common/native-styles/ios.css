@@ -31,7 +31,7 @@ tab-bar tab-bar-item {
 }
 
 tab-bar tab-bar-item:selected {
-  color: #1596f7;
+  color: #ffffff;
 }
 
 tab-bar-item#settings {
@@ -54,4 +54,3 @@ tab-bar-item#internet {
   background-image: url(../assets/icons/search.svg);
 
 }
-

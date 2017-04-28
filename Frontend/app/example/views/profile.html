@@ -1,4 +1,7 @@
 <super-navbar>
+    <super-navbar-button onclick="supersonic.ui.modal.hide()">
+        Close
+    </super-navbar-button>
     <super-navbar-title>
         Profile
     </super-navbar-title>
@@ -8,12 +11,36 @@
 <div ng-controller="Profile">
 
     <div class="padding-top" style="text-align: center;">
-        <img style="border-radius: 50%" ng-src="data:image/jpeg;base64,{{profileImage}}" alt="Profile Image" />
+        <img style="border-radius: 50%" ng-src="data:image/jpeg;base64,{{profile.image}}" alt="Profile Image" />
         <button class="button button-block button-dark" ng-click="choosePhoto()">
             <i class="fa fa-picture-o"></i> Choose Profile Picture
         </button>
     </div>
-    <button onclick="supersonic.ui.modal.hide()" class="button button-block button-positive">Close</button>
 
+    <div class="padding">
+        <div class="sample"> <h4>About</h4> </div>
+    <!--<div class="item item-button-right">-->
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Description</span>
+                <input type="text" ng-model="description" placeholder="abcd">
+            </label>
+            <button ng-click ="aboutme()" class="button button-block button-positive">
+                Modify
+            </button>
+    <!--</div>-->
+    </div>
+    <div class="text-left">
+        <h4>
+            <div class="sample">
+                <ul class="list">
+                    <li class="item"> <strong> FirstName </strong>: {{profile.FirstName}} </li>
+                    <li class="item"> <strong> LastName </strong>: {{profile.LastName}} </li>
+                    <li class="item"> <strong> Username </strong>: {{profile.UserName}} </li>
+                    <li class="item"> <strong> Gender </strong>: {{profile.Gender}} </li>
+                </ul>
+            </div>
+        </h4>
+    </div>
+    <!--<button onclick="supersonic.ui.modal.hide()" class="button button-block button-positive">Close</button>-->
 
 </div>

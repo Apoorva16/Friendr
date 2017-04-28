@@ -19,7 +19,7 @@ angular
 				//supersonic.logger.log($scope.courses);
 		}).catch(function(err){
 			supersonic.logger.log("error " + 	err);
-		}) 
+		});
 
 		backendService.getPreferenceList("Eat").then(function(data) {
 			$scope.eat = data;
@@ -28,7 +28,7 @@ angular
 					$scope.eatKey.push(key);
 				}
 			}
-		})
+		});
 		backendService.getPreferenceList("Study").then(function(data) {
 			$scope.study = data;
 			for(var key in data) {

@@ -231,6 +231,7 @@ module.exports =
 						snapshot.forEach(function(childSnapshot)
 						{
 							var childData = childSnapshot.val();
+
 							list.push(childData);
 						});
 
@@ -847,12 +848,10 @@ module.exports =
 
 	addToFavorites: function (other_uid) 
 	{
-		firebase.auth().onAuthStateChanged(function(user)
-		{
+		firebase.auth().onAuthStateChanged(function(user) {
 			if (user)
 			{
 				var other_name;
-				
 				database.ref('Users').once('value').then(function(snapshot)
 				{
 					if (!snapshot.child(other_uid).exists()) {
@@ -911,6 +910,6 @@ module.exports =
 			}
 		});
 	}
-}
+};
 
 

@@ -32,8 +32,24 @@
 <body ng-app="example">
 
 <super-navbar>
+<<<<<<< HEAD
   <super-navbar-title>Messages</super-navbar-title>
 </super-navbar>
+=======
+  <super-navbar-button onclick="supersonic.ui.modal.hide()">
+    Close
+  </super-navbar-button>
+  <super-navbar-title>
+    Messages
+  </super-navbar-title>
+</super-navbar>
+
+<div class="list" ng-controller="LearnMoreController">
+  <a class="item item-avatar" ng-repeat="conversation in conversationList" ng-click="viewConversation($index)">
+    <img ng-src="data:image/jpeg;base64,{{conversation.user.profile.Image}}">
+    <h2>{{conversation.user.profile.FirstName + ' ' + conversation.user.profile.LastName}}</h2>
+  </a>
+>>>>>>> 0e0bae3e1badac6325f5e99b3704c0c3c5845bf5
 
 <div class="list" ng-controller="LearnMoreController">
   <div id="container">

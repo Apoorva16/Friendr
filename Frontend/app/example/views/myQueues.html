@@ -1,0 +1,33 @@
+<div ng-controller="myQueuesController">
+<div class="list">
+    <a ng-click="editQueue(key)" ng-repeat="key in queueKeys" class="item item-avatar" href="#" >
+      <h2>
+      {{key}}
+      </h2>
+      <p>Date: {{activities[key].DateQueued}}</p>
+      <p ng-repeat="(key1, value) in activities[key].Preferences">{{key1}}: {{value}}</p>
+    </a>
+
+</div>
+</div>
+
+<super-navbar>
+  <super-navbar-title>
+    My Queues
+  </super-navbar-title>
+</super-navbar>
+ <!-- <div ng-controller="queueController">
+<div class="list preference">
+ <div class="item item-divider">
+  {{activity}}
+</div>
+<label class="item item-input item-select" ng-repeat="key in keys">
+  <div class="input-label">
+    {{key}}
+  </div>
+  <select ng-model="test[key]">
+    <option ng-repeat="option in preferences[key]">{{option}}</option>
+  </select>
+</label>
+<button ng-click="submit()" class="button button-block button-positive queue">Queue</button>
+</div> -->

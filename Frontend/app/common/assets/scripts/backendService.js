@@ -265,7 +265,7 @@ var printCurrentUserData= function() {
 							var list = [];
 							snapshot.forEach(function(childSnapshot)
 							{
-								var message = childSnapshot.val();
+								var message = childSnapshot.val().Message;
 								list.push(message);
 							});
 							resolve(list);
@@ -279,7 +279,7 @@ var printCurrentUserData= function() {
 							var list = [];
 							snapshot.forEach(function(childSnapshot)
 							{
-								var message = childSnapshot.val();
+								var message = childSnapshot.val().Message;
 								list.push(message);
 							});
 							resolve(list);
@@ -535,21 +535,8 @@ var leaveQueue= function(activity)
 	{
 		if (user)
 		{
-
-			database.ref('Activities/').once('value').then(function(snapshot)
-			{
-				snapshot.forEach(function(childSnapshot)
-				{
-					if (childSnapshot.child("Searching").exists()) 
-					{
-						if (childSnapshot.child("Searching").child(user.uid).exists()) 
-						{
-							database.ref("Activities/" + childSnapshot.key + "/Searching/"+user.uid).remove();
-							console.log("User remove from: " + childSnapshot.key);
-						}
-					}
-				});
-			});   
+			database.ref('Activities/' + activity + '/Searching/' + user.uid).remove();
+			database.ref('Users/' + user.uid + '/Queue_List/' + activity).remove();
 		}
 	});
 };
@@ -929,12 +916,31 @@ var editQueue = function(activity, newPreference)
 				if (snapshot.exists())
 				{
 					database.ref('Activities/' + activity + '/Searching/' + user.uid + '/Preferences').update(newPreference);
-					database.ref('Users/'+ user.uid + '/Preferences/' + activity).update(newPreference);
+					database.ref('Users/'+ user.uid + '/Queue_List/' + activity + '/Preferences').update(newPreference);
 				}
 			});
 		}
 	});
 }
+
+var getQueueList = function() {
+	var queueListPromise = new Promise(function(resolve, reject)
+	{
+		firebase.auth().onAuthStateChanged(function(user)
+		{
+			if (user)
+			{
+				database.ref('Users/' + user.uid + '/Queue_List/').once('value').then(function(snapshot)
+				{
+					resolve(snapshot.val());
+				});
+			}
+		});
+	});
+
+	return queueListPromise;
+}
+
 
 return {
 	modifyUsername: modifyUsername,
@@ -970,6 +976,7 @@ return {
 	addToFavorites: addToFavorites,
 	getFavoritesList: getFavoritesList,
 	removeFromFavorites: removeFromFavorites,
-	editQueue: editQueue
+	editQueue: editQueue,
+	getQueueList: getQueueList
 }
 })
