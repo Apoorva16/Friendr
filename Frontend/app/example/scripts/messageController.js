@@ -1,11 +1,6 @@
 angular
   .module('example')
   .controller('messageController', function($scope, supersonic, backendService) {
-
-        var messageUserObj = JSON.parse(window.localStorage.getItem("messageUserObj"));
-        $scope.title = messageUserObj.user.profile.FirstName + " " + messageUserObj.user.profile.LastName[0];
-       // alert($scope.title);
-
       supersonic.logger.log("this is in a new view");
         $scope.hasmsg;
         $scope.testmsg;
@@ -31,12 +26,8 @@ angular
          //alert($scope.hasmsg);
           supersonic.logger.log($scope.hasmsg);
           $scope.testmsg = " ";
-<<<<<<< HEAD
           $scope.apply();
       })
-=======
-      });
->>>>>>> 0e0bae3e1badac6325f5e99b3704c0c3c5845bf5
       var other_data = JSON.parse(id2);
 
       $scope.tester1 = function(){
@@ -89,7 +80,7 @@ angular
                   });
               }
           });
-      };
+      }
 
 
 
@@ -107,13 +98,13 @@ angular
 
          // $scope.currmsg = backendService.listenToConversation(JSON.parse(id2));
           //supersonic.logger.log($scope.currmsg);
-      };
+      }
 
 
-      backendService.sendMessage(user.other_user,$message).then(function(value) {
+     // backendService.sendMessage(user.other_user,$message).then(function(value) {
 
 
-      })
+//})
 
 
 });

@@ -20,10 +20,12 @@ angular
 
         $scope.messages = function(){
             var view = new supersonic.ui.View("example#getting-started");
-            var options = {
-                animate: true
-            };
-            supersonic.ui.modal.show(view, options);
+            // var options = {
+            //     animate: true
+            // };
+            supersonic.ui.layers.push(view);
+            supersonic.ui.drawers.close();
+
         };
 
         $scope.queues = function() {

@@ -86,7 +86,7 @@
   width:100vw;
   z-index: 1;
 /*  background-color: blue !important;
-*/  
+*/
 }
 
 .recentContent{
@@ -102,12 +102,7 @@
   left:0;
   height:100vh;
   width:100vw;
-<<<<<<< HEAD
-    background-color: #dfe3ee;
-=======
   background-image:    url(../assets/icons/cog.svg);
-
->>>>>>> 0e0bae3e1badac6325f5e99b3704c0c3c5845bf5
 }
 
 .recentActivities {

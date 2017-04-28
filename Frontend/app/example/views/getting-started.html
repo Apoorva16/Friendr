@@ -1,14 +1,24 @@
-  <super-navbar-button onclick="supersonic.ui.modal.hide()">
-    Close
-  </super-navbar-button>
-  <super-navbar-title>
-    Messages
-  </super-navbar-title>
+<super-navbar>
+  <super-navbar-title>Messages</super-navbar-title>
 </super-navbar>
 
+<!--<div class="list" ng-controller="LearnMoreController">-->
+  <!--<div id="container">-->
+    <!--<a class="item item-avatar" ng-repeat="user in other_users" ng-click="myFunction($index)">-->
+      <!--<img class="img-circle" img src="http://rbamstelveen.weebly.com/uploads/4/9/5/0/49504239/7808026_orig.png">-->
+      <!--<h2>{{user.other_user}}</h2>-->
+      <!--&lt;!&ndash;<button class="button button-small" ng-click="deleteTapped()">&ndash;&gt;-->
+        <!--&lt;!&ndash;<i class="icon super-ios-cross"></i>&ndash;&gt;-->
+      <!--&lt;!&ndash;</button>&ndash;&gt;-->
+    <!--</a>-->
+
+  <!--</div>-->
+<!--</div>-->
 <div class="list" ng-controller="LearnMoreController">
-  <a class="item item-avatar" ng-repeat="conversation in conversationList" ng-click="viewConversation($index)">
-    <img ng-src="data:image/jpeg;base64,{{conversation.user.profile.Image}}">
-    <h2>{{conversation.user.profile.FirstName + ' ' + conversation.user.profile.LastName}}</h2>
-  </a>
+    <a class="item item-avatar" ng-repeat="conversation in conversationList" ng-click="viewConversation($index)">
+      <img ng-src="data:image/jpeg;base64,{{conversation.user.profile.Image}}">
+      <h2>{{conversation.user.profile.FirstName + ' ' + conversation.user.profile.LastName}}</h2>
+    </a>
+
+
 </div>
