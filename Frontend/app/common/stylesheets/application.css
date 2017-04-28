@@ -98,11 +98,12 @@
 }
 
 .homePage {
-    top: 5vh;
+  top: 5vh;
   left:0;
   height:100vh;
   width:100vw;
-    background: linear-gradient(white, black);
+  background-image:    url(../assets/icons/cog.svg);
+
 }
 
 .recentActivities {
@@ -134,14 +135,20 @@
     transform: translateY(-50%);
   
 }
-.study {
-  background-color: red;
+.study{
+  background-color:transparent;
 }
+
 .eat {
-  background-color: blue;
+  background-color:transparent;
 }
+
 .workout {
-  background-color: green;
+  background-color:transparent;
+}
+
+.sample {
+  font-family: "Comic Sans MS";
 }
 .container {
   height:100vw;

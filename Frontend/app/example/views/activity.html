@@ -10,7 +10,7 @@
 <div ng-controller="Activity">
     <super-navbar>
         <super-navbar-title>
-            Activities
+            Favourites
         </super-navbar-title>
     </super-navbar>
     <!--<div class="list list-inset" style="position: fixed; width: 90%">-->
@@ -25,12 +25,8 @@
             <!--</label>-->
         <!--</h1>-->
     <div class="micro-padding">
+
         <h1>
-            <div class="font-activity">
-                <p> Matches
-            </div>
-        </h1>
-        <h2>
             <ul class="list">
                 <li class="item item-icon-left item-icon-right" ng-repeat="matchedUser in matchedlistusers">
                     <i class="icon "></i>
@@ -38,7 +34,7 @@
                     <i ng-click="toggleFavorite(matchedUser)" ng-class="{redColor: matchedUser.isFavorite}" class="icon super-heart"></i>
                 </li>
             </ul>
-        </h2>
+        </h1>
         <!--{{favoritesList}}-->
     </div>
 
