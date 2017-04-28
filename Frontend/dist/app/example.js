@@ -278,6 +278,7 @@ angular
     .module('example')
     .controller('LearnMoreController', function($scope, supersonic, backendService) {
         $scope.conversationList = [];
+        $scope.other_users;
         //var id1;
 
         $scope.populateConversationListDetails = function(user) {
@@ -304,6 +305,7 @@ angular
                 var user = value[index];
                 $scope.populateConversationListDetails(user);
             }
+            $scope.other_users = value;
         });
 
         $scope.viewConversation = function(index){
