@@ -4,7 +4,7 @@ angular
 
         var messageUserObj = JSON.parse(window.localStorage.getItem("messageUserObj"));
         $scope.title = messageUserObj.user.profile.FirstName + " " + messageUserObj.user.profile.LastName[0];
-        alert($scope.title);
+       // alert($scope.title);
 
       supersonic.logger.log("this is in a new view");
         $scope.hasmsg;

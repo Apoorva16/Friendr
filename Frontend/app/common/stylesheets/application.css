@@ -122,6 +122,7 @@
   height:100%;
   width:100%;
   display: inline-block;
+  font-color: #ffffff;
 }
 
 .test2 {
@@ -133,24 +134,46 @@
     -ms-transform: translateY(-50%);
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
-  
-}
-.study{
-  background-image: url("/images/study2.jpg");
-  /*background-color:transparent;*/
 
 }
 
 .eat {
   background-image: url("/images/eat1.png");
+  margin: auto;
+  height: 100%;
+  border-radius: 100%;
+  overflow:hidden;
+  background-color: white;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
   /*background-color:transparent;*/
 }
-
+.study {
+  background-image: url("/images/apple_books.jpg");
+  margin: auto;
+  height: 100%;
+  border-radius: 100%;
+  overflow:hidden;
+  background-color: white;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  /*background-color:transparent;*/
+}
 .workout {
-  background-image: url("/images/workout1.jpg");
+  background-image: url("/images/fun.jpg");
+  margin: auto;
+  height: 100%;
+  border-radius: 50%;
+  overflow:hidden;
+  background-color: white;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+
   /*background-color:transparent;*/
 }
-
 .sample {
   font-family: "Comic Sans MS";
 }
