@@ -59,7 +59,7 @@
   padding-right: 1px;
 }
 .wrap-buttons {
-  color: blue;
+  color: #3b5998;
 }
 .logo-login {
   margin-top: 5%;
@@ -86,7 +86,7 @@
   width:100vw;
   z-index: 1;
 /*  background-color: blue !important;
-*/  
+*/
 }
 
 .recentContent{
@@ -98,11 +98,11 @@
 }
 
 .homePage {
-    top: 5vh;
+  top: 5vh;
   left:0;
   height:100vh;
   width:100vw;
-    background: linear-gradient(white, black);
+  background-image:    url(../assets/icons/cog.svg);
 }
 
 .recentActivities {
@@ -121,6 +121,7 @@
   height:100%;
   width:100%;
   display: inline-block;
+  font-color: #ffffff;
 }
 
 .test2 {
@@ -132,16 +133,48 @@
     -ms-transform: translateY(-50%);
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
-  
+
+}
+
+.eat {
+  background-image: url("/images/eat1.png");
+  margin: auto;
+  height: 100%;
+  border-radius: 100%;
+  overflow:hidden;
+  background-color: white;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  /*background-color:transparent;*/
 }
 .study {
-  background-color: red;
-}
-.eat {
-  background-color: blue;
+  background-image: url("/images/apple_books.jpg");
+  margin: auto;
+  height: 100%;
+  border-radius: 100%;
+  overflow:hidden;
+  background-color: white;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  /*background-color:transparent;*/
 }
 .workout {
-  background-color: green;
+  background-image: url("/images/fun.jpg");
+  margin: auto;
+  height: 100%;
+  border-radius: 50%;
+  overflow:hidden;
+  background-color: white;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+
+  /*background-color:transparent;*/
+}
+.sample {
+  font-family: "Comic Sans MS";
 }
 .container {
   height:100vw;

@@ -14,11 +14,19 @@ angular
       $scope.viewTitle = JSON.parse(id12);
       $scope.msgS = JSON.parse(id2);
 
+      $scope.buttonTapped = function(){
+          //alert("does it work?");
+          backendService.clearConversation(JSON.parse(id2));
+          $scope.msgs ="";
+          $scope.hasmsg = "";
+      }
+
       backendService.viewConversation(JSON.parse(id2)).then(function(value){
           $scope.hasmsg= value;
          //alert($scope.hasmsg);
           supersonic.logger.log($scope.hasmsg);
           $scope.testmsg = " ";
+          $scope.apply();
       })
       var other_data = JSON.parse(id2);
 
@@ -84,6 +92,7 @@ angular
           backendService.sendMessage(JSON.parse(id2),$scope.foo);
           $scope.newMessage++;
           $scope.foo = "";
+         // $scope.tester1();
           //alert($scope.msgs);
           $scope.apply();
 

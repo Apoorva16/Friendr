@@ -10,16 +10,65 @@ angular
 
         $scope.matchedlistusers;
 
+        $scope.currentUser = null;
+
+        $scope.populateMatchedUserList = function(user) {
+            firebase.database().ref('Users/' + user.other_user_uid + '/Profile').once('value').then(function(snapshot) {
+                var element = {
+                    uid: user.other_user_uid,
+                    profile : {
+                        FirstName : snapshot.val().FirstName,
+                        LastName : snapshot.val().LastName,
+                        UserName : snapshot.val().UserName,
+                        Gender : snapshot.val().Gender,
+                        Image : snapshot.val().Image
+                    },
+                    isFavorite : $scope.favorites.indexOf(user.other_user_uid) != -1
+                };
+                $scope.matchedlistusers.push(element);
+                $scope.$apply();
+            });
+        };
+
         backendService.viewConversationList().then(function (value) {
             $scope.$apply();
-            $scope.matchedlistusers = value;
-            $scope.$apply();
+            $scope.matchedlistusers = [];
+
+            $scope.favorites = [];
+            firebase.auth().onAuthStateChanged(function(currentUser) {
+                $scope.currentUser = currentUser;
+                firebase.database().ref('Users/' + currentUser.uid + '/Favorites').once('value').then(function(snapshot) {
+                    snapshot.forEach(function(childSnapshot) {
+                        var other_uid = childSnapshot.key;
+                        $scope.favorites.push(other_uid);
+                    });
+
+                    for(var index = 0; index < value.length; index++) {
+                        var user = value[index];
+                        $scope.populateMatchedUserList(user);
+                    }
+                    $scope.$apply();
+                });
+            });
+
+            //$scope.favoritesList = backendService.getFavoritesList();
           // alert($scope.matchedlistusers[0].other_user);
         });
 
-        $scope.toggleFavorite = function(matchedUser) {
-            backendService.addToFavorites(matchedUser.other_user_uid);
-            alert("here");
+        $scope.toggleFavorite = function($index) {
+            var matchedUser = $scope.matchedlistusers[$index];
+            if(matchedUser.isFavorite) {
+                firebase.database().ref('Users/' + $scope.currentUser.uid + '/Favorites/' + matchedUser.uid).remove();
+                matchedUser.isFavorite = false;
+                $scope.apply();
+            } else {
+                firebase.database().ref('Users/' + $scope.currentUser.uid + '/Favorites/' + matchedUser.uid).set({
+                    FirstName: matchedUser.profile.FirstName,
+                    LastName: matchedUser.profile.LastName
+                });
+                matchedUser.isFavorite = true;
+                $scope.apply();
+            }
         };
 
        /* $scope.searchforuser = function() {
@@ -63,6 +112,4 @@ angular
             return matchedUser;
 
         };*/
-
-
 });

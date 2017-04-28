@@ -4,8 +4,8 @@
  ***********************************************************/
 
 navigation-bar {
-  background-color: #00B5FF;
-  color: #ffffff;
+  background-color: #3b5998;
+  color: #3b5998;
   padding-bottom:0px;
   margin-bottom:0px;
 }
@@ -49,7 +49,7 @@ tab-bar tab-bar-item {
 }
 
 tab-bar tab-bar-item:selected {
-  color: #1596f7;
+  color: #ffffff;
 }
 
 tab-bar divider {
@@ -57,7 +57,7 @@ tab-bar divider {
 }
 
 tab-bar tab-bar-item marker-top:selected {
-  background-color: #1596f7;
+  background-color: #ffffff;
 }
 
 tab-bar-item#settings {

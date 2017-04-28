@@ -1,12 +1,23 @@
-<super-navbar>
-  <super-navbar-title>
-    Login
-  </super-navbar-title>
-</super-navbar>
-
-
 <div class="login-page" ng-controller="InitialViewController">
-
+  <style>
+    body {
+      background-color: #3b5998;
+    }
+    .wrap-login{
+        background-color: #8b9dc3;
+    }
+    .logo-font{
+        font-style: oblique;
+        color: #3b5998;
+    }
+    .white{
+      background-color: #dfe3ee;
+    }
+    .button-block{
+      background-color: #8b9dc3;
+      font-color: #ffffff;
+    }
+  </style>
   <div class="padding">
     <div class="wrap-login">
       <div class="text-center">
@@ -22,11 +33,15 @@
       <div class="list white">
         <label class="item item-input item-stacked-label">
           <span class="input-label">Email</span>
+          <label class="item-input-wrapper">
           <input type="text" ng-model="email" placeholder="abcd@purdue.edu">
+        </label>
         </label>
         <label class="item item-input item-stacked-label">
           <span class="input-label">Password</span>
+          <label class="item-input-wrapper">
           <input type="password" ng-model="password" placeholder="abcd">
+          </label>
         </label>
       </div>
       <div class="wrap-buttons">
@@ -34,9 +49,9 @@
         <!--<i class="fa fa-facebook-square fa"></i>&nbsp; Login with Facebook-->
         <!--</button>-->
       <!--<button onclick="supersonic.ui.initialView.dismiss()" class="button button-block button-positive">Log in</button> -->
-        <button ng-click="login()" class="button button-block button-positive">Login</button>
-        <button ng-click="signUp()" class="button button-block button-positive">Create Account</button>
-        <button ng-click="reset()" class="button button-block button-positive">Forgot Password</button>
+        <button ng-click="login()" class="button button-block">Login</button>
+        <button ng-click="signUp()" class="button button-block">Create Account</button>
+        <button ng-click="reset()" class="button button-block">Forgot Password</button>
       </div>
     </div>
   </div>

@@ -7,8 +7,6 @@ angular
     .controller('DrawerController', function($scope, supersonic,backendService) {
 
         $scope.logout = function() {
-
-
             supersonic.ui.initialView.show();
             //supersonic.ui.dialog.alert("Say hello");
         };
@@ -20,12 +18,15 @@ angular
             supersonic.ui.drawers.close();
         };
 
-        $scope.myFunction = function(){
+        $scope.messages = function(){
             var view = new supersonic.ui.View("example#getting-started");
+            // var options = {
+            //     animate: true
+            // };
             supersonic.ui.layers.push(view);
-            supersonic.logger.log("Something semi-interesting just happened.");
             supersonic.ui.drawers.close();
-        }
+
+        };
 
         $scope.queues = function() {
             var view = new supersonic.ui.View("example#myQueues");

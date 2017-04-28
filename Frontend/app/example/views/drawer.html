@@ -5,11 +5,22 @@
 </script>
 
   <ul class="list" ng-controller="DrawerController">
-    <li ng-controller="ProfileController" ng-click="profilefunc()" class="item"> Profile </li>
-    <li ng-controller="SettingsController" ng-click="settings()" class="item">Settings </li>
-    <li class="item" ng-click="myFunction();">Messages</li>
-    <li class="item" ng-click="queues();">My Queues</li>
-<!--     <li class="item" ng-click="preference()">Preferences</li>
- -->    <li ng-controller="FAQController" ng-click="faqs()" class="item"> FAQ </li>
-    <li class="item" ng-click="logout();">Logout</li>
+    <li ng-controller="ProfileController" ng-click="profilefunc()" class="item">
+      <i class="icon super-person-stalker">  Profile </i>
+    </li>
+    <li ng-controller="SettingsController" ng-click="settings()" class="item">
+      <i class="icon super-settings">  Settings </i>
+    </li>
+    <li class="item" ng-click="messages();">
+      <i class="icon super-chatbubble-working">  Messages </i>
+    </li>
+    <li class="item" ng-click="queues();">
+      <i class="icon super-social-buffer">  My Queues </i>
+    </li>
+    <li ng-controller="FAQController" ng-click="faqs()" class="item">
+      <i class="icon super-help-buoy">  FAQ </i>
+    </li>
+    <li class="item" ng-click="logout();">
+      <i class="icon super-close">  Logout </i>
+    </li>
   </ul>

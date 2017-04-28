@@ -1,4 +1,7 @@
 <super-navbar>
+    <super-navbar-button onclick="supersonic.ui.modal.hide()">
+        Close
+    </super-navbar-button>
     <super-navbar-title>
         Profile
     </super-navbar-title>
@@ -15,7 +18,7 @@
     </div>
 
     <div class="padding">
-        <h4>About</h4>
+        <div class="sample"> <h4>About</h4> </div>
     <!--<div class="item item-button-right">-->
             <label class="item item-input item-stacked-label">
                 <span class="input-label">Description</span>
@@ -28,14 +31,16 @@
     </div>
     <div class="text-left">
         <h4>
-            <ul class="list">
-                <li class="item"> FirstName: {{profile.FirstName}} </li>
-                <li class="item"> LastName: {{profile.LastName}} </li>
-                <li class="item"> Username: {{profile.UserName}} </li>
-                <li class="item"> Gender: {{profile.Gender}} </li>
-            </ul>
+            <div class="sample">
+                <ul class="list">
+                    <li class="item"> <strong> FirstName </strong>: {{profile.FirstName}} </li>
+                    <li class="item"> <strong> LastName </strong>: {{profile.LastName}} </li>
+                    <li class="item"> <strong> Username </strong>: {{profile.UserName}} </li>
+                    <li class="item"> <strong> Gender </strong>: {{profile.Gender}} </li>
+                </ul>
+            </div>
         </h4>
     </div>
-    <button onclick="supersonic.ui.modal.hide()" class="button button-block button-positive">Close</button>
+    <!--<button onclick="supersonic.ui.modal.hide()" class="button button-block button-positive">Close</button>-->
 
 </div>

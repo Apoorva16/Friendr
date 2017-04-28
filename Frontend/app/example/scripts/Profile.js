@@ -41,6 +41,10 @@ angular
                     currentUser.updateProfile({
                         photoURL: $scope.profile.image  /*is base64 */
                     });
+                    alert(currentUser.uid);
+                    firebase.database().ref('Users/' + currentUser.uid + '/Profile').update({
+                        Image: $scope.profile.image
+                    });
                 });
 
                 userObj.photoURL = result;
